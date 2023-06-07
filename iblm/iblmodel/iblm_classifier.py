@@ -75,6 +75,7 @@ class IBLMClassifier():
         ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
         ・Create a code like the following. Do not change the input or output format.
         ・Create a code that can predict as accurately as possible.
+        ・Use conditional branching and linear relational expressions.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
         ------------------
