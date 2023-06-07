@@ -1,2 +1,2 @@
-from .iblmodel.iblm_classifier from IBLMClassifier
-from .iblmodel.iblm_regressor from IBLMRegressor
+from .iblmodel.iblm_classifier import IBLMClassifier
+from .iblmodel.iblm_regressor import IBLMRegressor
