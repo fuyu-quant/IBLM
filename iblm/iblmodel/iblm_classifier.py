@@ -8,7 +8,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-class Classifier():
+class IBLMClassifier():
     def __init__(
         self, 
         llm_model_name, 
