@@ -6,18 +6,20 @@ def predict(x):
     for index, row in df.iterrows():
 
         # Feature creation and data preprocessing
-        A, B, C, D = row['A'], row['B'], row['C'], row['D']
+        A, B, C, D = row[0], row[1], row[2], row[3]
 
         # Conditional branching, sums and products of features, linear relationships
-        y = A * B + C * D
-
-        # Apply sigmoid function to map the result to a probability between 0 and 1
-        y = 1 / (1 + np.exp(-y))
-
-        # Binary classification threshold
-        if y >= 0.5:
-            output.append(1)
+        if A > 0:
+            y = A * D - B * C
         else:
-            output.append(0)
+            y = A * C + B * D
 
+        # As many formulas as possible
+        y += A * B * C * D
+        y += A * B + C * D
+        y += A * C + B * D
+        y += A * D + B * C
+
+        y = 1 / (1 + np.exp(-y))
+        output.append(y)
     return np.array(output)

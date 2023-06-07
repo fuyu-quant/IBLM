@@ -75,9 +75,9 @@ class IBLMClassifier():
         ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
         ・Consider the following factors to achieve the highest possible accuracy.
             ・Conditional branching
-            ・Sums and products of features
+            ・Sum of features
+            ・Multiply features by a constant
             ・Linear relationships
-            ・As many formulas as possible.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
         ・Create a code like the following. Do not change the code before 'for index, row in df.iterrows():' and after {output_code_}.
