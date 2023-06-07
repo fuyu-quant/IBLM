@@ -2,66 +2,90 @@ from langchain.llms import OpenAI
 import re
 
 
-class InductiveBiasLearning():
-    def __init__(self, llm_model):
-        self.llm_model = llm_model
+class Classification():
+    def __init__(self, llm_model, params):
+        self.llm_model = llm_model,
+        self.columns_name = params['columns_name']
         pass
 
-    def fit(self, x_train, y_train):
+    def train(self, x, y, file_path=None):
         print("> Start of model training.")
+        df = x.copy()
 
+        # yのデータをtargetとしてxのdataframeに加える
+        df['target'] = y
+
+        # 二値分類か多値分類かを判定
+        if len(df['target'].unique()) == 2:
+            task_type = 'binary classification'
+            output_code = 'y = 1 / (1 + np.exp(-y))'
+        else:
+            task_type = 'multi-class classification'
+
+        # データ型の取得
+        data_type = ', '.join(df.dtypes.astype(str))
+
+
+
+        # 文字列のdatasetを作成
+        dataset = []
+        for index, row in df.iterrows():
+            row_as_str = [str(item) for item in row.tolist()]  # 各要素を文字列に変換
+            dataset.append(','.join(row_as_str))
+
+        # リスト全体を改行文字で結合
+        dataset_str = '\n'.join(dataset)
+
+
+        # ハイパーパラメータの設定
+        if self.columns_name:
+            col_name = ', '.join(df.columns.astype(str))
 
         create_prompt = """
-        Please create your code in compliance with all of the following conditions.
-        ・Create a python class that can take a single string as input and perform the following.
+        Please create your code in compliance with all of the following conditions. Output should be code only. Do not enclose the output in ``python ``` or the like.
+        ・Analyze the large amount of data below and create a {task_type_} code to accurately predict "target".
         ------------------
-        {input_}
+        {dataset_str_}
         ------------------
-        ・Output should be code only.
-        ・Do not enclose the output in ``python ``` or the like.
-        ・from langchain.tools import BaseTool must be written.
-        ・Class must inherit from BaseTool.
-        ・If you have previously created code that failed to execute, please refer to it as well.
-        ・Here is the code I created previously: {created_tool_code_}
-        ・The following code was created with the input "multiply two numbers". Please create it like this code.
+        ・Each data type is as follows. If necessary, you can change the data type.
+        ・Create code that can make predictions about new data based on logic from large amounts of input data without using machine learning models.
+        ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
+        ・Create a code like the following. Do not change the input or output format.
         ------------------
-        from langchain.tools import BaseTool
+        import numpy as np
 
-        class MultiplicationTool(BaseTool):
-            name = "MultiplicationTool"
-            description = "used for multiplication. The input is two numbers. For example, if you want to multiply 1 by 2, the input is '1,2'."
+        def model(x):
+            df = x.copy()
 
-            def _run(self, query: str) -> str:
-                "Use the tool."
-                a, b = query.split(",")
-                c = int(a) * int(b)
-                result = c
-                return result 
+            output = []
+            for index, row in df.iterrows():
 
-            async def _arun(self, query: str) -> str:
-                "Use the tool asynchronously."
-                raise NotImplementedError("MultiplicationTool does not support async")     
-        ------------------
-        ・The following is a code that may be similar. Please refer to them if they exist.
-        ------------------
-        {related_tools_}
+
+                # Feature creation and data preprocessing
+
+
+                {output_code_}
+                output.append(y)
+                
+            return output
         """.format(
-            input_ = generalized_input, 
-            created_tool_code_ = created_tool_code, 
-            related_tools_ = related_tools
+            task_type_ = task_type,
+            dataset_str_ = dataset_str,
+            col_name_ = col_name,
+            output_code_ = output_code
             )
-
-        #print(create_prompt)
 
         code = self.llm_model(create_prompt)
 
+        name = re.search(r'def "(.*?)"', code).group(1)
+
         # Save to File
-        #if folder_path_ != None:
-        #    with open(folder_path_ + f'{name}.py', mode='w') as file:
-        #        file.write(code)
+        if file_path_ != None:
+            with open(folder_path_ + f'{name}.py', mode='w') as file:
+                file.write(code)
 
         # モデルの訓練処理
-        return
+        return code
 
 
 
@@ -72,72 +96,14 @@ class InductiveBiasLearning():
 
 
 
+    def interpret(self):
 
 
-    def run(self, generalized_input, search_result, created_tool_code):
-        print("> Start of model training.")
+        interpretprompt = """
 
-        related_tools = ''
-        for i in range(len(search_result)):
-            disc = search_result[i].payload['discription']
-            code = search_result[i].payload['code']
-            related_tools += 'discription:' + '\n' + disc +'\n' + 'code:' +'\n' + code + '\n' + '------------------' + '\n'
+        """
 
+        output = self.llm_model(interpretprompt)
 
+        return output
 
-        create_prompt = """
-        Please create your code in compliance with all of the following conditions.
-        ・Create a python class that can take a single string as input and perform the following.
-        ------------------
-        {input_}
-        ------------------
-        ・Output should be code only.
-        ・Do not enclose the output in ``python ``` or the like.
-        ・from langchain.tools import BaseTool must be written.
-        ・Class must inherit from BaseTool.
-        ・If you have previously created code that failed to execute, please refer to it as well.
-        ・Here is the code I created previously: {created_tool_code_}
-        ・The following code was created with the input "multiply two numbers". Please create it like this code.
-        ------------------
-        from langchain.tools import BaseTool
-
-        class MultiplicationTool(BaseTool):
-            name = "MultiplicationTool"
-            description = "used for multiplication. The input is two numbers. For example, if you want to multiply 1 by 2, the input is '1,2'."
-
-            def _run(self, query: str) -> str:
-                "Use the tool."
-                a, b = query.split(",")
-                c = int(a) * int(b)
-                result = c
-                return result 
-
-            async def _arun(self, query: str) -> str:
-                "Use the tool asynchronously."
-                raise NotImplementedError("MultiplicationTool does not support async")     
-        ------------------
-        ・The following is a code that may be similar. Please refer to them if they exist.
-        ------------------
-        {related_tools_}
-        """.format(
-            input_ = generalized_input, 
-            created_tool_code_ = created_tool_code, 
-            related_tools_ = related_tools
-            )
-
-        #print(create_prompt)
-
-        code = self.create_model(create_prompt)
-
-        tool_name = re.search(r'name = "(.*?)"', code).group(1)
-
-
-        print('\033[32m' + 'Completed!')
-        print('Created tool name：' + tool_name + '\n' + '\033[0m')
-
-        # Save to File
-        #if folder_path_ != None:
-        #    with open(folder_path_ + f'{name}.py', mode='w') as file:
-        #        file.write(code)
-
-        return code
