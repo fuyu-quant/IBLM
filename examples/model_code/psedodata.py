@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 def predict(x):
     df = x.copy()
@@ -8,24 +7,18 @@ def predict(x):
 
         # Feature creation and data preprocessing
         A, B, C, D = row['A'], row['B'], row['C'], row['D']
+        
+        # Conditional branching, generation of new features, sums and products of features, linear relationships
+        new_feature_1 = A * B
+        new_feature_2 = C * D
+        new_feature_3 = A + C
+        new_feature_4 = B + D
+        new_feature_5 = A * C * B * D
+        
+        # As many formulas as possible
+        y = new_feature_1 + new_feature_2 + new_feature_3 + new_feature_4 + new_feature_5
 
-        # Conditional branching and linear relational expressions
-        if A > 0 and B < 0 and C > 0:
-            y = 1
-        elif A < 0 and B > 0 and C < 0:
-            y = 0
-        elif A * B * C * D > 0:
-            y = 1
-        elif A * B * C * D < 0:
-            y = 0
-        else:
-            y = 0.5
-
-        # Complex relational expressions
-        if A > 0 and B > 0 and C > 0 and D > 0:
-            y = 1 - y
-
-        # Sigmoid function to convert y to probability
+        # Apply sigmoid function to get probability
         y = 1 / (1 + np.exp(-y))
         output.append(y)
     return np.array(output)
