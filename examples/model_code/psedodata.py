@@ -6,34 +6,28 @@ def predict(x):
     for index, row in df.iterrows():
 
         # Feature creation and data preprocessing
-        A, B, C, D = row[0], row[1], row[2], row[3]
-
-        # Conditional branching
-        if A > 0:
-            y = A * D
-        else:
-            y = B * C
-
-        # Generation of new features
+        A, B, C, D = row['A'], row['B'], row['C'], row['D']
+        
+        # Conditional branching and generation of new features
         E = A * B
         F = C * D
-
+        G = A + C
+        H = B + D
+        
         # Sums and products of features
-        G = A + B + C + D
-        H = A * B * C * D
-
+        I = E + F
+        J = G * H
+        
         # Linear relationships
-        I = A * B + C * D
-
+        K = A * 0.5 + B * 0.3 + C * 0.2 + D * 0.1
+        
         # As many formulas as possible
-        J = (A + B) * (C + D)
-        K = (A * B) - (C * D)
-        L = (A / B) + (C / D)
-
-        # Combine features
-        y = y + E + F + G + H + I + J + K + L
-
-        # Apply sigmoid function
+        L = (A * B * C * D) / (E * F * G * H)
+        
+        # Combine features to make a prediction
+        y = K + L + I + J
+        
+        # Apply logistic function to convert y to probability
         y = 1 / (1 + np.exp(-y))
         output.append(y)
     return np.array(output)

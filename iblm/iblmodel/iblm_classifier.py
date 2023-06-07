@@ -75,7 +75,6 @@ class IBLMClassifier():
         ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
         ・Consider the following factors to achieve the highest possible accuracy.
             ・Conditional branching
-            ・Generation of new features
             ・Sums and products of features
             ・Linear relationships
             ・As many formulas as possible.
