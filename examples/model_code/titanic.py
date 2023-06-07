@@ -18,28 +18,27 @@ def predict(x):
 
         # Prediction logic
         y = 0
-
         if pclass == 'First':
             y += 0.3
         elif pclass == 'Second':
-            y += 0.1
+            y += 0.15
 
         if sex == 'female':
             y += 0.35
 
         if age <= 16:
-            y += 0.2
-        elif age > 16 and age <= 32:
             y += 0.1
+        elif age > 16 and age <= 32:
+            y += 0.05
 
         if fare > 50:
             y += 0.1
 
         if embarked == 'C':
-            y += 0.1
+            y += 0.05
 
-        if alone == 'True':
-            y -= 0.1
+        if alone:
+            y += 0.05
 
         y = 1 / (1 + np.exp(-y))
         output.append(y)
