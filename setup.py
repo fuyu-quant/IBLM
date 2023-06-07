@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='iblm',
     version='0.0.1',
-    description='A package of learning models that make predictions from the structure of the model by LLM.',
+    description='Inductive Bias Learning Models',
     packages=find_packages(), 
     install_requires=[
         'langchain==0.0.167',
