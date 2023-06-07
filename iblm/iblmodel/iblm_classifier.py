@@ -73,7 +73,7 @@ class IBLMClassifier():
         ------------------
         ・Create code that can make predictions about new data based on logic from large amounts of input data without using machine learning models.
         ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
-        ・The following elements should be reflected in the code to achieve the highest possible accuracy.
+        ・Consider the following factors to achieve the highest possible accuracy.
             ・Conditional branching
             ・Generation of new features
             ・Sums and products of features
