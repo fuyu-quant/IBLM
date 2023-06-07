@@ -6,9 +6,10 @@ import numpy as np
 
 import warnings
 warnings.filterwarnings('ignore')
+ 
 
 
-class IBLMClassifier():
+class IBBoostingClassifier():
     def __init__(
         self, 
         llm_model_name, 
@@ -68,9 +69,6 @@ class IBLMClassifier():
         {dataset_str_}
         ------------------
         ・Each data type is as follows. If necessary, you can change the data type.
-        ------------------
-        {data_type_}
-        ------------------
         ・Create code that can make predictions about new data based on logic from large amounts of input data without using machine learning models.
         ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
         ・Create a code like the following. Do not change the input or output format.
@@ -98,7 +96,7 @@ class IBLMClassifier():
         """.format(
             task_type_ = task_type,
             dataset_str_ = dataset_str,
-            data_type_ = data_type,
+            model_name_ = model_name,
             col_name_ = col_name,
             col_option_ = col_option,
             output_code_ = output_code
