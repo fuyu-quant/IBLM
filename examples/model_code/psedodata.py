@@ -7,15 +7,15 @@ def predict(x):
         # Feature creation and data preprocessing
         A, B, C, D = row['A'], row['B'], row['C'], row['D']
 
-        # Conditional branching of features and linear formulas
-        if A > 0 and C < 0:
-            y = 0.8 * A - 0.6 * C
-        elif A < 0 and C > 0:
-            y = 0.6 * B - 0.8 * D
-        elif A > 0 and C > 0:
-            y = 0.4 * A + 0.4 * C
+        # Conditional branching of features and linear relationships
+        if A > 0 and B > 0:
+            y = A * 0.5 + B * 0.3 - C * 0.2 + D * 0.1
+        elif A < 0 and B < 0:
+            y = A * 0.3 + B * 0.5 - C * 0.1 + D * 0.2
+        elif A > 0 and B < 0:
+            y = A * 0.4 - B * 0.3 - C * 0.1 + D * 0.2
         else:
-            y = 0.4 * B + 0.4 * D
+            y = A * 0.3 - B * 0.4 - C * 0.2 + D * 0.1
 
         y = 1 / (1 + np.exp(-y))
         output.append(y)
