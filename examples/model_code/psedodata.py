@@ -1,24 +1,26 @@
 import numpy as np
-
 def predict(x):
     df = x.copy()
     output = []
     for index, row in df.iterrows():
 
         # Feature creation and data preprocessing
-        A, B, C, D = row[0], row[1], row[2], row[3]
+        A, B, C, D = row['A'], row['B'], row['C'], row['D']
 
-        # Conditional branching, sums and products of features, linear relationships
+        # Conditional branching
         if A > 0:
-            y = A * D - B * C
+            y = A * 0.5 + B * 0.3 + C * 0.1 + D * 0.1
         else:
-            y = A * C + B * D
+            y = A * 0.1 + B * 0.3 + C * 0.5 + D * 0.1
 
-        # As many formulas as possible
-        y += A * B * C * D
-        y += A * B + C * D
-        y += A * C + B * D
-        y += A * D + B * C
+        # Sum of features
+        y += A + B + C + D
+
+        # Multiply features by a constant
+        y *= 0.1
+
+        # Linear relationships
+        y = 0.5 * A + 0.3 * B + 0.1 * C + 0.1 * D
 
         y = 1 / (1 + np.exp(-y))
         output.append(y)
