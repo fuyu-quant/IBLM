@@ -19,8 +19,8 @@ class Classifier():
 
         #self.llm_model = llm_model,
         self.columns_name = params['columns_name']
-
         self.model_code = None
+
 
     def fit(self, x, y, model_name, file_path=None):
         print("> Start of model creating.")

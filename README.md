@@ -1,4 +1,4 @@
-# Inductive Bias Conductive Models
+# IBLM:Inductive Bias Learning Models
 
 
 - [](#)
@@ -10,7 +10,7 @@
 
 
 
-## What is CreateTool-AGI?
+## What is IBLM?
 
 
 
