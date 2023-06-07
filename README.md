@@ -1,1 +1,1 @@
-# inductive-bias-learning
+# Inductive Bias Learning
