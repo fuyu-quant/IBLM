@@ -80,7 +80,7 @@ class IBLMClassifier():
             ・As many formulas as possible.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
-        ・Create a code like the following. Do not change the input or output format.
+        ・Create a code like the following. Do not change the code before 'for index, row in df.iterrows():' and after {output_code_}.
         ------------------
         import numpy as np
         def predict(x):
