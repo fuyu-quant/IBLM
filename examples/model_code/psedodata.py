@@ -11,7 +11,7 @@ def predict(x):
         A, B, C, D = row['A'], row['B'], row['C'], row['D']
 
         # Custom logic for prediction based on input data
-        y = A * B - C * D
+        y = A * B + C * D
 
         # Apply sigmoid function to the result
         y = 1 / (1 + np.exp(-y))
@@ -19,4 +19,8 @@ def predict(x):
 
     output = np.array(output)
         
+    # Binary classification threshold
+    threshold = 0.5
+    output = (output > threshold).astype(int)
+    
     return output

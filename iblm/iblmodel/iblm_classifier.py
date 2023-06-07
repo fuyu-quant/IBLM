@@ -74,27 +74,21 @@ class IBLMClassifier():
         ・Create code that can make predictions about new data based on logic from large amounts of input data without using machine learning models.
         ・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{col_name_}
         ・Create a code like the following. Do not change the input or output format.
+        ・Create a code that can predict as accurately as possible.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
         ------------------
         import numpy as np
-
         def predict(x):
             df = x.copy()
-
             output = []
             for index, row in df.iterrows():
 
-
                 # Feature creation and data preprocessing
-
 
                 {output_code_}
                 output.append(y)
-
-            output = np.array(output)
-                
-            return output
+            return np.array(output)
         """.format(
             task_type_ = task_type,
             dataset_str_ = dataset_str,

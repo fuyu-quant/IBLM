@@ -9,5 +9,5 @@ services:
     environment:
       - JUPYTER_ENABLE_LAB=yes
     volumes:
-      - /Users/tanakatouma/vscode/inductive-bias-learning/:/home/inductive-bias-learning/
+      - /Users/tanakatouma/vscode/IBLM/:/home/IBLM/
     command: start-notebook.sh --NotebookApp.token=''
