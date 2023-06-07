@@ -74,7 +74,7 @@ class IBLMClassifier():
         ・Without using a machine learning model, we will create a code to predict a "target" based on logic from a large amount of input data.
         ・The column names, in order, are as follows {col_name_}
         ・Please make your predictions as accurate as possible.
-        ・Use conditional branching of features and linear formulas to improve the accuracy of predictions.
+        ・If you can use conditional branching of features, linear relationships, etc., please use them.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
         ・Create a code like the following. Do not change the code before 'for index, row in df.iterrows():' and after {output_code_}.
