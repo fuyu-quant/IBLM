@@ -76,6 +76,7 @@ class IBLMClassifier():
         ・Create a code like the following. Do not change the input or output format.
         ・Create a code that can predict as accurately as possible.
         ・Use conditional branching and linear relational expressions.
+        ・Complex relational expressions should also be used.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
         ------------------
