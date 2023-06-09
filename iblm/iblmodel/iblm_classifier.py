@@ -75,9 +75,10 @@ class IBLMClassifier():
         ・Without using a machine learning model, we will create a code to predict a "target" based on logic from a large amount of input data.
         ・The column names, in order, are as follows {col_name_}
         ・Please make your predictions as accurate as possible.
+        ・The output should be a probability value of 1.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
-        ・Create a code like the following. Do not change the code before 'for index, row in df.iterrows():' and after {output_code_}.
+        ・Create a code like the following. Do not change the code before 'for index, row in df.iterrows():' and after 'output.append(y)'.
         ------------------
         import numpy as np
         def predict(x):
@@ -95,7 +96,7 @@ class IBLMClassifier():
             data_type_ = data_type,
             col_name_ = col_name,
             col_option_ = col_option,
-            output_code_ = output_code
+            #output_code_ = output_code
             )
 
         #print(create_prompt)

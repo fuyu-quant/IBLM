@@ -4,17 +4,16 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Please describe the process required to make the prediction below.
-        sepal_length = row[0]
-        sepal_width = row[1]
-        petal_length = row[2]
-        petal_width = row[3]
 
-        if petal_length <= 2.0:
-            y = 0
-        elif petal_length > 2.0 and petal_length <= 4.9:
+        # If the passenger is a woman or a child, predict survival (1)
+        if row['sex'] == 'female' or row['age'] < 18:
             y = 1
+        # If the passenger is a man and in first or second class, predict survival (1)
+        elif row['pclass'] in [1, 2] and row['sex'] == 'male':
+            y = 1
+        # Otherwise, predict non-survival (0)
         else:
-            y = 2
+            y = 0
 
         output.append(y)
     return np.array(output)
