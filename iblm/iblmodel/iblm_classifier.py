@@ -106,9 +106,9 @@ class IBLMClassifier():
 
 
         # Save to File
-        #if file_path != None:
-        #    with open(file_path + f'{model_name}.py', mode='w') as file:
-        #        file.write(model_code)
+        if file_path != None:
+            with open(file_path + f'{model_name}.py', mode='w') as file:
+                file.write(model_code)
 
 
         self.model_code = model_code
@@ -121,14 +121,9 @@ class IBLMClassifier():
 
         code = self.model_code
 
-        # = re.search(r'def (\w+)', function_string).group(1)
-        #code = self.model_code + '\n'# + f'model = model({x})'
         exec(code, globals())
 
-        #model = namespace["code"]
-        
         y = predict(x)
-
         return y
 
 
