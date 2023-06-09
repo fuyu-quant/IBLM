@@ -3,20 +3,25 @@ def predict(x):
     df = x.copy()
     output = []
     for index, row in df.iterrows():
+        # Please describe the process required to make the prediction below.
 
-        # Feature creation and data preprocessing
-        sex = 1 if row['sex'] == 'male' else 0
-        age = row['age']
-        pclass = row['pclass']
-        fare = row['fare']
-        sibsp = row['sibsp']
-        parch = row['parch']
-        adult_male = 1 if row['adult_male'] else 0
-        alone = 1 if row['alone'] else 0
-
-        # Prediction logic
-        y = -1.5 + 0.8 * sex - 0.02 * age - 0.5 * pclass + 0.001 * fare - 0.3 * sibsp - 0.2 * parch + 0.6 * adult_male - 0.4 * alone
+        # If the passenger is a female and in first or second class, predict survival
+        if row['sex'] == 'female' and (row['pclass'] == 1 or row['pclass'] == 2):
+            y = 1
+        # If the passenger is a child (age <= 15) and in first or second class, predict survival
+        elif row['age'] <= 15 and (row['pclass'] == 1 or row['pclass'] == 2):
+            y = 1
+        # If the passenger is a male and in third class, predict non-survival
+        elif row['sex'] == 'male' and row['pclass'] == 3:
+            y = 0
+        # If the passenger is an adult male and traveling alone, predict non-survival
+        elif row['adult_male'] and row['alone']:
+            y = 0
+        # For all other cases, predict non-survival
+        else:
+            y = 0
 
         y = 1 / (1 + np.exp(-y))
+
         output.append(y)
     return np.array(output)

@@ -34,6 +34,7 @@ class IBLMClassifier():
             output_code = 'y = 1 / (1 + np.exp(-y))'
         else:
             task_type = 'multi-class classification'
+            output_code = ''
 
         # Obtaining data types
         data_type = ', '.join(df.dtypes.astype(str))

@@ -1,14 +1,4 @@
 survived,pclass,sex,age,sibsp,parch,fare,embarked,class,who,adult_male,deck,embark_town,alive,alone
-1,1,female,35.0,1,0,83.475,S,First,woman,False,C,Southampton,yes,False
-0,3,male,29.0,0,0,7.775,S,Third,man,True,,Southampton,no,True
-0,2,male,59.0,0,0,13.5,S,Second,man,True,,Southampton,no,True
-1,3,female,5.0,4,2,31.3875,S,Third,child,False,,Southampton,yes,False
-0,2,male,24.0,0,0,10.5,S,Second,man,True,,Southampton,no,True
-0,3,female,,0,0,7.55,S,Third,woman,False,,Southampton,no,True
-0,2,male,44.0,1,0,26.0,S,Second,man,True,,Southampton,no,False
-1,2,female,8.0,0,2,26.25,S,Second,child,False,,Southampton,yes,False
-0,2,male,19.0,0,0,10.5,S,Second,man,True,,Southampton,no,True
-0,2,male,33.0,0,0,12.275,S,Second,man,True,,Southampton,no,True
 0,3,female,,1,0,14.4542,C,Third,woman,False,,Cherbourg,no,False
 1,3,female,,1,0,15.5,Q,Third,woman,False,,Queenstown,yes,False
 0,2,male,29.0,0,0,10.5,S,Second,man,True,,Southampton,no,True
