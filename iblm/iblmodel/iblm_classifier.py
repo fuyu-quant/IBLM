@@ -106,9 +106,9 @@ class IBLMClassifier():
 
 
         # Save to File
-        if file_path != None:
-            with open(file_path + f'{model_name}.py', mode='w') as file:
-                file.write(model_code)
+        #if file_path != None:
+        #    with open(file_path + f'{model_name}.py', mode='w') as file:
+        #        file.write(model_code)
 
 
         self.model_code = model_code
