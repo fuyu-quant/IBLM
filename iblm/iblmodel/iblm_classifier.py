@@ -64,7 +64,7 @@ class IBLMClassifier():
 
         create_prompt = """
         Please create your code in compliance with all of the following conditions. Output should be code only. Do not enclose the output in ``python ``` or the like.
-        ・Analyze the large amount of data below and create a {task_type_} code to accurately predict "target".
+        ・Analyze the following large amount of data and create a code to accurately predict the probability that the "target" is 1.
         ------------------
         {dataset_str_}
         ------------------
@@ -91,7 +91,7 @@ class IBLMClassifier():
                 output.append(y)
             return np.array(output)
         """.format(
-            task_type_ = task_type,
+            #task_type_ = task_type,
             dataset_str_ = dataset_str,
             data_type_ = data_type,
             col_name_ = col_name,

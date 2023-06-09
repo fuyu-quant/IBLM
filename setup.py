@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='iblm',
-    version='0.0.18',
+    version='0.0.19',
     description='Inductive Bias Learning Models',
     packages=find_packages(), 
     install_requires=[

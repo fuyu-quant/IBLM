@@ -4,14 +4,20 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Please describe the process required to make the prediction below.
-
-        # If the passenger is a woman or a child, predict survival (1)
-        if row['sex'] == 'female' or row['age'] < 18:
+        
+        # If the passenger is a female, has a fare greater than 50, and is not in the third class, predict 1
+        if row['sex'] == 'female' and row['fare'] > 50 and row['pclass'] != 3:
             y = 1
-        # If the passenger is a man and in first or second class, predict survival (1)
-        elif row['pclass'] in [1, 2] and row['sex'] == 'male':
+        # If the passenger is a male, younger than 10, and is not in the third class, predict 1
+        elif row['sex'] == 'male' and row['age'] < 10 and row['pclass'] != 3:
             y = 1
-        # Otherwise, predict non-survival (0)
+        # If the passenger is a female, younger than 18, and is in the first or second class, predict 1
+        elif row['sex'] == 'female' and row['age'] < 18 and row['pclass'] != 3:
+            y = 1
+        # If the passenger is a male, older than 50, and is in the first class, predict 1
+        elif row['sex'] == 'male' and row['age'] > 50 and row['pclass'] == 1:
+            y = 1
+        # Otherwise, predict 0
         else:
             y = 0
 
