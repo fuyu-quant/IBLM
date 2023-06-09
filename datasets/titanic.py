@@ -4,22 +4,40 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Please describe the process required to make the prediction below.
-        
-        # If the passenger is a female, has a fare greater than 50, and is not in the third class, predict 1
-        if row['sex'] == 'female' and row['fare'] > 50 and row['pclass'] != 3:
-            y = 1
-        # If the passenger is a male, younger than 10, and is not in the third class, predict 1
-        elif row['sex'] == 'male' and row['age'] < 10 and row['pclass'] != 3:
-            y = 1
-        # If the passenger is a female, younger than 18, and is in the first or second class, predict 1
-        elif row['sex'] == 'female' and row['age'] < 18 and row['pclass'] != 3:
-            y = 1
-        # If the passenger is a male, older than 50, and is in the first class, predict 1
-        elif row['sex'] == 'male' and row['age'] > 50 and row['pclass'] == 1:
-            y = 1
-        # Otherwise, predict 0
-        else:
-            y = 0
+
+        # Initialize the probability of target being 1
+        prob = 0
+
+        # If the passenger is a woman, increase the probability
+        if row['sex'] == 'female':
+            prob += 0.6
+
+        # If the passenger is in first or second class, increase the probability
+        if row['pclass'] in [1, 2]:
+            prob += 0.3
+
+        # If the passenger is a child, increase the probability
+        if row['age'] < 18:
+            prob += 0.2
+
+        # If the passenger is not alone, increase the probability
+        if not row['alone']:
+            prob += 0.1
+
+        # If the passenger is an adult male, decrease the probability
+        if row['adult_male']:
+            prob -= 0.4
+
+        # If the passenger embarked from Cherbourg, increase the probability
+        if row['embark_town'] == 'Cherbourg':
+            prob += 0.1
+
+        # If the passenger embarked from Queenstown, decrease the probability
+        if row['embark_town'] == 'Queenstown':
+            prob -= 0.1
+
+        # Clip the probability between 0 and 1
+        y = np.clip(prob, 0, 1)
 
         output.append(y)
-    return np.array(output)
+    return
