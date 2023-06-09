@@ -72,10 +72,10 @@ class IBLMClassifier():
         ------------------
         {data_type_}
         ------------------
-        ・Without using a machine learning model, we will create a code to predict a "target" based on logic from a large amount of input data.
         ・The column names, in order, are as follows {col_name_}
+        ・Think and code the logic to predict probability values based on the data without using a machine learning model.
         ・Please make your predictions as accurate as possible.
-        ・The output should be a probability value of 1.
+        ・Predicting probability values as finely as possible increases overall accuracy.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
         ・Create a code like the following.
