@@ -1,9 +1,11 @@
 # IBLM:Inductive Bias Learning Models
 
 
-- [](#)
-- [How It Works](#how-it-works)
+- [What is IBLM](#what-is-iblm)
 - [How to Use](#how-to-use)
+    - [Setting](#setting)
+    - [Binary classificatin](#binary-classification)
+    - [Notebooks](#notebooks)
 - [Supported Models](#supported-models)
 - [Contributor](#contributor)
 - [Backstory](#backstory)
@@ -11,17 +13,49 @@
 
 
 ## What is IBLM?
-
-
-
-## How It Works
-
-
-
+IBLM (Inductive Bias Learning) is a new machine learning modeling method that uses LLM to infer the structure of the model itself from the data set and outputs it as Python code. The learned model (code model) can be used as a machine learning model to predict a new dataset.
 
 
 ## How to Use
+
+### Setting
+
+* Installation
+```python
+pip install iblm
+```
+* OpenAI API key settings
+```python
+os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
+```
+
+### Binary classification
+
+* Model Definition
+```python
+from iblm import IBLMClassifier
+
+llm_model_name = 'gpt-4'
+
+params = {'columns_name': True}
+
+iblm = IBLMClassifier(llm_model_name=llm_model_name, params=params)
+```
+
+* Model Learning
+```python
+file_path = 'Specify the directory to output python files.'
+model = iblm.fit(x_train, y_train, model_name = 'model_name', file_path=file_path)
+```
+
+* Model Predictions
+```python
+y_proba = iblm.predict(x_test)
+```
+
+### Notebooks
 Use the link below to try it out immediately on Google colab.
+- [Binary classification](https://github.com/fuyu-quant/IBLM/blob/release-maintenance/examples/iblmodel_halfmoon.ipynb)
 
 
 ## Supported Models
