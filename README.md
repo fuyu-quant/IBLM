@@ -45,6 +45,7 @@ iblm = IBLMClassifier(llm_model_name=llm_model_name, params=params)
 * Model Learning
 ```python
 file_path = 'Specify the directory to output python files.'
+
 model = iblm.fit(x_train, y_train, model_name = 'model_name', file_path=file_path)
 ```
 

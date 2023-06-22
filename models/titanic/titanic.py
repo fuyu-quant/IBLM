@@ -5,54 +5,64 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        # Please describe the process required to make the prediction below.
-
-        # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}
-        sex_prob = {'female': 0.74, 'male': 0.19}
-        age_prob = {0: 0.67, 1: 0.42, 2: 0.40, 3: 0.44, 4: 0.09}
-        fare_prob = {0: 0.68, 1: 0.50, 2: 0.44, 3: 0.16}
         
+        # Prediction logic
         pclass = row['pclass']
         age = row['age']
         fare = row['fare']
         sex_female = row['sex_female']
-        sex_male = row['sex_male']
+        embarked_C = row['embarked_C']
+        embarked_Q = row['embarked_Q']
+        embarked_S = row['embarked_S']
+        alive_yes = row['alive_yes']
+        alone_True = row['alone_True']
+        adult_male_True = row['adult_male_True']
+        who_child = row['who_child']
+        who_woman = row['who_woman']
+        class_First = row['class_First']
+        class_Second = row['class_Second']
+        class_Third = row['class_Third']
+        embark_town_Cherbourg = row['embark_town_Cherbourg']
+        embark_town_Queenstown = row['embark_town_Queenstown']
+        embark_town_Southampton = row['embark_town_Southampton']
 
-        # Determine the age group
-        if age <= 16:
-            age_group = 0
-        elif age <= 32:
-            age_group = 1
-        elif age <= 48:
-            age_group = 2
-        elif age <= 64:
-            age_group = 3
-        else:
-            age_group = 4
-
-        # Determine the fare group
-        if fare <= 7.91:
-            fare_group = 0
-        elif fare <= 14.454:
-            fare_group = 1
-        elif fare <= 31:
-            fare_group = 2
-        else:
-            fare_group = 3
-
-        # Calculate the probability based on the features
-        pclass_probability = pclass_prob[pclass]
-        age_probability = age_prob[age_group]
-        fare_probability = fare_prob[fare_group]
-
+        # Calculate probability based on the given data
+        prob = 0
         if sex_female:
-            sex_probability = sex_prob['female']
-        else:
-            sex_probability = sex_prob['male']
+            prob += 0.6
+        if pclass == 1:
+            prob += 0.3
+        elif pclass == 2:
+            prob += 0.1
+        if age <= 16:
+            prob += 0.2
+        if fare > 50:
+            prob += 0.1
+        if embarked_C:
+            prob += 0.1
+        if alive_yes:
+            prob += 0.3
+        if alone_True:
+            prob -= 0.1
+        if adult_male_True:
+            prob -= 0.2
+        if who_child:
+            prob += 0.2
+        if who_woman:
+            prob += 0.1
+        if class_First:
+            prob += 0.2
+        if class_Second:
+            prob += 0.1
+        if embark_town_Cherbourg:
+            prob += 0.1
+        if embark_town_Queenstown:
+            prob += 0.05
+        if embark_town_Southampton:
+            prob += 0.05
 
-        # Calculate the final probability
-        y = pclass_probability * age_probability * fare_probability * sex_probability
+        # Normalize probability to be between 0 and 1
+        y = min(max(prob, 0), 1)
 
         # Do not change the code after this point.
         output.append(y)
