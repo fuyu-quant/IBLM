@@ -5,55 +5,41 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        # Please describe the process required to make the prediction below.
-
-        # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}
-        sex_prob = {'female': 0.74, 'male': 0.19}
-        age_prob = {0: 0.67, 1: 0.38, 2: 0.40, 3: 0.44, 4: 0.09}
-        fare_prob = {0: 0.68, 1: 0.50, 2: 0.44, 3: 0.15}
         
+        # Calculate the probability based on the given features
         pclass = row['pclass']
         age = row['age']
-        sex_female = row['sex_female']
         fare = row['fare']
+        sex_female = row['sex_female']
+        sex_male = row['sex_male']
+        embarked_C = row['embarked_C']
+        embarked_Q = row['embarked_Q']
+        embarked_S = row['embarked_S']
+        class_First = row['class_First']
+        class_Second = row['class_Second']
+        class_Third = row['class_Third']
         
-        # Calculate the probability based on pclass
-        pclass_probability = pclass_prob[pclass]
+        # Weights for each feature
+        w_pclass = -0.15
+        w_age = -0.005
+        w_fare = 0.002
+        w_sex_female = 0.5
+        w_sex_male = -0.5
+        w_embarked_C = 0.1
+        w_embarked_Q = 0.05
+        w_embarked_S = -0.15
+        w_class_First = 0.3
+        w_class_Second = 0.1
+        w_class_Third = -0.4
         
-        # Calculate the probability based on sex
-        if sex_female == 1:
-            sex_probability = sex_prob['female']
-        else:
-            sex_probability = sex_prob['male']
+        # Calculate the probability using a weighted sum of features
+        prob = (pclass * w_pclass + age * w_age + fare * w_fare + sex_female * w_sex_female + sex_male * w_sex_male +
+                embarked_C * w_embarked_C + embarked_Q * w_embarked_Q + embarked_S * w_embarked_S +
+                class_First * w_class_First + class_Second * w_class_Second + class_Third * w_class_Third)
         
-        # Calculate the probability based on age
-        if age <= 16:
-            age_group = 0
-        elif age <= 32:
-            age_group = 1
-        elif age <= 48:
-            age_group = 2
-        elif age <= 64:
-            age_group = 3
-        else:
-            age_group = 4
-        age_probability = age_prob[age_group]
+        # Normalize the probability to be between 0 and 1
+        y = 1 / (1 + np.exp(-prob))
         
-        # Calculate the probability based on fare
-        if fare <= 7.91:
-            fare_group = 0
-        elif fare <= 14.454:
-            fare_group = 1
-        elif fare <= 31:
-            fare_group = 2
-        else:
-            fare_group = 3
-        fare_probability = fare_prob[fare_group]
-        
-        # Calculate the final probability
-        y = pclass_probability * sex_probability * age_probability * fare_probability
-
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
