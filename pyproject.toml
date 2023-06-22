@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "iblm"
+version = "0.1.0"
+description = "inductive bias learning"
+authors = ["toma tanaka <ulti4929@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+langchain = "^0.0.208"
+openai = "^0.27.8"
+jupyter = "^1.0.0"
+pandas = "^2.0.2"
+scikit-learn = "^1.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
