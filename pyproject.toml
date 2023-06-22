@@ -8,7 +8,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-iblm = {git = "https://github.com/fuyu-quant/IBLM"}
 langchain = "^0.0.208"
 openai = "^0.27.8"
 jupyter = "^1.0.0"
