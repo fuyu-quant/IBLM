@@ -37,14 +37,13 @@ class ICLClassifier():
 
 
         icl_prompt = """
-        Please make your predictions by adhering to all of the following conditions.
+        Predict the 'target' by observing all of the following conditions.
         ・Please make your predictions as accurate as possible.
-        ・The output must be a single number.
-        ・Make your prediction based on the following data.
+        ・Make your prediction based on the following data.The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
         {dataset_str_}
         ------------------
-        ・Please make a prediction for the following data.
+        ・Predict the probability that 'target' is 1 for the following data. The output should be a probability value only.
         ------------------
         """.format(
             dataset_str_ = dataset_str
