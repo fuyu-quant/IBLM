@@ -39,7 +39,7 @@ class ICLClassifier():
         icl_prompt = """
         Please make your predictions by adhering to all of the following conditions.
         ・Please make your predictions as accurate as possible.
-        ・Output should be a single number only.
+        ・The output must be a single number.
         ・Please make your prediction based on the dataset below.
         ------------------
         {dataset_str_}
