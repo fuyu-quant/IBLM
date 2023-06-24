@@ -67,7 +67,7 @@ class ICLClassifier():
             str_row = ','.join([str(elm) for elm in row.to_list()])
             prompt = self.icl_prompt + str_row
 
-            y = int(self.llm_model(prompt))
+            y = float(self.llm_model(prompt))
             output.append(y)
 
         return np.array(output)
