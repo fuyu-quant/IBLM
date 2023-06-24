@@ -1,0 +1,9 @@
+survived,pclass,age,sibsp,parch,fare,sex_female,sex_male,embarked_C,embarked_Q,embarked_S,alive_no,alive_yes,alone_False,alone_True,adult_male_False,adult_male_True,who_child,who_man,who_woman,class_First,class_Second,class_Third,deck_A,deck_B,deck_C,deck_D,deck_E,deck_F,deck_G,embark_town_Cherbourg,embark_town_Queenstown,embark_town_Southampton
+1,2,27.0,0,0,10.5,True,False,False,False,True,False,True,False,True,True,False,False,False,True,False,True,False,False,False,False,False,True,False,False,False,False,True
+1,2,7.0,0,2,26.25,True,False,False,False,True,False,True,True,False,True,False,True,False,False,False,True,False,False,False,False,False,False,False,False,False,False,True
+1,2,29.0,1,0,26.0,True,False,False,False,True,False,True,True,False,True,False,False,False,True,False,True,False,False,False,False,False,False,False,False,False,False,True
+1,3,27.0,0,0,7.7958,False,True,False,False,True,False,True,False,True,False,True,False,True,False,False,False,True,False,False,False,False,False,False,False,False,False,True
+0,3,20.0,0,0,9.225,False,True,False,False,True,True,False,False,True,False,True,False,True,False,False,False,True,False,False,False,False,False,False,False,False,False,True
+0,3,21.0,0,0,8.4333,False,True,False,False,True,True,False,False,True,False,True,False,True,False,False,False,True,False,False,False,False,False,False,False,False,False,True
+0,2,28.0,0,0,0.0,False,True,False,False,True,True,False,False,True,False,True,False,True,False,False,True,False,False,False,False,False,False,False,False,False,False,True
+0,3,24.0,0,0,8.85,True,False,False,False,True,True,False,False,True,True,False,False,False,True,False,False,True,False,False,False,False,False,False,False,False,False,True
