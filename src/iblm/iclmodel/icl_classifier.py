@@ -39,6 +39,7 @@ class ICLClassifier():
         icl_prompt = """
         Predict the 'target' according to the following conditions.
         ・Please make your predictions as accurate as possible.
+        ・No machine learning algorithms are used.
         ・Predict 'target' based on the following data only.The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
         {dataset_str_}
