@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iblm"
-version = "0.1.7"
+version = "0.1.8"
 description = "inductive bias learning"
 authors = ["toma tanaka <ulti4929@gmail.com>"]
 license = "MIT"
@@ -15,6 +15,7 @@ pandas = "^2.0.2"
 scikit-learn = "^1.2.2"
 datasets = "^2.13.1"
 matplotlib = "^3.7.1"
+tqdm = "^4.65.0"
 
 
 [build-system]

@@ -1,5 +1,5 @@
 from langchain.llms import OpenAI
-from langchain.callbacks import get_openai_callback
+from tqdm import tqdm
 import re
 
 import numpy as np
@@ -40,7 +40,7 @@ class ICLClassifier():
         Please output the predicted value by observing all of the following conditions.
         ・What is the probability that "Predicted data" is 1 given the following data?
         ・Please make your predictions as accurate as possible.
-        ・The output should be only probability values.
+        ・The output is a single number with a probability value of 1 only.
         ------------------
         {dataset_str_}
         ------------------
@@ -63,7 +63,8 @@ class ICLClassifier():
             raise Exception("You must train the model before predicting!")
 
         output = []
-        for _, row in x.iterrows():
+        for _, row in tqdm(x.iterrows(), total=x.shape[0]):
+        #for _, row in x.iterrows():
             str_row = ','.join([str(elm) for elm in row.to_list()])
             prompt = self.icl_prompt + str_row
 
