@@ -21,7 +21,7 @@ class ICLClassifier():
 
 
     def fit(self, x, y):
-        print("> Start of model creating.")
+        print("> Start of code creating.")
         df = x.copy()
 
         df['target'] = y
@@ -32,6 +32,7 @@ class ICLClassifier():
         for index, row in df.iterrows():
             row_as_str = [str(item) for item in row.tolist()] 
             dataset.append(','.join(row_as_str))
+
         dataset_str = '\n'.join(dataset)
 
 
@@ -41,12 +42,12 @@ class ICLClassifier():
         ・Please make your predictions as accurate as possible.
         ・The output should be only probability values.
         ------------------
-        {dataset_str}
+        {dataset_str_}
         ------------------
         Predicted data
         ------------------
         """.format(
-            dataset_str_ = dataset_str,
+            dataset_str_ = dataset_str
             )
 
         self.icl_prompt = icl_prompt
