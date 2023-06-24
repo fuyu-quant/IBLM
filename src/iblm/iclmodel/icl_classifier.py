@@ -20,7 +20,7 @@ class ICLClassifier():
         self.icl_prompt = None
 
 
-    def fit(self, x, y, model_name, file_path=None):
+    def fit(self, x, y):
         print("> Start of model creating.")
         df = x.copy()
 
@@ -51,7 +51,7 @@ class ICLClassifier():
 
         self.icl_prompt = icl_prompt
 
-        return self.icl_prompt
+        return icl_prompt
 
 
 
