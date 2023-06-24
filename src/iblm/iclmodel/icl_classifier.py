@@ -52,12 +52,14 @@ class ICLClassifier():
 
         self.icl_prompt = icl_prompt
 
+        print(len(icl_prompt))
+
         return icl_prompt
 
 
 
     def predict(self, x):
-        if self.model_code is None:
+        if self.icl_prompt is None:
             raise Exception("You must train the model before predicting!")
 
         output = []
