@@ -40,11 +40,11 @@ class ICLClassifier():
         Please make your predictions by adhering to all of the following conditions.
         ・Please make your predictions as accurate as possible.
         ・The output must be a single number.
-        ・Please make your prediction based on the dataset below.
+        ・Make your prediction based on the following data.
         ------------------
         {dataset_str_}
         ------------------
-        Predicted data
+        ・Please make a prediction for the following data.
         ------------------
         """.format(
             dataset_str_ = dataset_str
@@ -68,7 +68,10 @@ class ICLClassifier():
             str_row = ','.join([str(elm) for elm in row.to_list()])
             prompt = self.icl_prompt + str_row
 
-            y = float(self.llm_model(prompt))
+            y = self.llm_model(prompt)
+            print(y)
+            y = float(y)
+            
             output.append(y)
 
         return np.array(output)
