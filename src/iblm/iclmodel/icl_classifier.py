@@ -51,7 +51,7 @@ class ICLClassifier():
 
         self.icl_prompt = icl_prompt
 
-        return 
+        return self.icl_prompt
 
 
 
