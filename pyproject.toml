@@ -13,6 +13,8 @@ openai = "^0.27.8"
 jupyter = "^1.0.0"
 pandas = "^2.0.2"
 scikit-learn = "^1.2.2"
+datasets = "^2.13.1"
+matplotlib = "^3.7.1"
 
 
 [build-system]
