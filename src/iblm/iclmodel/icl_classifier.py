@@ -37,10 +37,10 @@ class ICLClassifier():
 
 
         icl_prompt = """
-        Please output the predicted value by observing all of the following conditions.
-        ・What is the probability that "Predicted data" is 1 given the following data?
+        Please make your predictions by adhering to all of the following conditions.
         ・Please make your predictions as accurate as possible.
-        ・The output is a single number with a probability value of 1 only.
+        ・Output should be a single number only.
+        ・Please make your prediction based on the dataset below.
         ------------------
         {dataset_str_}
         ------------------
