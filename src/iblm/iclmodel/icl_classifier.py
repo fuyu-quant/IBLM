@@ -41,7 +41,6 @@ class ICLClassifier():
         ・The output should be numeric only.
         ・Do not output data analysis methods or calculation methods.
         ・Output probability values as far as you can tell, even if you cannot make an exact prediction.
-        ・Please make your predictions as accurate as possible.
         ・No machine learning algorithms are used.
         ・The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
