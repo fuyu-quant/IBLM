@@ -66,13 +66,15 @@ class ICLClassifier():
 
         output = []
         for _, row in tqdm(x.iterrows(), total=x.shape[0]):
-        #for _, row in x.iterrows():
             str_row = ','.join([str(elm) for elm in row.to_list()])
             prompt = self.icl_prompt + str_row
 
-            y = self.llm_model(prompt)
-            print(y)
-            y = float(y)
+            try:
+                y = self.llm_model(prompt)
+                print(y)
+                y = float(y)
+            except ValueError:
+                print('Calculate the probability value again.')
             
             output.append(y)
 
