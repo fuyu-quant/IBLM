@@ -63,7 +63,7 @@ class IBLMClassifier():
 
 
         create_prompt = """
-        You are a machine learning model that finds patterns in large amounts of data and codes accordingly.
+        You are skilled at finding the logic that leads to predictions from large amounts of data and creating code to do so.
         Please create your code in compliance with all of the following conditions. Output should be code only. Do not enclose the output in ``python ``` or the like.
         ・Analyze the following large amount of data and create a code to accurately predict the probability that the "target" is 1.
         ------------------
