@@ -40,9 +40,7 @@ class ICLClassifier():
         Output the values according to all of the following conditions.
         ・The output should be numeric only.
         ・Do not output any text.
-        ・Do not output data analysis methods or calculation methods.
-        ・Output probability values as far as you can tell, even if you cannot make an exact prediction.
-        ・No machine learning algorithms are used.
+        ・Predict the probability value as accurately as possible. Please be as detailed as possible.
         ・The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
         {dataset_str_}
@@ -72,7 +70,7 @@ class ICLClassifier():
 
             try:
                 y = self.llm_model(prompt)
-                print(y)
+                #print(y)
                 y = float(y)
             except ValueError:
                 print('Calculate the probability value again.')
