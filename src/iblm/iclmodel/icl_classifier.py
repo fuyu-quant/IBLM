@@ -43,7 +43,6 @@ class ICLClassifier():
         ・Output probability values as far as you can tell, even if you cannot make an exact prediction.
         ・Please make your predictions as accurate as possible.
         ・No machine learning algorithms are used.
-        ・Predict the 'target' of the new data based on the following data.
         ・The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
         {dataset_str_}
