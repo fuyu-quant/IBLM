@@ -38,13 +38,15 @@ class ICLClassifier():
 
         icl_prompt = """
         Predict the 'target' according to the following conditions.
+        ・The output should be numeric only.
         ・Please make your predictions as accurate as possible.
         ・No machine learning algorithms are used.
-        ・Predict 'target' based on the following data only.The rightmost column with a value of 0 or 1 is 'target'.
+        ・Predict the 'target' of the new data based on the following data.
+        ・The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
         {dataset_str_}
         ------------------
-        ・Predict the probability that 'target' is 1 for the following data. The output should be a probability value only.
+        ・Predict the probability that 'target' is 1 for the following data. 
         ------------------
         """.format(
             dataset_str_ = dataset_str
