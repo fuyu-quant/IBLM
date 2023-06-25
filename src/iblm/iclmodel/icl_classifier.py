@@ -72,10 +72,10 @@ class ICLClassifier():
                 y = self.llm_model(prompt)
                 #print(y)
                 y = float(y)
+                output.append(y)
             except ValueError:
-                print('Calculate the probability value again.')
+                #print('Calculate the probability value again.')
             
-            output.append(y)
 
         return np.array(output)
 
