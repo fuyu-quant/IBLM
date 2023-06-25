@@ -37,7 +37,7 @@ class ICLClassifier():
 
 
         icl_prompt = """
-        Predict the 'target' according to the following conditions.
+        Output the values according to all of the following conditions.
         ・The output should be numeric only.
         ・Please make your predictions as accurate as possible.
         ・No machine learning algorithms are used.
