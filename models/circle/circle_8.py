@@ -10,14 +10,15 @@ def predict(x):
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
 
-        # Based on the given data, we can observe that the target is more likely to be 1 when
-        # the absolute values of Feature_1 and Feature_2 are higher.
-        # We can use a simple heuristic to predict the probability based on the sum of the absolute values.
-        probability = (abs(feature_1) + abs(feature_2)) / 2
+        # Calculate the distance from the origin (0, 0)
+        distance = np.sqrt(feature_1**2 + feature_2**2)
 
-        # Normalize the probability to be between 0 and 1
-        probability = min(max(probability, 0), 1)
+        # Normalize the distance to a range between 0 and 1
+        normalized_distance = distance / (np.sqrt(2))
+
+        # Calculate the probability of the target being 1
+        y = 1 - normalized_distance
 
         # Do not change the code after this point.
-        output.append(probability)
+        output.append(y)
     return np.array(output)

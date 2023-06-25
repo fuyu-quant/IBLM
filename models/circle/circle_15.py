@@ -1,4 +1,5 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []
@@ -9,10 +10,14 @@ def predict(x):
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
 
-        # Based on the given data, we can observe that the target is 1 when the sum of Feature_1 and Feature_2 is positive
-        # and the target is 0 when the sum is negative. We can use this observation to predict the probability of the target being 1.
-        sum_features = feature_1 + feature_2
-        y = max(0, min(1, (sum_features + 1) / 2))
+        # Calculate the distance from the origin (0, 0)
+        distance = np.sqrt(feature_1**2 + feature_2**2)
+
+        # Normalize the distance to range [0, 1]
+        normalized_distance = distance / np.sqrt(2)
+
+        # Calculate the probability of the target being 1
+        y = 1 - normalized_distance
 
         # Do not change the code after this point.
         output.append(y)

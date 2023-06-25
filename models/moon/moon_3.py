@@ -10,14 +10,9 @@ def predict(x):
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
 
-        # Based on the given data, we can observe that the target is more likely to be 1 when Feature_1 is positive
-        # and Feature_2 is negative or close to 0. Similarly, the target is more likely to be 0 when Feature_1 is
-        # negative or close to 0 and Feature_2 is positive. We can use this observation to predict the probability
-        # of the target being 1.
-
-        # Calculate the probability of target being 1 based on Feature_1 and Feature_2 values
-        prob_1 = (feature_1 + 1) / 2 * (1 - (feature_2 + 1) / 2)
+        # Calculate the probability based on the given features
+        probability = 1 / (1 + np.exp(-(feature_1 + feature_2)))
 
         # Do not change the code after this point.
-        output.append(prob_1)
+        output.append(probability)
     return np.array(output)

@@ -10,9 +10,15 @@ def predict(x):
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
 
-        # Calculate the probability based on the given features
-        probability = 1 / (1 + np.exp(-(feature_1 + feature_2)))
+        # Calculate the distance from the origin (0, 0)
+        distance = np.sqrt(feature_1**2 + feature_2**2)
+
+        # Normalize the distance to a value between 0 and 1
+        normalized_distance = distance / (distance + 1)
+
+        # Use the normalized distance as the probability
+        y = normalized_distance
 
         # Do not change the code after this point.
-        output.append(probability)
+        output.append(y)
     return np.array(output)

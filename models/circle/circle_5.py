@@ -1,4 +1,5 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []
@@ -15,7 +16,7 @@ def predict(x):
         # Normalize the distance to range [0, 1]
         normalized_distance = distance / np.sqrt(2)
 
-        # Calculate the probability of target being 1
+        # Calculate the probability of the target being 1
         y = 1 - normalized_distance
 
         # Do not change the code after this point.

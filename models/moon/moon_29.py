@@ -1,4 +1,5 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []

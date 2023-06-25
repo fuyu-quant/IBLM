@@ -7,17 +7,15 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Based on the given data, it seems that the target is more likely to be 1 when Feature_1 is positive
-        # and Feature_2 is negative or close to 0. Conversely, the target is more likely to be 0 when
-        # Feature_1 is negative or close to 0 and Feature_2 is positive.
-        # We can use this observation to create a simple heuristic for predicting the probability of the target being 1.
+        # Calculate the distance from the origin (0, 0)
+        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
 
-        feature_1 = row['Feature_1']
-        feature_2 = row['Feature_2']
+        # Normalize the distance to a range between 0 and 1
+        normalized_distance = distance / (np.sqrt(2))
 
-        # Calculate the probability of the target being 1 based on the heuristic
-        prob_1 = (feature_1 + 1) / 2 * (1 - (feature_2 + 1) / 2)
+        # Calculate the probability of the target being 1
+        y = 1 - normalized_distance
 
         # Do not change the code after this point.
-        output.append(prob_1)
+        output.append(y)
     return np.array(output)
