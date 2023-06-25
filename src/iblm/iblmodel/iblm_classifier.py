@@ -63,6 +63,7 @@ class IBLMClassifier():
 
 
         create_prompt = """
+        You are a machine learning model that finds patterns in large amounts of data and codes accordingly.
         Please create your code in compliance with all of the following conditions. Output should be code only. Do not enclose the output in ``python ``` or the like.
         ・Analyze the following large amount of data and create a code to accurately predict the probability that the "target" is 1.
         ------------------
@@ -73,9 +74,9 @@ class IBLMClassifier():
         {data_type_}
         ------------------
         ・The column names, in order, are as follows {col_name_}
-        ・Think and code the logic to predict probability values based on the data without using a machine learning model.
+        ・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
         ・Create a code that outputs a high probability value for data that is likely to be 1 and a low probability value for data that is likely to be 0.
-        ・Do not use values such as 0, 1, or 0.5 as output values.
+        ・Create code that does not output values such as 0, 1, or 0.5.
         ・Predicting probability values as finely as possible increases overall accuracy.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
