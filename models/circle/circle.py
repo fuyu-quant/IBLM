@@ -10,7 +10,7 @@ def predict(x):
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
 
-        # Calculate the probability based on the given features
+        # Calculate the probability based on the features
         probability = 1 / (1 + np.exp(-(feature_1 + feature_2)))
 
         # Do not change the code after this point.
