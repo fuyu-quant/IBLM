@@ -68,14 +68,14 @@ class ICLClassifier():
             str_row = ','.join([str(elm) for elm in row.to_list()])
             prompt = self.icl_prompt + str_row
 
-        while True:
-            try:
-                y = self.llm_model(prompt)
-                y = float(y)
-                output.append(y)
-                break  
-            except ValueError:
-                pass
+            while True:
+                try:
+                    y = self.llm_model(prompt)
+                    y = float(y)
+                    output.append(y)
+                    break  
+                except ValueError:
+                    pass
 
         return np.array(output)
 
