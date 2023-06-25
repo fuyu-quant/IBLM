@@ -6,15 +6,23 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Calculate the distance from the origin
-        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
+        feature_1 = row['Feature_1']
+        feature_2 = row['Feature_2']
 
-        # Normalize the distance to a range between 0 and 1
-        normalized_distance = distance / (np.sqrt(2))
+        # Calculate the distance from the origin (0, 0)
+        distance = np.sqrt(feature_1**2 + feature_2**2)
 
-        # Use the normalized distance to predict the probability of the target being 1
-        y = 1 - normalized_distance
+        # Normalize the distance to a probability value between 0 and 1
+        probability = 1 / (1 + np.exp(-distance))
+
+        # Adjust the probability based on the signs of feature_1 and feature_2
+        if feature_1 > 0 and feature_2 < 0:
+            probability = 1 - probability
+        elif feature_1 < 0 and feature_2 > 0:
+            probability = probability
+        else:
+            probability = 0.5
 
         # Do not change the code after this point.
-        output.append(y)
+        output.append(probability)
     return np.array(output)
