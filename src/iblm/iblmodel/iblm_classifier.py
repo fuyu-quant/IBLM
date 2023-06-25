@@ -74,7 +74,6 @@ class IBLMClassifier():
         ------------------
         ・The column names, in order, are as follows {col_name_}
         ・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
-        ・・Create a code that outputs a high probability value for data that is likely to be 1 and a low probability value for data that is likely to be 0.
         ・Predicting probability values as finely as possible increases overall accuracy.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
