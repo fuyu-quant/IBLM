@@ -40,6 +40,7 @@ class ICLClassifier():
         Output the values according to all of the following conditions.
         ・The output should be numeric only.
         ・Do not output any text.
+        ・Non-numeric output will result in an error.
         ・Predict the probability value as accurately as possible. Please be as detailed as possible.
         ・The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
