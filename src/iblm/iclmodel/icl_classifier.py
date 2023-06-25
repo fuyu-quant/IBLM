@@ -39,6 +39,7 @@ class ICLClassifier():
         icl_prompt = """
         Output the values according to all of the following conditions.
         ・The output should be numeric only.
+        ・Do not output any text.
         ・Do not output data analysis methods or calculation methods.
         ・Output probability values as far as you can tell, even if you cannot make an exact prediction.
         ・No machine learning algorithms are used.
