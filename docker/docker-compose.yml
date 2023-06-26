@@ -1,11 +1,9 @@
 version: '3.9'
 
 services:
-  ctagi:
+  ibl:
     container_name: ibl
     image: jupyter/datascience-notebook
-    #ports:
-    #  - '8090:8090'
     environment:
       - JUPYTER_ENABLE_LAB=yes
     volumes:
