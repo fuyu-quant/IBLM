@@ -11,7 +11,7 @@ def predict(x):
         
         # Apply the sigmoid function to the weighted sum to get the probability
         y = 1 / (1 + np.exp(-weighted_sum))
-
+        
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)

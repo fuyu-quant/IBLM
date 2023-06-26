@@ -1,4 +1,5 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []
@@ -7,42 +8,25 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}
-        age_prob = {0: 0.55, 1: 0.34, 2: 0.42, 3: 0.44, 4: 0.38, 5: 0.29, 6: 0.00, 7: 0.50}
-        fare_prob = {0: 0.20, 1: 0.42, 2: 0.45, 3: 0.58}
-        sex_female_prob = 0.74
-        sex_male_prob = 0.19
-        embarked_C_prob = 0.55
-        embarked_Q_prob = 0.39
-        embarked_S_prob = 0.34
+        pclass_prob = {1: 0.6, 2: 0.5, 3: 0.3}[row['pclass']]
+        age_prob = 0.5 if row['age'] <= 30 else 0.3
+        sibsp_prob = 0.5 if row['sibsp'] == 0 else 0.4
+        parch_prob = 0.5 if row['parch'] == 0 else 0.4
+        fare_prob = 0.5 if row['fare'] <= 20 else 0.4
+        sex_female_prob = 0.7 if row['sex_female'] else 0.3
+        embarked_S_prob = 0.5 if row['embarked_S'] else 0.4
+        alive_yes_prob = 0.6 if row['alive_yes'] else 0.4
+        alone_True_prob = 0.5 if row['alone_True'] else 0.4
+        adult_male_True_prob = 0.4 if row['adult_male_True'] else 0.6
+        who_man_prob = 0.4 if row['who_man'] else 0.6
+        class_Third_prob = 0.3 if row['class_Third'] else 0.5
+        embark_town_Southampton_prob = 0.5 if row['embark_town_Southampton'] else 0.4
 
-        pclass = row['pclass']
-        age = row['age']
-        fare = row['fare']
-        sex_female = row['sex_female']
-        sex_male = row['sex_male']
-        embarked_C = row['embarked_C']
-        embarked_Q = row['embarked_Q']
-        embarked_S = row['embarked_S']
+        # Combine the probabilities
+        y = pclass_prob * age_prob * sibsp_prob * parch_prob * fare_prob * sex_female_prob * embarked_S_prob * alive_yes_prob * alone_True_prob * adult_male_True_prob * who_man_prob * class_Third_prob * embark_town_Southampton_prob
 
-        age_group = int(age // 10)
-        fare_group = int(fare // 10)
-
-        prob = pclass_prob[pclass] * age_prob[age_group] * fare_prob[fare_group]
-        if sex_female:
-            prob *= sex_female_prob
-        else:
-            prob *= sex_male_prob
-
-        if embarked_C:
-            prob *= embarked_C_prob
-        elif embarked_Q:
-            prob *= embarked_Q_prob
-        else:
-            prob *= embarked_S_prob
-
-        # Normalize the probability to be between 0 and 1
-        y = min(max(prob, 0), 1)
+        # Normalize the probability
+        y = y / (y + (1 - y))
 
         # Do not change the code after this point.
         output.append(y)

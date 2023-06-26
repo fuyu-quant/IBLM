@@ -7,15 +7,9 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Calculate the distance from the origin (0, 0)
-        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
-
-        # Normalize the distance to a value between 0 and 1
-        normalized_distance = distance / (distance + 1)
-
-        # Use the normalized distance as the probability of the target being 1
-        y = normalized_distance
+        # Calculate the probability based on the given data
+        probability = 1 / (1 + np.exp(-(row['Feature_1'] + row['Feature_2'])))
 
         # Do not change the code after this point.
-        output.append(y)
+        output.append(probability)
     return np.array(output)

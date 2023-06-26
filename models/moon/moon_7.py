@@ -7,12 +7,12 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        feature_1 = row['Feature_1']
-        feature_2 = row['Feature_2']
+        # Calculate the weighted sum of the features
+        weighted_sum = row['Feature_1'] * 0.6 + row['Feature_2'] * 0.4
 
-        # Calculate the probability based on the given features
-        probability = 1 / (1 + np.exp(-(feature_1 + feature_2)))
+        # Apply the sigmoid function to the weighted sum to get the probability
+        y = 1 / (1 + np.exp(-weighted_sum))
 
         # Do not change the code after this point.
-        output.append(probability)
+        output.append(y)
     return np.array(output)

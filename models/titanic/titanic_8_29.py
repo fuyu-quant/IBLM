@@ -8,19 +8,22 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}
-        sex_prob = {True: 0.74, False: 0.19}
-        age_prob = {0: 0.67, 1: 0.42, 2: 0.40, 3: 0.44, 4: 0.09}
-        fare_prob = {0: 0.68, 1: 0.43, 2: 0.42, 3: 0.39}
+        pclass_weight = 0.3 if row['pclass'] == 1 else 0.6 if row['pclass'] == 2 else 0.1
+        age_weight = 0.5 if row['age'] <= 18 else 0.3 if row['age'] <= 40 else 0.2
+        fare_weight = 0.4 if row['fare'] <= 10 else 0.3 if row['fare'] <= 30 else 0.2 if row['fare'] <= 50 else 0.1
+        sex_weight = 0.6 if row['sex_female'] else 0.4
+        embarked_weight = 0.5 if row['embarked_C'] else 0.3 if row['embarked_Q'] else 0.2
+        alone_weight = 0.6 if row['alone_True'] else 0.4
+        adult_male_weight = 0.6 if row['adult_male_True'] else 0.4
+        class_weight = 0.4 if row['class_First'] else 0.3 if row['class_Second'] else 0.2
+        deck_weight = 0.1 if row['deck_A'] else 0.2 if row['deck_B'] else 0.3 if row['deck_C'] else 0.4 if row['deck_D'] else 0.5 if row['deck_E'] else 0.6 if row['deck_F'] else 0.7 if row['deck_G'] else 0.8
 
-        age_group = int(row['age'] // 20)
-        fare_group = int(row['fare'] // 10)
+        # Combine the weights to calculate the probability
+        y = pclass_weight * age_weight * fare_weight * sex_weight * embarked_weight * alone_weight * adult_male_weight * class_weight * deck_weight
 
-        pclass = row['pclass']
-        sex_female = row['sex_female']
-
-        prob = pclass_prob[pclass] * sex_prob[sex_female] * age_prob.get(age_group, 0.4) * fare_prob.get(fare_group, 0.4)
+        # Normalize the probability to be between 0 and 1
+        y = y / (pclass_weight + age_weight + fare_weight + sex_weight + embarked_weight + alone_weight + adult_male_weight + class_weight + deck_weight)
 
         # Do not change the code after this point.
-        output.append(prob)
+        output.append(y)
     return np.array(output)

@@ -9,11 +9,15 @@ def predict(x):
         # Calculate the distance from the origin
         distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
         
-        # Normalize the distance to a value between 0 and 1
-        normalized_distance = distance / (distance + 1)
+        # Normalize the distance to a probability value between 0 and 1
+        probability = 1 / (1 + np.exp(-distance))
         
-        # Use the normalized distance as the probability of the target being 1
-        y = normalized_distance
+        # Set a threshold to classify the data
+        threshold = 0.5
+        if probability > threshold:
+            y = 1
+        else:
+            y = 0
 
         # Do not change the code after this point.
         output.append(y)

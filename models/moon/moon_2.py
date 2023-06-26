@@ -6,14 +6,12 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         
-        # Calculate the distance from the origin (0, 0)
-        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
+        # Calculate the distance from the center of each class
+        distance_1 = np.sqrt((row['Feature_1'] - 1)**2 + (row['Feature_2'] - 0)**2)
+        distance_0 = np.sqrt((row['Feature_1'] - 0)**2 + (row['Feature_2'] - 1)**2)
         
-        # Normalize the distance to be between 0 and 1
-        normalized_distance = distance / (np.sqrt(2) * 2)
-        
-        # Calculate the probability based on the distance
-        y = 1 - normalized_distance
+        # Calculate the probability of belonging to class 1 using the softmax function
+        y = np.exp(-distance_1) / (np.exp(-distance_1) + np.exp(-distance_0))
 
         # Do not change the code after this point.
         output.append(y)

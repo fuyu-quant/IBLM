@@ -5,21 +5,44 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        
+        # Please describe the process required to make the prediction below.
+
         # Calculate the probability based on the given features
-        pclass_factor = 0.9 if row['pclass'] == 1 else (0.7 if row['pclass'] == 2 else 0.5)
-        age_factor = 0.9 if row['age'] <= 16 else (0.7 if row['age'] <= 32 else (0.5 if row['age'] <= 48 else 0.3))
-        fare_factor = 0.9 if row['fare'] >= 50 else (0.7 if row['fare'] >= 25 else 0.5)
-        sex_factor = 0.9 if row['sex_female'] else 0.5
-        embarked_factor = 0.9 if row['embarked_C'] else (0.7 if row['embarked_Q'] else 0.5)
-        alone_factor = 0.9 if row['alone_True'] else 0.7
-        adult_male_factor = 0.9 if row['adult_male_False'] else 0.5
-        class_factor = 0.9 if row['class_First'] else (0.7 if row['class_Second'] else 0.5)
-        
-        # Combine the factors to calculate the final probability
-        y = pclass_factor * age_factor * fare_factor * sex_factor * embarked_factor * alone_factor * adult_male_factor * class_factor
-        y = min(y, 1)  # Ensure the probability is not greater than 1
-        
+        pclass_prob = {1: 0.6, 2: 0.5, 3: 0.3}
+        age_prob = {0: 0.5, 1: 0.4, 2: 0.3, 3: 0.2}
+        fare_prob = {0: 0.5, 1: 0.4, 2: 0.3, 3: 0.2}
+        sex_female_prob = 0.7
+        sex_male_prob = 0.3
+        embarked_C_prob = 0.5
+        embarked_Q_prob = 0.4
+        embarked_S_prob = 0.6
+
+        pclass = row['pclass']
+        age = row['age']
+        fare = row['fare']
+        sex_female = row['sex_female']
+        sex_male = row['sex_male']
+        embarked_C = row['embarked_C']
+        embarked_Q = row['embarked_Q']
+        embarked_S = row['embarked_S']
+
+        age_group = int(age // 10)
+        fare_group = int(fare // 10)
+
+        prob = pclass_prob[pclass] * age_prob.get(age_group, 0.1) * fare_prob.get(fare_group, 0.1)
+
+        if sex_female:
+            prob *= sex_female_prob
+        else:
+            prob *= sex_male_prob
+
+        if embarked_C:
+            prob *= embarked_C_prob
+        elif embarked_Q:
+            prob *= embarked_Q_prob
+        else:
+            prob *= embarked_S_prob
+
         # Do not change the code after this point.
-        output.append(y)
+        output.append(prob)
     return np.array(output)

@@ -5,48 +5,25 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        # Please describe the process required to make the prediction below.
-
-        # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}
-        age_prob = {0: 0.55, 1: 0.34, 2: 0.42, 3: 0.44, 4: 0.37}
-        fare_prob = {0: 0.68, 1: 0.51, 2: 0.42, 3: 0.31}
-        sex_prob = {0: 0.74, 1: 0.19}
-        embarked_prob = {0: 0.55, 1: 0.39, 2: 0.34}
-
-        # Assign age group based on age
-        age_group = 0
-        if row['age'] <= 16:
-            age_group = 0
-        elif row['age'] <= 32:
-            age_group = 1
-        elif row['age'] <= 48:
-            age_group = 2
-        elif row['age'] <= 64:
-            age_group = 3
-        else:
-            age_group = 4
-
-        # Assign fare group based on fare
-        fare_group = 0
-        if row['fare'] <= 7.91:
-            fare_group = 0
-        elif row['fare'] <= 14.454:
-            fare_group = 1
-        elif row['fare'] <= 31:
-            fare_group = 2
-        else:
-            fare_group = 3
-
-        # Calculate the probability based on the given features
-        pclass = pclass_prob[row['pclass']]
-        age = age_prob[age_group]
-        fare = fare_prob[fare_group]
-        sex = sex_prob[row['sex_female']]
-        embarked = embarked_prob[row['embarked_C'] + 2 * row['embarked_Q']]
+        
+        # Calculate the probability based on the given data
+        pclass_factor = 0.5 if row['pclass'] == 2 else 0.3 if row['pclass'] == 3 else 0.2
+        age_factor = 0.5 if row['age'] <= 27 else 0.3 if row['age'] <= 29 else 0.2
+        sibsp_factor = 0.5 if row['sibsp'] == 0 else 0.3 if row['sibsp'] == 1 else 0.2
+        parch_factor = 0.5 if row['parch'] == 0 else 0.3 if row['parch'] == 2 else 0.2
+        fare_factor = 0.5 if row['fare'] <= 10.5 else 0.3 if row['fare'] <= 26.25 else 0.2
+        sex_female_factor = 0.5 if row['sex_female'] else 0.3
+        sex_male_factor = 0.5 if row['sex_male'] else 0.3
+        embarked_S_factor = 0.5 if row['embarked_S'] else 0.3
+        alive_yes_factor = 0.5 if row['alive_yes'] else 0.3
+        alone_True_factor = 0.5 if row['alone_True'] else 0.3
+        adult_male_True_factor = 0.5 if row['adult_male_True'] else 0.3
+        who_man_factor = 0.5 if row['who_man'] else 0.3
+        class_Third_factor = 0.5 if row['class_Third'] else 0.3
+        embark_town_Southampton_factor = 0.5 if row['embark_town_Southampton'] else 0.3
 
         # Calculate the final probability
-        y = pclass * age * fare * sex * embarked
+        y = pclass_factor * age_factor * sibsp_factor * parch_factor * fare_factor * sex_female_factor * sex_male_factor * embarked_S_factor * alive_yes_factor * alone_True_factor * adult_male_True_factor * who_man_factor * class_Third_factor * embark_town_Southampton_factor
 
         # Normalize the probability to be between 0 and 1
         y = y / (y + (1 - y))

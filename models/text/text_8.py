@@ -8,21 +8,17 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Calculate the sentiment score based on the number of positive and negative words in the text
-        positive_words = ['good', 'great', 'excellent', 'best', 'amazing', 'love', 'loved', 'like', 'liked', 'enjoy', 'enjoyed', 'favorite', 'wonderful', 'superb', 'fantastic', 'happy', 'strong', 'beautiful', 'awesome', 'perfect', 'recommend', 'recommended']
-        negative_words = ['bad', 'worst', 'terrible', 'awful', 'poor', 'disappoint', 'disappointed', 'disappointing', 'hate', 'hated', 'dislike', 'disliked', 'boring', 'weak', 'ugly', 'annoy', 'annoying', 'waste', 'stupid', 'ridiculous', 'lame', 'forgettable']
+        text = row['text']
+        positive_words = ['excellent', 'astonishing', 'amazing', 'wonderful', 'great', 'good', 'love', 'best', 'favorite', 'recommended', 'enjoy', 'beautiful', 'charming', 'memorable', 'superb', 'highly']
+        negative_words = ['awful', 'terrible', 'horrible', 'worst', 'bad', 'disappointing', 'boring', 'ridiculous', 'poor', 'lame', 'waste', 'forgettable', 'uninteresting', 'weak', 'dull', 'low']
 
-        text = row['text'].lower()
-        text = re.sub(r'[^\w\s]', '', text)  # Remove punctuation
-        words = text.split()
+        positive_count = sum([1 for word in positive_words if re.search(r'\b' + word + r'\b', text, re.IGNORECASE)])
+        negative_count = sum([1 for word in negative_words if re.search(r'\b' + word + r'\b', text, re.IGNORECASE)])
 
-        positive_count = sum([1 for word in words if word in positive_words])
-        negative_count = sum([1 for word in words if word in negative_words])
-
-        sentiment_score = positive_count - negative_count
-
-        # Normalize the sentiment score to a probability value between 0 and 1
-        y = 1 / (1 + np.exp(-sentiment_score))
+        if positive_count + negative_count == 0:
+            y = 0.5
+        else:
+            y = positive_count / (positive_count + negative_count)
 
         # Do not change the code after this point.
         output.append(y)

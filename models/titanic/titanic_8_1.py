@@ -5,21 +5,45 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        
+        # Please describe the process required to make the prediction below.
+
         # Calculate the probability based on the given features
-        pclass_factor = 0.9 if row['pclass'] == 1 else 0.7 if row['pclass'] == 2 else 0.5
-        age_factor = 0.9 if row['age'] <= 16 else 0.7 if row['age'] <= 40 else 0.5
-        fare_factor = 0.9 if row['fare'] >= 50 else 0.7 if row['fare'] >= 20 else 0.5
-        sex_factor = 0.9 if row['sex_female'] else 0.5
-        embarked_factor = 0.9 if row['embarked_C'] else 0.7 if row['embarked_Q'] else 0.5
-        alone_factor = 0.9 if row['alone_True'] else 0.7
+        pclass = row['pclass']
+        age = row['age']
+        fare = row['fare']
+        sex_female = row['sex_female']
+        embarked_S = row['embarked_S']
+        alive_yes = row['alive_yes']
+        alone_True = row['alone_True']
+        adult_male_True = row['adult_male_True']
         
-        # Combine the factors to calculate the final probability
-        y = pclass_factor * age_factor * fare_factor * sex_factor * embarked_factor * alone_factor
+        # Weights for each feature
+        weights = {
+            'pclass': -0.2,
+            'age': -0.01,
+            'fare': 0.01,
+            'sex_female': 0.5,
+            'embarked_S': -0.1,
+            'alive_yes': 0.8,
+            'alone_True': -0.1,
+            'adult_male_True': -0.3
+        }
         
-        # Normalize the probability to be between 0 and 1
-        y = (y - 0.5) / 0.4
+        # Calculate the weighted sum
+        weighted_sum = (
+            pclass * weights['pclass'] +
+            age * weights['age'] +
+            fare * weights['fare'] +
+            sex_female * weights['sex_female'] +
+            embarked_S * weights['embarked_S'] +
+            alive_yes * weights['alive_yes'] +
+            alone_True * weights['alone_True'] +
+            adult_male_True * weights['adult_male_True']
+        )
         
+        # Calculate the probability using the sigmoid function
+        y = 1 / (1 + np.exp(-weighted_sum))
+
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)

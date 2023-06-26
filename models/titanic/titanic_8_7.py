@@ -5,46 +5,21 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        # Please describe the process required to make the prediction below.
-
-        # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}
-        age_prob = {0: 0.55, 1: 0.34, 2: 0.42, 3: 0.44, 4: 0.37, 5: 0.49, 6: 0.45, 7: 0.5}
-        fare_prob = {0: 0.68, 1: 0.51, 2: 0.42, 3: 0.31}
-        sex_prob = {0: 0.19, 1: 0.74}
-        embarked_prob = {0: 0.55, 1: 0.39, 2: 0.34}
-
-        pclass = row['pclass']
-        age = row['age']
-        fare = row['fare']
-        sex_female = row['sex_female']
-        embarked_C = row['embarked_C']
-        embarked_Q = row['embarked_Q']
-
-        # Age group
-        age_group = int(age // 10)
-        if age_group > 7:
-            age_group = 7
-
-        # Fare group
-        fare_group = int(fare // 10)
-        if fare_group > 3:
-            fare_group = 3
-
-        # Sex group
-        sex_group = int(sex_female)
-
-        # Embarked group
-        if embarked_C:
-            embarked_group = 0
-        elif embarked_Q:
-            embarked_group = 1
-        else:
-            embarked_group = 2
-
-        # Calculate the probability
-        y = pclass_prob[pclass] * age_prob[age_group] * fare_prob[fare_group] * sex_prob[sex_group] * embarked_prob[embarked_group]
-
+        
+        # Calculate the probability based on the given data
+        pclass_weight = 0.3 if row['pclass'] == 1 else 0.6 if row['pclass'] == 2 else 1
+        age_weight = 0.5 if row['age'] <= 10 else 1 if row['age'] >= 60 else 0.8
+        fare_weight = 0.5 if row['fare'] <= 10 else 1 if row['fare'] >= 50 else 0.8
+        sex_weight = 0.7 if row['sex_female'] else 1
+        embarked_weight = 0.8 if row['embarked_C'] else 1 if row['embarked_Q'] else 0.9
+        alone_weight = 0.9 if row['alone_True'] else 1
+        class_weight = 0.3 if row['class_First'] else 0.6 if row['class_Second'] else 1
+        deck_weight = 0.5 if row['deck_A'] or row['deck_B'] or row['deck_C'] or row['deck_D'] or row['deck_E'] else 1
+        
+        # Calculate the final probability
+        y = pclass_weight * age_weight * fare_weight * sex_weight * embarked_weight * alone_weight * class_weight * deck_weight
+        y = 1 - (y / 10)
+        
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)

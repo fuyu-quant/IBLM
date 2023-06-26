@@ -5,25 +5,45 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        
-        # Calculate the probability based on the given data
-        pclass_factor = 0.9 if row['pclass'] == 1 else (0.7 if row['pclass'] == 2 else 0.5)
-        age_factor = 0.9 if row['age'] <= 16 else (0.7 if row['age'] <= 40 else 0.5)
-        fare_factor = 0.9 if row['fare'] >= 50 else (0.7 if row['fare'] >= 20 else 0.5)
-        sex_factor = 0.9 if row['sex_female'] else 0.5
-        embarked_factor = 0.9 if row['embarked_C'] else (0.7 if row['embarked_Q'] else 0.5)
-        alone_factor = 0.9 if row['alone_True'] else 0.7
-        adult_male_factor = 0.9 if row['adult_male_False'] else 0.5
-        who_factor = 0.9 if row['who_child'] else (0.7 if row['who_woman'] else 0.5)
-        class_factor = 0.9 if row['class_First'] else (0.7 if row['class_Second'] else 0.5)
-        deck_factor = 0.9 if row['deck_A'] or row['deck_B'] or row['deck_C'] or row['deck_D'] or row['deck_E'] else 0.5
-        embark_town_factor = 0.9 if row['embark_town_Cherbourg'] else (0.7 if row['embark_town_Queenstown'] else 0.5)
+        # Please describe the process required to make the prediction below.
 
-        # Combine the factors to calculate the probability
-        y = pclass_factor * age_factor * fare_factor * sex_factor * embarked_factor * alone_factor * adult_male_factor * who_factor * class_factor * deck_factor * embark_town_factor
+        # Calculate the probability based on the given features
+        prob = 0
+        prob += row['pclass'] * 0.1
+        prob += row['age'] * 0.01
+        prob += row['sibsp'] * 0.05
+        prob += row['parch'] * 0.05
+        prob += row['fare'] * 0.001
+        prob += row['sex_female'] * 0.3
+        prob += row['sex_male'] * -0.3
+        prob += row['embarked_C'] * 0.1
+        prob += row['embarked_Q'] * 0.05
+        prob += row['embarked_S'] * -0.05
+        prob += row['alive_no'] * -0.2
+        prob += row['alive_yes'] * 0.2
+        prob += row['alone_False'] * 0.1
+        prob += row['alone_True'] * -0.1
+        prob += row['adult_male_False'] * 0.2
+        prob += row['adult_male_True'] * -0.2
+        prob += row['who_child'] * 0.2
+        prob += row['who_man'] * -0.1
+        prob += row['who_woman'] * 0.1
+        prob += row['class_First'] * 0.2
+        prob += row['class_Second'] * 0.1
+        prob += row['class_Third'] * -0.1
+        prob += row['deck_A'] * 0.05
+        prob += row['deck_B'] * 0.1
+        prob += row['deck_C'] * 0.15
+        prob += row['deck_D'] * 0.2
+        prob += row['deck_E'] * 0.25
+        prob += row['deck_F'] * 0.3
+        prob += row['deck_G'] * 0.35
+        prob += row['embark_town_Cherbourg'] * 0.1
+        prob += row['embark_town_Queenstown'] * 0.05
+        prob += row['embark_town_Southampton'] * -0.05
 
         # Normalize the probability to be between 0 and 1
-        y = (y - 0.5) / 0.4
+        y = 1 / (1 + np.exp(-prob))
 
         # Do not change the code after this point.
         output.append(y)

@@ -1,4 +1,5 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []
@@ -7,15 +8,17 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # Calculate the probability based on the given features
-        pclass_prob = {1: 0.63, 2: 0.47, 3: 0.24}[row['pclass']]
-        sex_prob = {True: 0.74, False: 0.19}[row['sex_female']]
-        age_prob = 0.5 if row['age'] <= 16 else 0.36
-        fare_prob = 0.5 if row['fare'] <= 20 else 0.4
-        embarked_prob = {True: 0.55, False: 0.39}[row['embarked_C'] or row['embarked_Q']]
-        alone_prob = {True: 0.3, False: 0.51}[row['alone_True']]
+        pclass_weight = 0.3 if row['pclass'] == 1 else 0.6 if row['pclass'] == 2 else 0.1
+        age_weight = 0.5 if row['age'] <= 30 else 0.3 if row['age'] <= 60 else 0.2
+        fare_weight = 0.4 if row['fare'] <= 10 else 0.3 if row['fare'] <= 30 else 0.2 if row['fare'] <= 60 else 0.1
+        sex_weight = 0.7 if row['sex_female'] else 0.3
+        embarked_weight = 0.5 if row['embarked_C'] else 0.3 if row['embarked_Q'] else 0.2
+        alone_weight = 0.6 if row['alone_True'] else 0.4
+        class_weight = 0.4 if row['class_First'] else 0.3 if row['class_Second'] else 0.3
+        deck_weight = 0.1 if row['deck_A'] else 0.2 if row['deck_B'] else 0.3 if row['deck_C'] else 0.1 if row['deck_D'] else 0.1 if row['deck_E'] else 0.1 if row['deck_F'] else 0.1
 
-        # Combine the probabilities
-        y = pclass_prob * sex_prob * age_prob * fare_prob * embarked_prob * alone_prob
+        # Combine the weights to calculate the final probability
+        y = pclass_weight * age_weight * fare_weight * sex_weight * embarked_weight * alone_weight * class_weight * deck_weight
 
         # Do not change the code after this point.
         output.append(y)

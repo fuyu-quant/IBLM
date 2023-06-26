@@ -7,17 +7,11 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        feature_1 = row['Feature_1']
-        feature_2 = row['Feature_2']
+        # Calculate the weighted sum of the features
+        weighted_sum = row['Feature_1'] * 0.6 + row['Feature_2'] * 0.4
 
-        # Calculate the distance from the origin (0, 0)
-        distance = np.sqrt(feature_1**2 + feature_2**2)
-
-        # Normalize the distance to a value between 0 and 1
-        normalized_distance = distance / (distance + 1)
-
-        # Use the normalized distance as the probability
-        y = normalized_distance
+        # Apply the sigmoid function to the weighted sum to get the probability
+        y = 1 / (1 + np.exp(-weighted_sum))
 
         # Do not change the code after this point.
         output.append(y)

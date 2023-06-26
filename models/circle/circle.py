@@ -10,7 +10,7 @@ def predict(x):
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
 
-        # Calculate the distance from the origin
+        # Calculate the distance from the origin (0, 0)
         distance = np.sqrt(feature_1**2 + feature_2**2)
 
         # Normalize the distance to a probability value between 0 and 1
@@ -19,6 +19,7 @@ def predict(x):
         # Threshold for classification
         threshold = 0.5
 
+        # Assign the probability value to y
         if probability > threshold:
             y = 1
         else:

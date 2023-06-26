@@ -1,4 +1,6 @@
 import numpy as np
+import re
+
 def predict(x):
     df = x.copy()
     output = []
@@ -6,19 +8,18 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Analyze the text and count the number of positive and negative words
-        positive_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'best', 'favorite', 'enjoy', 'beautiful']
-        negative_words = ['bad', 'terrible', 'awful', 'horrible', 'worst', 'hate', 'dislike', 'boring', 'ugly', 'disappointing']
+        text = row['text']
+        positive_words = ['excellent', 'amazing', 'great', 'wonderful', 'best', 'love', 'good', 'favorite', 'enjoy', 'beautiful']
+        negative_words = ['awful', 'terrible', 'worst', 'boring', 'disappointing', 'bad', 'hate', 'poor', 'ugly', 'annoying']
 
-        positive_count = sum([row['text'].count(word) for word in positive_words])
-        negative_count = sum([row['text'].count(word) for word in negative_words])
+        positive_count = sum([1 for word in positive_words if word in text.lower()])
+        negative_count = sum([1 for word in negative_words if word in text.lower()])
 
-        # Calculate the probability of the target being 1 (positive)
-        total_count = positive_count + negative_count
-        if total_count == 0:
-            y = 0.5
-        else:
-            y = positive_count / total_count
+        # Calculate the sentiment score based on the counts of positive and negative words
+        sentiment_score = (positive_count - negative_count) / (positive_count + negative_count + 1)
+
+        # Normalize the sentiment score to a probability value between 0 and 1
+        y = (sentiment_score + 1) / 2
 
         # Do not change the code after this point.
         output.append(y)

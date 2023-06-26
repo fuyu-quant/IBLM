@@ -5,65 +5,21 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        
-        # Calculate the probability based on the given data
-        pclass = row['pclass']
-        age = row['age']
-        sibsp = row['sibsp']
-        parch = row['parch']
-        fare = row['fare']
-        sex_female = row['sex_female']
-        sex_male = row['sex_male']
-        embarked_C = row['embarked_C']
-        embarked_Q = row['embarked_Q']
-        embarked_S = row['embarked_S']
-        alive_no = row['alive_no']
-        alive_yes = row['alive_yes']
-        alone_False = row['alone_False']
-        alone_True = row['alone_True']
-        adult_male_False = row['adult_male_False']
-        adult_male_True = row['adult_male_True']
-        who_child = row['who_child']
-        who_man = row['who_man']
-        who_woman = row['who_woman']
-        class_First = row['class_First']
-        class_Second = row['class_Second']
-        class_Third = row['class_Third']
-        deck_A = row['deck_A']
-        deck_B = row['deck_B']
-        deck_C = row['deck_C']
-        deck_D = row['deck_D']
-        deck_E = row['deck_E']
-        deck_F = row['deck_F']
-        deck_G = row['deck_G']
-        embark_town_Cherbourg = row['embark_town_Cherbourg']
-        embark_town_Queenstown = row['embark_town_Queenstown']
-        embark_town_Southampton = row['embark_town_Southampton']
+        # Please describe the process required to make the prediction below.
 
-        # Calculate the probability of survival based on the given features
-        prob_survival = 0
+        # Calculate the probability based on the given features
+        pclass_weight = 0.3 if row['pclass'] == 1 else 0.6 if row['pclass'] == 2 else 0.1
+        age_weight = 0.5 if row['age'] <= 30 else 0.3 if row['age'] <= 60 else 0.2
+        fare_weight = 0.4 if row['fare'] <= 10 else 0.3 if row['fare'] <= 30 else 0.2 if row['fare'] <= 60 else 0.1
+        sex_weight = 0.7 if row['sex_female'] else 0.3
+        embarked_weight = 0.5 if row['embarked_C'] else 0.3 if row['embarked_Q'] else 0.2
+        alone_weight = 0.6 if row['alone_True'] else 0.4
+        class_weight = 0.4 if row['class_First'] else 0.3 if row['class_Second'] else 0.3
+        deck_weight = 0.1 if row['deck_A'] else 0.2 if row['deck_B'] else 0.3 if row['deck_C'] else 0.4 if row['deck_D'] else 0.5 if row['deck_E'] else 0.6 if row['deck_F'] else 0.7 if row['deck_G'] else 0.8
 
-        # Higher probability for female passengers
-        if sex_female:
-            prob_survival += 0.6
-
-        # Higher probability for passengers in first and second class
-        if pclass == 1:
-            prob_survival += 0.3
-        elif pclass == 2:
-            prob_survival += 0.2
-
-        # Higher probability for passengers with lower fare
-        if fare < 20:
-            prob_survival += 0.1
-
-        # Higher probability for passengers with age less than 10
-        if age < 10:
-            prob_survival += 0.2
-
-        # Normalize the probability to be between 0 and 1
-        prob_survival = min(1, prob_survival)
+        # Combine the weights to calculate the final probability
+        y = pclass_weight * age_weight * fare_weight * sex_weight * embarked_weight * alone_weight * class_weight * deck_weight
 
         # Do not change the code after this point.
-        output.append(prob_survival)
+        output.append(y)
     return np.array(output)

@@ -1,4 +1,6 @@
 import numpy as np
+import re
+
 def predict(x):
     df = x.copy()
     output = []
@@ -6,15 +8,15 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Count the number of positive and negative words in the text
-        positive_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'best', 'favorite', 'enjoy', 'beautiful']
-        negative_words = ['bad', 'terrible', 'awful', 'horrible', 'worst', 'hate', 'dislike', 'boring', 'ugly', 'disappointing']
+        text = row['text']
+        positive_words = ['excellent', 'amazing', 'great', 'wonderful', 'good', 'love', 'best', 'favorite', 'enjoy', 'beautiful']
+        negative_words = ['awful', 'terrible', 'bad', 'worst', 'disappointing', 'hate', 'boring', 'poor', 'waste', 'ridiculous']
 
-        positive_count = sum([1 for word in positive_words if word in row['text'].lower()])
-        negative_count = sum([1 for word in negative_words if word in row['text'].lower()])
+        positive_count = sum([1 for word in positive_words if word in text.lower()])
+        negative_count = sum([1 for word in negative_words if word in text.lower()])
 
-        # Calculate the probability of the target being 1 based on the counts of positive and negative words
         total_count = positive_count + negative_count
+
         if total_count == 0:
             y = 0.5
         else:

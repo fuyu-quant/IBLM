@@ -6,15 +6,9 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         
-        # Calculate the distance from the origin
-        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
+        # Calculate the probability based on Feature_1 and Feature_2
+        prob = 1 / (1 + np.exp(-(row['Feature_1'] + row['Feature_2'])))
         
-        # Normalize the distance to a value between 0 and 1
-        normalized_distance = distance / (distance + 1)
-        
-        # Use the normalized distance as the probability of the target being 1
-        y = normalized_distance
-
         # Do not change the code after this point.
-        output.append(y)
+        output.append(prob)
     return np.array(output)

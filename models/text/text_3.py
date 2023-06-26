@@ -1,4 +1,6 @@
 import numpy as np
+import re
+
 def predict(x):
     df = x.copy()
     output = []
@@ -6,19 +8,17 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Count the number of positive and negative words in the text
-        positive_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'best', 'favorite', 'beautiful', 'enjoy']
-        negative_words = ['bad', 'terrible', 'awful', 'horrible', 'worst', 'hate', 'boring', 'disappointing', 'ugly', 'annoying']
+        text = row['text']
+        positive_words = ['excellent', 'astonishing', 'amazing', 'wonderful', 'great', 'good', 'love', 'best', 'favorite', 'recommend', 'enjoy', 'beautiful', 'charming', 'happy', 'fun', 'interesting', 'memorable', 'insightful', 'riveting', 'captivating', 'powerful', 'moving', 'heart']
+        negative_words = ['awful', 'terrible', 'horrible', 'worst', 'boring', 'dull', 'disappointing', 'waste', 'forgettable', 'uninteresting', 'poor', 'bad', 'lame', 'ridiculous', 'stupid', 'annoying', 'painful', 'unpleasant', 'uninspired', 'predictable', 'cliché', 'weak', 'insulting']
 
-        positive_count = sum([1 for word in positive_words if word in row['text'].lower()])
-        negative_count = sum([1 for word in negative_words if word in row['text'].lower()])
+        positive_count = sum([1 for word in positive_words if re.search(r'\b' + word + r'\b', text, re.IGNORECASE)])
+        negative_count = sum([1 for word in negative_words if re.search(r'\b' + word + r'\b', text, re.IGNORECASE)])
 
-        # Calculate the probability of the target being 1 based on the counts of positive and negative words
-        total_count = positive_count + negative_count
-        if total_count == 0:
+        if positive_count + negative_count == 0:
             y = 0.5
         else:
-            y = positive_count / total_count
+            y = positive_count / (positive_count + negative_count)
 
         # Do not change the code after this point.
         output.append(y)

@@ -47,7 +47,7 @@ class ICLClassifier():
 
         self.icl_prompt = icl_prompt
 
-        print(len(icl_prompt))
+        print('Number of input tokens:' + len(icl_prompt))
 
         return icl_prompt
 

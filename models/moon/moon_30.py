@@ -5,20 +5,14 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        # Please describe the process required to make the prediction below.
-
+        
+        # Calculate the probability based on the given data
         feature_1 = row['Feature_1']
         feature_2 = row['Feature_2']
-
-        # Calculate the distance from the origin (0, 0)
-        distance = np.sqrt(feature_1**2 + feature_2**2)
-
-        # Normalize the distance to a value between 0 and 1
-        normalized_distance = distance / (distance + 1)
-
-        # Use the normalized distance as the probability of the target being 1
-        y = normalized_distance
-
+        
+        # Use a simple linear combination of features to predict the probability
+        probability = 1 / (1 + np.exp(-(0.5 * feature_1 + 0.5 * feature_2)))
+        
         # Do not change the code after this point.
-        output.append(y)
+        output.append(probability)
     return np.array(output)

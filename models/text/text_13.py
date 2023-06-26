@@ -1,27 +1,40 @@
 import numpy as np
 import re
+from collections import Counter
 
 def predict(x):
     df = x.copy()
     output = []
+
+    # Preprocess the text data
+    def preprocess_text(text):
+        text = text.lower()
+        text = re.sub(r'<br />', ' ', text)
+        text = re.sub(r'[^a-z\s]', '', text)
+        return text
+
+    df['text'] = df['text'].apply(preprocess_text)
+
+    # Calculate word frequencies
+    word_freq = Counter()
+    for text in df['text']:
+        word_freq.update(text.split())
+
+    # Calculate sentiment scores
+    def sentiment_score(text):
+        words = text.split()
+        pos_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'best', 'favorite', 'enjoy', 'beautiful']
+        neg_words = ['bad', 'terrible', 'awful', 'horrible', 'worst', 'hate', 'boring', 'disappointing', 'poor', 'ugly']
+        pos_count = sum([word_freq[word] for word in words if word in pos_words])
+        neg_count = sum([word_freq[word] for word in words if word in neg_words])
+        return (pos_count - neg_count) / len(words)
+
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Calculate the sentiment score based on the number of positive and negative words in the text
-        positive_words = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'best', 'favorite', 'enjoy', 'beautiful']
-        negative_words = ['bad', 'worst', 'terrible', 'awful', 'boring', 'hate', 'dislike', 'poor', 'ugly', 'disappoint']
-
-        text = row['text'].lower()
-        words = re.findall(r'\w+', text)
-
-        positive_count = sum([1 for word in words if word in positive_words])
-        negative_count = sum([1 for word in words if word in negative_words])
-
-        sentiment_score = positive_count - negative_count
-
-        # Normalize the sentiment score to a probability value between 0 and 1
-        y = 1 / (1 + np.exp(-sentiment_score))
+        score = sentiment_score(row['text'])
+        y = 1 / (1 + np.exp(-score))
 
         # Do not change the code after this point.
         output.append(y)

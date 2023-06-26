@@ -5,16 +5,25 @@ def predict(x):
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
-        
+        # Please describe the process required to make the prediction below.
+
+        feature_1 = row['Feature_1']
+        feature_2 = row['Feature_2']
+
         # Calculate the distance from the origin (0, 0)
-        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
-        
-        # Normalize the distance to a range between 0 and 1
-        normalized_distance = distance / np.sqrt(2)
-        
-        # Calculate the probability based on the normalized distance
-        y = 1 - normalized_distance
-        
+        distance = np.sqrt(feature_1**2 + feature_2**2)
+
+        # Normalize the distance to a probability value between 0 and 1
+        probability = 1 / (1 + np.exp(-distance))
+
+        # Set a threshold to classify the data
+        threshold = 0.5
+
+        if probability > threshold:
+            y = 1
+        else:
+            y = 0
+
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
