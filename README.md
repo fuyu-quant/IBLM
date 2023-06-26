@@ -35,11 +35,12 @@ os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
 ```python
 from iblm import IBLMClassifier
 
-llm_model_name = 'gpt-4'
+# Load LLM via LangChain. (GPT-4 recommended)
+llm_model = OpenAI(temperature=0, model_name = 'gpt-4')
 
 params = {'columns_name': True}
 
-iblm = IBLMClassifier(llm_model_name=llm_model_name, params=params)
+iblm = IBLMClassifier(llm_model = llm_model, params=params)
 ```
 
 * Model Learning

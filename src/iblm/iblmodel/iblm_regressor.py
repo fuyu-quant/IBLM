@@ -1,4 +1,3 @@
-from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
 import re
 

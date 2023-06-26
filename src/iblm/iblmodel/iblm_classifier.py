@@ -1,10 +1,7 @@
-from langchain.llms import OpenAI
 from langchain.callbacks import get_openai_callback
-import re
-
 import numpy as np
-
 import warnings
+
 warnings.filterwarnings('ignore')
 
 
