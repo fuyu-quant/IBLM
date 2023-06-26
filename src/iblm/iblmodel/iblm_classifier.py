@@ -52,6 +52,7 @@ class IBLMClassifier():
         ------------------
         {dataset_str_}
         ------------------
+        ・Create a code that predicts a high probability value when "target" is 1 and a low probability value when "target" is 0 for the data given above.
         ・Each data type is as follows. If necessary, you can change the data type.
         ------------------
         {data_type_}
@@ -59,7 +60,6 @@ class IBLMClassifier():
         ・The column names, in order, are as follows {col_name_}
         ・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
         ・Predicting probability values as finely as possible increases overall accuracy.
-        ・The code should be written in such a way that the output probability value is always neither too high nor too low.
         ・Use conditional branching if necessary.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.

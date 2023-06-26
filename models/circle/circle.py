@@ -13,8 +13,11 @@ def predict(x):
         # Calculate the distance from the origin
         distance = np.sqrt(feature_1**2 + feature_2**2)
 
-        # Normalize the distance to a probability value between 0 and 1
-        y = 1 / (1 + np.exp(-distance))
+        # Normalize the distance to be between 0 and 1
+        normalized_distance = distance / np.sqrt(2)
+
+        # Calculate the probability based on the normalized distance
+        y = 1 - normalized_distance
 
         # Do not change the code after this point.
         output.append(y)
