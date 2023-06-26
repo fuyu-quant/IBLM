@@ -1,5 +1,5 @@
 # IBLM:Inductive Bias Learning Models
-※ I am currently writing a paper. If you are interested in our activities, please contact us.
+※ I am currently writing a paper. Please contact ulti4929@gmail.com if you are interested.
 
 - [What is IBLM](#what-is-iblm)
 - [How to Use](#how-to-use)
