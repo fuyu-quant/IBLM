@@ -11,12 +11,9 @@ warnings.filterwarnings('ignore')
 class ICLClassifier():
     def __init__(
         self, 
-        llm_model_name, 
+        llm_model, 
         ):
-        self.llm_model_name = llm_model_name
-        self.llm_model = OpenAI(temperature=0, model_name = self.llm_model_name)
-
-        #self.llm_model = llm_model,
+        self.llm_model = llm_model
         self.icl_prompt = None
 
 
