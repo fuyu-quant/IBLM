@@ -12,12 +12,13 @@ class IBLMClassifier():
     def __init__(
         self, 
         llm_model_name, 
+        llm_model,
         params
         ):
-        self.llm_model_name = llm_model_name
-        self.llm_model = OpenAI(temperature=0, model_name = self.llm_model_name)
+        #self.llm_model_name = llm_model_name
+        #self.llm_model = OpenAI(temperature=0, model_name = self.llm_model_name)
 
-        #self.llm_model = llm_model,
+        self.llm_model = llm_model,
         self.columns_name = params['columns_name']
         self.model_code = None
 
