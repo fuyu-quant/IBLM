@@ -1,0 +1,25 @@
+import numpy as np
+import re
+
+def predict(x):
+    df = x.copy()
+    output = []
+    for index, row in df.iterrows():
+        # Do not change the code before this point.
+        # Please describe the process required to make the prediction below.
+
+        text = row['text']
+        positive_words = ['excellent', 'amazing', 'great', 'wonderful', 'best', 'love', 'good', 'enjoy', 'favorite', 'beautiful']
+        negative_words = ['awful', 'terrible', 'worst', 'boring', 'disappointing', 'bad', 'hate', 'annoying', 'waste', 'poor']
+
+        positive_count = sum([1 for word in positive_words if word in text.lower()])
+        negative_count = sum([1 for word in negative_words if word in text.lower()])
+
+        sentiment_score = positive_count - negative_count
+
+        # Normalize the sentiment score to a probability value between 0 and 1
+        y = 1 / (1 + np.exp(-sentiment_score))
+
+        # Do not change the code after this point.
+        output.append(y)
+    return np.array(output)
