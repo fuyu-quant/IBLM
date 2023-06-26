@@ -15,7 +15,6 @@ class ICLClassifier():
 
 
     def fit(self, x, y):
-        print("> Start of code creating.")
         df = x.copy()
 
         df['target'] = y

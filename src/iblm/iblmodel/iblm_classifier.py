@@ -19,20 +19,11 @@ class IBLMClassifier():
     def fit(self, x, y, model_name, file_path=None):
         print("> Start of model creating.")
         df = x.copy()
-
         df['target'] = y
 
-        # Determine whether binary or multivalued classification is used
-        if len(df['target'].unique()) == 2:
-            task_type = 'binary classification'
-            output_code = 'y = 1 / (1 + np.exp(-y))'
-        else:
-            task_type = 'multi-class classification'
-            output_code = ''
 
         # Obtaining data types
         data_type = ', '.join(df.dtypes.astype(str))
-
 
 
         # Create a string dataset
@@ -69,6 +60,7 @@ class IBLMClassifier():
         ・The column names, in order, are as follows {col_name_}
         ・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
         ・Predicting probability values as finely as possible increases overall accuracy.
+        ・If "target" is likely to be 1, output a higher probability value; if "target" is likely to be 0, output a lower probability value.
         ・Use conditional branching if necessary.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.

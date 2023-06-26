@@ -7,14 +7,20 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
+        feature_1 = row['Feature_1']
+        feature_2 = row['Feature_2']
+
         # Calculate the distance from the origin
-        distance = np.sqrt(row['Feature_1']**2 + row['Feature_2']**2)
+        distance = np.sqrt(feature_1**2 + feature_2**2)
 
-        # Normalize the distance to a range between 0 and 1
-        normalized_distance = distance / np.sqrt(2)
+        # Set a threshold value for classification
+        threshold = 0.8
 
-        # Calculate the probability based on the normalized distance
-        y = 1 - normalized_distance
+        # Calculate the probability of the target being 1
+        if distance < threshold:
+            y = 1 - (distance / threshold)
+        else:
+            y = 0
 
         # Do not change the code after this point.
         output.append(y)
