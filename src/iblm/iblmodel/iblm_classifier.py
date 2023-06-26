@@ -17,7 +17,6 @@ class IBLMClassifier():
 
 
     def fit(self, x, y, model_name, file_path=None):
-        print("> Start of model creating.")
         df = x.copy()
         df['target'] = y
 
@@ -60,7 +59,7 @@ class IBLMClassifier():
         ・The column names, in order, are as follows {col_name_}
         ・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
         ・Predicting probability values as finely as possible increases overall accuracy.
-        ・If "target" is likely to be 1, output a higher probability value; if "target" is likely to be 0, output a lower probability value.
+        ・The code should be written in such a way that the output probability value is always neither too high nor too low.
         ・Use conditional branching if necessary.
         ・If {col_option_} is not blank, add it after 'df = x.copy()'.
         ・You do not need to provide examples.
@@ -79,15 +78,11 @@ class IBLMClassifier():
                 output.append(y)
             return np.array(output)
         """.format(
-            #task_type_ = task_type,
             dataset_str_ = dataset_str,
             data_type_ = data_type,
             col_name_ = col_name,
-            col_option_ = col_option,
-            #output_code_ = output_code
+            col_option_ = col_option
             )
-
-        #print(create_prompt)
 
         with get_openai_callback() as cb:
             model_code = self.llm_model(create_prompt)
@@ -103,6 +98,8 @@ class IBLMClassifier():
         self.model_code = model_code
 
         return model_code
+
+
 
     def predict(self, x):
         if self.model_code is None:

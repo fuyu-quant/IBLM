@@ -13,14 +13,8 @@ def predict(x):
         # Calculate the distance from the origin
         distance = np.sqrt(feature_1**2 + feature_2**2)
 
-        # Set a threshold value for classification
-        threshold = 0.8
-
-        # Calculate the probability of the target being 1
-        if distance < threshold:
-            y = 1 - (distance / threshold)
-        else:
-            y = 0
+        # Normalize the distance to a probability value between 0 and 1
+        y = 1 / (1 + np.exp(-distance))
 
         # Do not change the code after this point.
         output.append(y)
