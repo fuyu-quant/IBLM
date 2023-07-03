@@ -6,19 +6,23 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival statistics from the Titanic disaster
-        # This is a very simple logic and does not take into account many other factors that could influence survival
-        y = 0.5
-        if row['sex_female'] == 1:
-            y += 0.3
-        if row['pclass'] == 1:
-            y += 0.1
-        if row['embarked_C'] == 1:
-            y += 0.1
-        if y > 1:
-            y = 1
+
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # This is based on the historical data that women, children, and the upper-class passengers were given priority during the evacuation.
+        # The age, fare, and number of siblings/spouses/parents/children are also considered.
+        # The values are normalized to be between 0 and 1.
+
+        y = 0.0
+        y += row['sex_female']
+        y += row['class_First']
+        y += row['embark_town_Cherbourg']
+        y -= row['age'] / 100
+        y += row['fare'] / 500
+        y -= row['sibsp'] / 10
+        y -= row['parch'] / 10
+
+        # Ensure the probability is between 0 and 1
+        y = max(0.0, min(1.0, y))
 
         # Do not change the code after this point.
         output.append(y)

@@ -1,4 +1,5 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []
@@ -7,14 +8,13 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # The logic here is to give more weightage to the features that are more likely to result in survival.
-        # For example, 'pclass' is negatively correlated with survival (i.e., lower class means lower survival rate).
-        # On the other hand, 'fare' and 'sex_female' are positively correlated with survival.
-        # 'age' is slightly negatively correlated with survival, but the correlation is not very strong, so we give it less weight.
-        # The other features are not very strongly correlated with survival, so we ignore them for simplicity.
-        y = 0.3 * (3 - row['pclass']) + 0.3 * row['fare'] / 100 + 0.3 * row['sex_female'] - 0.1 * row['age'] / 80
+        # For example, 'sex_female', 'fare', 'class_First', 'who_woman' are given more weightage as they are more likely to result in survival.
+        # Similarly, 'sex_male', 'pclass', 'class_Third', 'who_man' are given less weightage as they are less likely to result in survival.
+        # The weights are arbitrary and can be tuned for better performance.
+        y = 0.3*row['sex_female'] + 0.2*row['fare'] + 0.2*row['class_First'] + 0.2*row['who_woman'] - 0.2*row['sex_male'] - 0.2*row['pclass'] - 0.2*row['class_Third'] - 0.2*row['who_man']
 
-        # Normalize the output to the range [0, 1]
-        y = (y - 0) / (1 - 0)
+        # Normalize the output to be between 0 and 1
+        y = (y - min(y)) / (max(y) - min(y))
 
         # Do not change the code after this point.
         output.append(y)

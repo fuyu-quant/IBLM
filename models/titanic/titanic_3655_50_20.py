@@ -6,18 +6,22 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is that we are giving more weightage to the features which are more likely to result in survival.
-        # For example, if the passenger is a female (sex_female=1), embarked from Cherbourg (embarked_C=1), travelling in first class (class_First=1), 
-        # and is alone (alone_True=1), then the chances of survival are high.
-        # Similarly, if the passenger is a male (sex_male=1), embarked from Southampton (embark_town_Southampton=1), travelling in third class (class_Third=1), 
-        # and is not alone (alone_False=1), then the chances of survival are low.
-        # The age, fare, and number of siblings/spouses (sibsp) and parents/children (parch) aboard the Titanic are also considered in the prediction.
-        # The weights for these features are determined based on their importance in determining the survival of the passenger.
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # This is based on the historical data that women, children, and the upper-class passengers were given priority during the evacuation.
+        # The age, fare, and number of siblings/spouses/parents/children are also considered.
+        # The probability is calculated as a weighted sum of these factors.
 
-        y = 0.1*row['sex_female'] + 0.1*row['embarked_C'] + 0.1*row['class_First'] + 0.1*row['alone_True'] - 0.1*row['sex_male'] - 0.1*row['embark_town_Southampton'] - 0.1*row['class_Third'] - 0.1*row['alone_False'] + 0.05*row['age'] + 0.05*row['fare'] - 0.05*row['sibsp'] - 0.05*row['parch']
+        y = 0.0
+        y += row['sex_female'] * 0.3
+        y += row['class_First'] * 0.2
+        y += row['embark_town_Cherbourg'] * 0.1
+        y += row['age'] / 100 * 0.1
+        y += row['fare'] / 100 * 0.1
+        y += row['sibsp'] / 10 * 0.1
+        y += row['parch'] / 10 * 0.1
 
-        # The predicted probability is then normalized to be between 0 and 1 using the sigmoid function.
-        y = 1 / (1 + np.exp(-y))
+        # The probability is capped at 1.0
+        y = min(y, 1.0)
 
         # Do not change the code after this point.
         output.append(y)

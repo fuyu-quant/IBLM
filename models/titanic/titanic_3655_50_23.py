@@ -7,13 +7,20 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give more weightage to the features that are more likely to result in survival.
-        # For example, 'pclass' is inversely proportional to survival rate, 'sex_female' has higher survival rate, 'fare' is directly proportional to survival rate, etc.
-        # The weights for these features are determined based on their importance in survival.
-        y = 0.1*row['pclass'] + 0.3*row['sex_female'] + 0.2*row['fare'] + 0.1*row['embarked_C'] + 0.1*row['alone_False'] + 0.1*row['adult_male_False'] + 0.1*row['class_First']
-        
-        # Normalize the prediction to be between 0 and 1
-        y = (y - df.min()) / (df.max() - df.min())
+        # The logic here is that we are giving more weightage to the features which are more likely to result in survival.
+        # For example, if the passenger is a female (sex_female=1), embarked from Cherbourg (embarked_C=1), travelling in first class (class_First=1), 
+        # and is an adult (who_woman=1), then the chances of survival are high.
+        # Similarly, if the passenger is a male (sex_male=1), embarked from Southampton (embark_town_Southampton=1), travelling in third class (class_Third=1), 
+        # and is an adult male (adult_male_True=1), then the chances of survival are low.
+        # The fare is also considered, assuming that passengers who paid a higher fare are more likely to survive.
+        # The age is considered inversely, assuming that younger passengers are more likely to survive.
+        # The sibsp (number of siblings/spouses aboard) and parch (number of parents/children aboard) are also considered inversely, 
+        # assuming that passengers with fewer family members aboard are more likely to survive.
+
+        y = 0.1*row['sex_female'] + 0.1*row['embarked_C'] + 0.1*row['class_First'] + 0.1*row['who_woman'] + 0.05*row['fare'] - 0.05*row['age'] - 0.05*row['sibsp'] - 0.05*row['parch'] - 0.1*row['sex_male'] - 0.1*row['embark_town_Southampton'] - 0.1*row['class_Third'] - 0.1*row['adult_male_True']
+
+        # The output is then normalized to be between 0 and 1 using the sigmoid function.
+        y = 1 / (1 + np.exp(-y))
 
         # Do not change the code after this point.
         output.append(y)

@@ -7,21 +7,26 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival statistics from the Titanic disaster
-        # We also consider age, with children being more likely to survive
-        # Fare is also considered, with higher fare indicating higher social-economic status and thus higher survival rate
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # These conditions are based on the historical data of the Titanic disaster where women, children, and first-class passengers had higher survival rates.
+        # The age of the passenger is also considered, giving higher survival probability for younger passengers.
+        # The fare paid by the passenger is also considered, assuming that passengers who paid higher fares might have been given priority during the evacuation.
+        # The 'alive_yes' column is also considered assuming that if the passenger was alive, they have a higher chance of survival.
+        # The 'deck' columns are not considered in this logic as the deck information might not be available for all passengers.
 
         y = 0.0
-        y += row['sex_female'] * 0.3
-        y += row['class_First'] * 0.2
-        y += row['embark_town_Cherbourg'] * 0.1
-        if row['age'] <= 16:
+        if row['sex_female'] == 1.0:
+            y += 0.2
+        if row['class_First'] == 1.0:
+            y += 0.2
+        if row['embark_town_Cherbourg'] == 1.0:
             y += 0.1
-        y += row['fare'] / 500
-
-        # Normalize the output to range between 0 and 1
-        y = min(max(y, 0.0), 1.0)
+        if row['age'] <= 30.0:
+            y += 0.1
+        if row['fare'] >= 30.0:
+            y += 0.1
+        if row['alive_yes'] == 1.0:
+            y += 0.3
 
         # Do not change the code after this point.
         output.append(y)

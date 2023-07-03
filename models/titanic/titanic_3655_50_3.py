@@ -1,5 +1,4 @@
 import numpy as np
-
 def predict(x):
     df = x.copy()
     output = []
@@ -7,22 +6,22 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival factors from the Titanic disaster
-        # The age, fare, and number of siblings/spouses/parents/children are also considered
-        # The weights for each factor are determined based on their perceived impact on survival
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # These conditions are based on the historical data of the Titanic disaster where women, children, and first-class passengers had higher survival rates.
+        # The age and fare are also considered where younger and higher fare passengers are given higher probability.
+        # This is a simple heuristic and does not guarantee accurate results for all cases.
 
         y = 0.0
-        y += row['sex_female'] * 0.3
-        y += row['class_First'] * 0.2
-        y += row['embark_town_Cherbourg'] * 0.1
-        y -= row['age'] / 100 * 0.1
-        y += row['fare'] / 100 * 0.1
-        y -= row['sibsp'] / 10 * 0.1
-        y -= row['parch'] / 10 * 0.1
-
-        # The final probability is capped between 0 and 1
-        y = max(0.0, min(1.0, y))
+        if row['sex_female'] == 1.0:
+            y += 0.3
+        if row['pclass'] == 1.0:
+            y += 0.3
+        if row['embarked_C'] == 1.0:
+            y += 0.1
+        if row['age'] <= 30.0:
+            y += 0.1
+        if row['fare'] >= 30.0:
+            y += 0.2
 
         # Do not change the code after this point.
         output.append(y)

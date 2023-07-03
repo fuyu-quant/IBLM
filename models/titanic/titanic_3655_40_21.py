@@ -7,16 +7,32 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival factors from the Titanic disaster
-        # The age, fare, and number of siblings/spouses/parents/children are also considered
-        # The weights for each factor are determined based on their perceived impact on survival
+        # Based on the given data, we can see that the survival rate is higher for females, children, first class passengers, and those who embarked from Cherbourg.
+        # We can also see that the survival rate is lower for males, adults, third class passengers, and those who embarked from Southampton.
+        # Therefore, we can create a simple rule-based model to predict the survival probability based on these observations.
 
-        y = 0.3*row['sex_female'] + 0.2*row['class_First'] + 0.1*row['embarked_C'] - 0.1*row['age']/50 - 0.1*row['fare']/100 - 0.1*row['sibsp']/5 - 0.1*row['parch']/5
+        # Initialize the probability to 0.5 (neutral)
+        prob = 0.5
 
-        # The resulting value is then passed through a sigmoid function to get a probability between 0 and 1
-        y = 1 / (1 + np.exp(-y))
+        # Increase the probability if the passenger is female, a child, or a first class passenger
+        if row['sex_female'] == 1.0 or row['who_child'] == 1.0 or row['class_First'] == 1.0:
+            prob += 0.1
+
+        # Increase the probability if the passenger embarked from Cherbourg
+        if row['embark_town_Cherbourg'] == 1.0:
+            prob += 0.05
+
+        # Decrease the probability if the passenger is male, an adult, or a third class passenger
+        if row['sex_male'] == 1.0 or row['who_man'] == 1.0 or row['class_Third'] == 1.0:
+            prob -= 0.1
+
+        # Decrease the probability if the passenger embarked from Southampton
+        if row['embark_town_Southampton'] == 1.0:
+            prob -= 0.05
+
+        # Ensure the probability is within the range [0, 1]
+        prob = max(0, min(1, prob))
 
         # Do not change the code after this point.
-        output.append(y)
+        output.append(prob)
     return np.array(output)

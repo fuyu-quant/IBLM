@@ -6,15 +6,32 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival factors from the Titanic disaster
-        # The age, fare, and number of siblings/spouses/parents/children are also considered
-        # The weights for each factor are determined based on their perceived impact on survival
-        y = 0.3*row['sex_female'] + 0.2*row['class_First'] + 0.1*row['embarked_C'] - 0.1*row['age']/50 - 0.1*row['fare']/100 - 0.1*row['sibsp']/5 - 0.1*row['parch']/5
-        
-        # The output is then scaled to be between 0 and 1 using the sigmoid function
-        y = 1 / (1 + np.exp(-y))
+
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # These conditions are based on the historical data of the Titanic disaster where women, children, and first-class passengers had higher survival rates.
+        # The age of the passenger is also considered, giving higher survival probability for younger passengers.
+        # The fare paid by the passenger is also considered, assuming that passengers who paid higher fares might have been given priority during the evacuation.
+        # The number of siblings/spouses and parents/children aboard is also considered, assuming that passengers with family members might have helped each other to survive.
+        # The deck of the passenger is also considered, assuming that passengers on higher decks had a higher chance of survival as they were closer to the lifeboats.
+
+        y = 0.0
+        y += row['sex_female']
+        y += row['class_First']
+        y += row['embark_town_Cherbourg']
+        y -= row['age'] / 80
+        y += row['fare'] / 500
+        y += row['sibsp'] / 8
+        y += row['parch'] / 6
+        y += row['deck_A'] / 2
+        y += row['deck_B'] / 2
+        y += row['deck_C'] / 2
+        y += row['deck_D'] / 2
+        y += row['deck_E'] / 2
+        y += row['deck_F'] / 2
+        y += row['deck_G'] / 2
+
+        # Normalize the prediction to the range [0, 1]
+        y = max(0.0, min(1.0, y))
 
         # Do not change the code after this point.
         output.append(y)

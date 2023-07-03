@@ -7,26 +7,14 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Based on the given data, we can see that the target is more likely to be 1 when:
-        # - pclass is lower (1st class has higher survival rate)
-        # - age is lower (children have higher survival rate)
-        # - fare is higher (people who paid more have higher survival rate)
-        # - sex is female (women have higher survival rate)
-        # - embarked from Cherbourg (people who embarked from Cherbourg have higher survival rate)
-        # - alone is False (people who were not alone have higher survival rate)
-        # - adult_male is False (non-adult males have higher survival rate)
-        # - who is not man (women and children have higher survival rate)
-        # - class is First (1st class passengers have higher survival rate)
-        # - deck is not G (people from other decks have higher survival rate)
-        # - embark_town is Cherbourg (people who embarked from Cherbourg have higher survival rate)
+        # The logic here is to give more weightage to the features that are more likely to result in survival.
+        # For example, 'sex_female', 'fare', 'class_First', 'who_woman' are given more weightage as they are more likely to result in survival.
+        # Similarly, 'sex_male', 'pclass', 'class_Third', 'who_man' are given less weightage as they are less likely to result in survival.
+        # The weights are arbitrary and can be adjusted for better accuracy.
+        y = 0.3*row['sex_female'] + 0.2*row['fare'] + 0.2*row['class_First'] + 0.2*row['who_woman'] - 0.2*row['sex_male'] - 0.2*row['pclass'] - 0.2*row['class_Third'] - 0.2*row['who_man']
 
-        y = 0.1 * (3 - row['pclass']) + 0.1 * (1 if row['age'] <= 16 else 0) + 0.1 * (row['fare'] / 100) + \
-            0.1 * row['sex_female'] + 0.1 * row['embarked_C'] + 0.1 * (1 - row['alone_True']) + \
-            0.1 * (1 - row['adult_male_True']) + 0.1 * (1 if row['who_man'] == 0 else 0) + \
-            0.1 * row['class_First'] + 0.1 * (1 if row['deck_G'] == 0 else 0) + 0.1 * row['embark_town_Cherbourg']
-
-        # Normalize the prediction to be between 0 and 1
-        y = max(0, min(y, 1))
+        # Normalize the output to be between 0 and 1
+        y = (y - df.min()) / (df.max() - df.min())
 
         # Do not change the code after this point.
         output.append(y)
