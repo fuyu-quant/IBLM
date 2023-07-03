@@ -9,13 +9,13 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        if row['sex_female'] == 1 and row['class_First'] == 1 and row['embark_town_Cherbourg'] == 1:
-            y = 0.9
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 1.0
         else:
-            y = 0.1
+            y = 0.0
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
 ```
 
-This function iterates over each row in the input DataFrame, checks if the passenger is female, is in first class, and embarked from Cherbourg, and assigns a high probability if all these conditions are met, and a low probability otherwise. The output is a numpy array of probability values.
+This function iterates over each row in the input DataFrame, checks the values of the 'sex_female', 'class_First', and 'embark_town_Cherbourg' columns, and assigns a prediction of 1.0 if all of these conditions are met, and 0.0 otherwise. The predictions are then returned as a NumPy array.

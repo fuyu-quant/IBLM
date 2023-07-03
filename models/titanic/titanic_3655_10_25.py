@@ -8,17 +8,14 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # Here we are using a simple rule-based approach to predict the target.
-        # The rules are based on the observation of the given data.
-        # For example, if the passenger is female, embarked from Cherbourg, and is in first class, 
-        # the probability of survival is high. Similarly, if the passenger is male, embarked from Southampton, 
-        # and is in third class, the probability of survival is low.
+        # We are assuming that if the passenger is female, young, and in first class, they have a high probability of survival.
+        # This is based on the historical fact that women, children, and first-class passengers were given priority during the evacuation of the Titanic.
+        # This is a very simplistic approach and would not work well in a real-world scenario where the data is more complex.
 
-        if row['sex_female'] == 1 and row['embarked_C'] == 1 and row['class_First'] == 1:
-            y = 0.9
-        elif row['sex_male'] == 1 and row['embarked_S'] == 1 and row['class_Third'] == 1:
-            y = 0.1
+        if row['sex_female'] == 1.0 and row['age'] <= 30.0 and row['pclass'] == 1.0:
+            y = 1.0
         else:
-            y = 0.5
+            y = 0.0
 
         # Do not change the code after this point.
         output.append(y)

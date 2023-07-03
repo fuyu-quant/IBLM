@@ -1,6 +1,3 @@
-Here is a simple example of a prediction function that uses a basic rule-based approach. This function assumes that the target is more likely to be 1 if the passenger is female, is in first class, and embarked from Cherbourg. This is a very simplistic approach and would likely not perform well in a real-world scenario, but it serves to illustrate the basic structure of a prediction function.
-
-```python
 import numpy as np
 
 def predict(x):
@@ -9,13 +6,20 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        if row['sex_female'] == 1 and row['class_First'] == 1 and row['embark_town_Cherbourg'] == 1:
+
+        # Here we are using a simple rule-based approach to predict the target.
+        # The rules are based on the observation of the data.
+        # For example, if the passenger is female, in first class, and embarked from Cherbourg, 
+        # the probability of survival is high. On the other hand, if the passenger is male, in third class, 
+        # and embarked from Southampton, the probability of survival is low.
+
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
             y = 0.9
-        else:
+        elif row['sex_male'] == 1.0 and row['class_Third'] == 1.0 and row['embark_town_Southampton'] == 1.0:
             y = 0.1
+        else:
+            y = 0.5
+
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
-```
-
-This function will return a high probability value when the conditions are met and a low probability value otherwise. Please note that this is a very basic example and a more sophisticated approach would be needed for a real-world application.

@@ -1,6 +1,3 @@
-Here is a simple Python code that predicts the probability of "target" being 1 based on the given data. This code uses a simple rule-based approach where it checks certain conditions in the data to predict the probability. 
-
-```python
 import numpy as np
 
 def predict(x):
@@ -10,31 +7,22 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
         
-        # Initialize probability to 0.5 (neutral)
-        prob = 0.5
-
-        # Increase probability if passenger is female
-        if row['sex_female'] == 1:
-            prob += 0.2
-
-        # Increase probability if passenger is in first class
-        if row['pclass'] == 1:
-            prob += 0.1
-
-        # Decrease probability if passenger is alone
-        if row['alone_True'] == 1:
-            prob -= 0.1
-
-        # Decrease probability if passenger embarked from Southampton
-        if row['embark_town_Southampton'] == 1:
-            prob -= 0.1
-
-        # Ensure probability is within [0, 1]
-        prob = max(0, min(1, prob))
+        # Here we are using a simple rule-based approach to predict the target.
+        # The rules are based on the observations from the given data.
+        # For example, if 'sex_female' is 1, 'alive_yes' is 1 and 'class_First' is 1, 
+        # then the probability of target being 1 is high.
+        # Similarly, if 'sex_male' is 1, 'alive_no' is 1 and 'class_Third' is 1, 
+        # then the probability of target being 1 is low.
+        # These rules are not perfect and may not work well on unseen data.
+        # For a more accurate prediction, a machine learning model should be trained on the data.
+        
+        if row['sex_female'] == 1 and row['alive_yes'] == 1 and row['class_First'] == 1:
+            y = 0.9
+        elif row['sex_male'] == 1 and row['alive_no'] == 1 and row['class_Third'] == 1:
+            y = 0.1
+        else:
+            y = 0.5
 
         # Do not change the code after this point.
-        output.append(prob)
+        output.append(y)
     return np.array(output)
-```
-
-This code is a simple example and may not provide very accurate predictions. For more accurate predictions, a machine learning model trained on the data would be more suitable.

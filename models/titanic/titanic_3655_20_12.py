@@ -1,4 +1,4 @@
-Here is a simple example of a prediction function that uses a basic rule-based approach. This function assumes that passengers who are female, young, and in first class have a higher probability of survival (target=1), while others have a lower probability. This is based on the historical fact that women, children, and first-class passengers were given priority during the evacuation of the Titanic.
+Here is a simple example of a prediction function that uses a basic rule-based approach. This function assumes that the target is more likely to be 1 if the passenger is female, is in first class, and embarked from Cherbourg. This is a very simplistic approach and would likely not perform well in a real-world scenario, but it serves as an example of how you might begin to approach this problem without using a machine learning model.
 
 ```python
 import numpy as np
@@ -9,25 +9,12 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        if row['sex_female'] == 1 and row['age'] < 18 and row['pclass'] == 1:
-            y = 0.9
-        elif row['sex_female'] == 1 and row['age'] < 18:
-            y = 0.8
-        elif row['sex_female'] == 1 and row['pclass'] == 1:
-            y = 0.7
-        elif row['sex_female'] == 1:
-            y = 0.6
-        elif row['age'] < 18 and row['pclass'] == 1:
-            y = 0.5
-        elif row['age'] < 18:
-            y = 0.4
-        elif row['pclass'] == 1:
-            y = 0.3
-        else:
-            y = 0.1
+        y = 0
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 1
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
 ```
 
-This function is a very simple example and does not take into account all the features in the dataset. For a more accurate prediction, a machine learning model should be trained on the data.
+This function will return an array of 1s and 0s, where 1 indicates a high probability of the target being 1, and 0 indicates a low probability. The function uses a simple rule-based approach to make these predictions, based on the values in the 'sex_female', 'class_First', and 'embark_town_Cherbourg' columns.

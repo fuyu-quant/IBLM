@@ -1,4 +1,4 @@
-Here is a simple Python code that predicts the probability of "target" being 1 based on the given data. This code uses a simple rule-based approach where it checks certain conditions in the data to predict the probability. 
+Here is a simple example of a prediction function that uses a basic rule-based approach. This function assumes that the target is more likely to be 1 if the passenger is female, is in first class, and is alone. This is a very simplistic approach and would likely not perform well in a real-world scenario, but it serves as an example of how you might begin to approach this problem without using a machine learning model.
 
 ```python
 import numpy as np
@@ -9,36 +9,15 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # Initialize probability to 0.5
-        prob = 0.5
-
-        # If the passenger is female, increase the probability
-        if row['sex_female'] == 1:
-            prob += 0.2
-
-        # If the passenger is in first class, increase the probability
-        if row['pclass'] == 1:
-            prob += 0.1
-
-        # If the passenger is a child, increase the probability
-        if row['who_child'] == 1:
-            prob += 0.1
-
-        # If the passenger embarked from Cherbourg, increase the probability
-        if row['embark_town_Cherbourg'] == 1:
-            prob += 0.05
-
-        # If the passenger is alone, decrease the probability
-        if row['alone_True'] == 1:
-            prob -= 0.05
-
-        # Ensure probability is within [0, 1]
-        prob = min(max(prob, 0), 1)
-
+        if row['sex_female'] == 1.0 and row['pclass'] == 1.0 and row['alone_True'] == 1.0:
+            y = 0.9
+        else:
+            y = 0.1
         # Do not change the code after this point.
-        output.append(prob)
+        output.append(y)
     return np.array(output)
 ```
 
-This code is a simple rule-based model and does not use any machine learning techniques. The rules are based on the assumption that certain factors (like being female, being in first class, being a child, and embarking from Cherbourg) increase the chance of survival, while other factors (like being alone) decrease the chance of survival. The weights for each factor are arbitrary and can be adjusted for better accuracy.
+This function will return a high probability for passengers who are female, in first class, and alone, and a low probability for all other passengers. This is based on the assumption that these factors make it more likely for the target to be 1. 
+
+Please note that this is a very basic example and does not take into account many other factors that could influence the target. A more sophisticated approach would likely involve using a machine learning model to make predictions based on all of the available data.

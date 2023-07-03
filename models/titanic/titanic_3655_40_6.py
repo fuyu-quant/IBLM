@@ -1,5 +1,4 @@
 import numpy as np
-
 def predict(x):
     df = x.copy()
     output = []
@@ -8,18 +7,12 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are just assumptions based on the data, and in a real scenario, a machine learning model would be trained to find these patterns
-        prob = 0.5
-        if row['sex_female'] == 1:
-            prob += 0.3
-        if row['pclass'] == 1:
-            prob += 0.1
-        if row['embarked_C'] == 1:
-            prob += 0.1
+        # These are based on the known survival facts from the Titanic disaster
+        y = 0.3*row['sex_female'] + 0.3*row['class_First'] + 0.3*row['embark_town_Cherbourg'] + 0.1*row['fare']
 
-        # Ensure probability is between 0 and 1
-        prob = min(max(prob, 0), 1)
+        # Normalizing the output to be between 0 and 1
+        y = 1 / (1 + np.exp(-y))
 
         # Do not change the code after this point.
-        output.append(prob)
+        output.append(y)
     return np.array(output)

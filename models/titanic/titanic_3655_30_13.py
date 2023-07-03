@@ -6,21 +6,20 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # The logic here is to give more weightage to the features that are more likely to result in survival.
-        # For example, 'pclass' is inversely proportional to survival rate, 'sex_female' is directly proportional to survival rate, etc.
-        # The weights for these features are determined based on their importance in survival.
-        # The sum of these weighted features is then normalized to get a probability between 0 and 1.
-        
-        y = (1/row['pclass'] * 0.15 +
-             row['sex_female'] * 0.35 +
-             row['fare']/100 * 0.1 +
-             row['alone_True'] * 0.1 +
-             row['adult_male_False'] * 0.15 +
-             row['class_First'] * 0.15)
-        
-        # Normalizing the output to get a probability between 0 and 1
-        y = y / (0.15 + 0.35 + 0.1 + 0.1 + 0.15 + 0.15)
+
+        # Here we are using a simple rule-based approach to predict the target.
+        # We are assuming that if the passenger is female, has a first class ticket, and embarked from Cherbourg, they have a high probability of survival.
+        # This is based on historical data which suggests that women, children, and first class passengers were given priority during the evacuation of the Titanic.
+        # We are also assuming that if the passenger is male, has a third class ticket, and embarked from Southampton, they have a low probability of survival.
+        # This is based on historical data which suggests that men, especially those in third class, had a lower survival rate.
+        # This is a very simplistic model and would likely not perform well on unseen data.
+
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 0.9
+        elif row['sex_male'] == 1.0 and row['class_Third'] == 1.0 and row['embark_town_Southampton'] == 1.0:
+            y = 0.1
+        else:
+            y = 0.5
 
         # Do not change the code after this point.
         output.append(y)

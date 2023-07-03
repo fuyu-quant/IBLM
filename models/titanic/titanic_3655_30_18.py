@@ -1,31 +1,22 @@
 import numpy as np
+
 def predict(x):
     df = x.copy()
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        y = 0
-        if row['pclass'] == 1:
-            y += 0.3
-        if row['sex_female'] == 1:
-            y += 0.3
-        if row['fare'] > 30:
-            y += 0.2
-        if row['age'] < 10 or row['age'] > 60:
-            y += 0.1
-        if row['sibsp'] == 0 and row['parch'] == 0:
-            y -= 0.1
-        if row['embarked_C'] == 1:
-            y += 0.1
-        if row['class_First'] == 1:
-            y += 0.1
-        if row['who_child'] == 1:
-            y += 0.1
-        if row['deck_A'] == 1 or row['deck_B'] == 1 or row['deck_C'] == 1 or row['deck_D'] == 1 or row['deck_E'] == 1:
-            y += 0.1
-        if y > 1:
-            y = 1
+
+        # The logic here is to give more weightage to the features that are more likely to result in survival.
+        # For example, 'sex_female', 'fare', 'class_First', 'who_woman' are given more weightage as they are more likely to result in survival.
+        # Similarly, 'sex_male', 'pclass', 'class_Third', 'who_man' are given less weightage as they are less likely to result in survival.
+        # The weights are arbitrary and can be adjusted for better accuracy.
+
+        y = 0.3*row['sex_female'] + 0.2*row['fare'] + 0.2*row['class_First'] + 0.2*row['who_woman'] - 0.2*row['sex_male'] - 0.2*row['pclass'] - 0.2*row['class_Third'] - 0.2*row['who_man']
+
+        # Converting the result to a probability between 0 and 1 using the sigmoid function
+        y = 1 / (1 + np.exp(-y))
+
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)

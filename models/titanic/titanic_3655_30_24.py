@@ -7,38 +7,19 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Based on the given data, we can see that the survival rate is higher for females, people in first class, and those who embarked from Cherbourg.
-        # We can also see that the survival rate is lower for males, people in third class, and those who embarked from Southampton.
-        # We will use these observations to make our predictions.
+        # Here we are using a simple rule-based approach to predict the target.
+        # We are assuming that if the passenger is female, in first class, and embarked from Cherbourg, they have a high probability of survival.
+        # This is based on historical data which suggests that women and children were given priority during the evacuation of the Titanic, and first class passengers had easier access to the lifeboats.
+        # We are also assuming that if the passenger is male, in third class, and embarked from Southampton, they have a low probability of survival.
+        # This is based on historical data which suggests that men and third class passengers had a lower survival rate.
+        # This is a very simplistic approach and would likely not perform well on unseen data.
 
-        y = 0.5  # start with a base probability of 0.5
-
-        # increase probability for females
-        if row['sex_female'] == 1:
-            y += 0.3
-
-        # decrease probability for males
-        if row['sex_male'] == 1:
-            y -= 0.3
-
-        # increase probability for first class
-        if row['class_First'] == 1:
-            y += 0.2
-
-        # decrease probability for third class
-        if row['class_Third'] == 1:
-            y -= 0.2
-
-        # increase probability for those who embarked from Cherbourg
-        if row['embark_town_Cherbourg'] == 1:
-            y += 0.1
-
-        # decrease probability for those who embarked from Southampton
-        if row['embark_town_Southampton'] == 1:
-            y -= 0.1
-
-        # ensure probability stays within [0, 1]
-        y = max(0, min(y, 1))
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 0.9
+        elif row['sex_male'] == 1.0 and row['class_Third'] == 1.0 and row['embark_town_Southampton'] == 1.0:
+            y = 0.1
+        else:
+            y = 0.5
 
         # Do not change the code after this point.
         output.append(y)

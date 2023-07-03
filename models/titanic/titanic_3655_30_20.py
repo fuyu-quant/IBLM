@@ -7,17 +7,12 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Here we are assuming that the target is more likely to be 1 if the passenger is female, is in first class, and embarked from Cherbourg.
-        # These conditions are based on the historical fact that women, children and first class passengers were given priority during the evacuation of the Titanic.
-        # We are also assuming that the target is less likely to be 1 if the passenger is male, is in third class, and embarked from Southampton.
-        # These assumptions are simplistic and may not hold true for all cases, but they serve as a starting point for our prediction.
-
-        if row['sex_female'] == 1 and row['class_First'] == 1 and row['embark_town_Cherbourg'] == 1:
-            y = 0.9
-        elif row['sex_male'] == 1 and row['class_Third'] == 1 and row['embark_town_Southampton'] == 1:
-            y = 0.1
-        else:
-            y = 0.5
+        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
+        # These are just assumptions based on general knowledge about the Titanic disaster, where women, children and first class passengers had higher survival rate
+        # The age is also considered, giving higher probability for children
+        # The fare is also considered, assuming that higher fare might indicate higher class or more resources, thus higher survival rate
+        # The values are normalized to be between 0 and 1 by dividing by the maximum value of each factor
+        y = (row['sex_female'] + row['class_First'] + row['embark_town_Cherbourg'] + row['age']/df['age'].max() + row['fare']/df['fare'].max()) / 5
 
         # Do not change the code after this point.
         output.append(y)

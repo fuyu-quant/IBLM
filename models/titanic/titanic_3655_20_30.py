@@ -8,28 +8,17 @@ def predict(x):
         # Please describe the process required to make the prediction below.
 
         # Here we are using a simple rule-based approach to predict the target.
-        # We assume that the target is more likely to be 1 if the passenger is female, embarked from Cherbourg, travelling in first class, and is alone.
-        # This is based on the historical data from the Titanic disaster, where women, children, and first-class passengers were more likely to survive.
-        # We also consider the age of the passenger, with younger passengers being more likely to survive.
-        # The fare paid by the passenger is also considered, with higher fares indicating a higher likelihood of survival.
-        # This is a very simplistic approach and would likely be improved with a more sophisticated machine learning model.
+        # The rules are based on the observations from the given data.
+        # For example, if the passenger is female, in first class, and embarked from Cherbourg, the probability of survival is high.
+        # Similarly, if the passenger is male, in third class, and embarked from Southampton, the probability of survival is low.
+        # These rules are not perfect and there may be exceptions, but they should give a reasonable prediction based on the given data.
 
-        y = 0.0
-        if row['sex_female'] == 1:
-            y += 0.3
-        if row['embarked_C'] == 1:
-            y += 0.1
-        if row['class_First'] == 1:
-            y += 0.2
-        if row['alone_True'] == 1:
-            y += 0.1
-        if row['age'] < 18:
-            y += 0.1
-        if row['fare'] > 50:
-            y += 0.2
-
-        # Ensure the predicted probability is between 0 and 1
-        y = min(max(y, 0.0), 1.0)
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 0.9
+        elif row['sex_male'] == 1.0 and row['class_Third'] == 1.0 and row['embark_town_Southampton'] == 1.0:
+            y = 0.1
+        else:
+            y = 0.5
 
         # Do not change the code after this point.
         output.append(y)

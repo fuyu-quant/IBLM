@@ -1,3 +1,6 @@
+Here is a simple example of a prediction function that uses a basic rule-based approach. This function assumes that the target is more likely to be 1 if the passenger is female, is in first class, and is alone. This is a very simplistic approach and would likely not perform well in a real-world scenario, but it serves to illustrate the basic structure of a prediction function.
+
+```python
 import numpy as np
 
 def predict(x):
@@ -6,24 +9,13 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-
-        # Here we are using a simple rule-based system to predict the target.
-        # The rules are based on the data provided and may not be accurate for all cases.
-        # This is a placeholder for a more sophisticated model.
-
-        # Rule 1: If the passenger is female, there is a high probability of survival.
-        if row['sex_female'] == 1:
-            y = 0.8
-        # Rule 2: If the passenger is male and in first class, there is a moderate probability of survival.
-        elif row['sex_male'] == 1 and row['class_First'] == 1:
-            y = 0.6
-        # Rule 3: If the passenger is male and in second or third class, there is a low probability of survival.
-        elif row['sex_male'] == 1 and (row['class_Second'] == 1 or row['class_Third'] == 1):
-            y = 0.3
-        # Rule 4: If none of the above conditions are met, assign a default probability.
+        if row['sex_female'] == 1.0 and row['pclass'] == 1.0 and row['alone_True'] == 1.0:
+            y = 0.9
         else:
-            y = 0.5
-
+            y = 0.1
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
+```
+
+This function will return a high probability for passengers who are female, in first class, and alone, and a low probability for all other passengers. The specific probability values (0.9 and 0.1) are arbitrary and could be adjusted based on further analysis of the data.

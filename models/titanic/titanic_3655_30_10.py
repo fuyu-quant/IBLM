@@ -6,15 +6,12 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # The logic here is to give more weightage to the features that are more likely to result in survival.
-        # For example, 'pclass' is inversely proportional to survival rate, 'sex_female' has higher survival rate, 'fare' is directly proportional to survival rate, etc.
-        # The weights for these features are determined based on their importance.
-        y = 0.1*row['pclass'] + 0.3*row['sex_female'] + 0.2*row['fare'] + 0.1*row['embarked_C'] + 0.1*row['alone_False'] + 0.1*row['adult_male_False'] + 0.1*row['class_First']
-        
-        # Normalize the prediction to be between 0 and 1
-        y = 1 / (1 + np.exp(-y))
-        
+
+        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
+        # These are just assumptions based on general knowledge about the Titanic incident, 
+        # a more accurate model would require data exploration and possibly machine learning algorithms
+        y = 0.3*row['sex_female'] + 0.3*row['class_First'] + 0.3*row['embark_town_Cherbourg'] + 0.1*row['fare']
+
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)

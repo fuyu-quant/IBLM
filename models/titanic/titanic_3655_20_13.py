@@ -1,6 +1,3 @@
-Here is a simple Python code that predicts the probability of "target" being 1 based on the given data. This code uses a simple rule-based approach where it checks certain conditions in the data to predict the probability. 
-
-```python
 import numpy as np
 
 def predict(x):
@@ -10,31 +7,34 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Initialize probability to 0.5 (neutral)
-        prob = 0.5
+        # Here we are using a simple rule-based approach to predict the target.
+        # We are assuming that the target is more likely to be 1 if the passenger is female, embarked from Cherbourg, is alone, and is in first class.
+        # This is based on the historical data from the Titanic disaster, where women, children, and first-class passengers were more likely to survive.
+        # We are also assuming that the target is more likely to be 0 if the passenger is male, embarked from Southampton, is not alone, and is in third class.
+        # These assumptions may not be completely accurate, but they should provide a reasonable starting point for the prediction.
+        # The actual prediction is a weighted sum of these factors, with weights chosen to reflect their perceived importance.
 
-        # Increase probability if passenger is female
-        if row['sex_female'] == 1:
-            prob += 0.2
+        y = 0.0
+        if row['sex_female'] == 1.0:
+            y += 0.3
+        if row['embarked_C'] == 1.0:
+            y += 0.2
+        if row['alone_True'] == 1.0:
+            y += 0.1
+        if row['class_First'] == 1.0:
+            y += 0.4
+        if row['sex_male'] == 1.0:
+            y -= 0.3
+        if row['embarked_S'] == 1.0:
+            y -= 0.2
+        if row['alone_False'] == 1.0:
+            y -= 0.1
+        if row['class_Third'] == 1.0:
+            y -= 0.4
 
-        # Increase probability if passenger is in first class
-        if row['pclass'] == 1:
-            prob += 0.1
-
-        # Decrease probability if passenger is alone
-        if row['alone_True'] == 1:
-            prob -= 0.1
-
-        # Decrease probability if passenger embarked from Southampton
-        if row['embark_town_Southampton'] == 1:
-            prob -= 0.1
-
-        # Ensure probability is within [0, 1]
-        prob = max(0, min(1, prob))
+        # Ensure the prediction is within the range [0, 1]
+        y = max(0.0, min(1.0, y))
 
         # Do not change the code after this point.
-        output.append(prob)
+        output.append(y)
     return np.array(output)
-```
-
-This code is a simple example and may not provide very accurate predictions. For more accurate predictions, a machine learning model trained on the data would be more suitable.

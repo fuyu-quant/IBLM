@@ -9,13 +9,17 @@ def predict(x):
 
         # Here we are using a simple rule-based approach to predict the target.
         # The rules are based on the observations from the given data.
-        # For example, if 'pclass' is 1 or 2, 'sex_female' is 1, 'embarked_C' is 1, 'alive_yes' is 1, 'alone_False' is 1, 'adult_male_False' is 1, 'who_woman' is 1, 'class_First' or 'class_Second' is 1, 'deck_B' or 'deck_D' or 'deck_E' is 1, 'embark_town_Cherbourg' is 1, then the target is likely to be 1.
-        # Otherwise, the target is likely to be 0.
+        # For example, if 'sex_female' is 1, 'alive_yes' is 1 and 'class_First' is 1, 
+        # then the probability of target being 1 is high.
+        # Similarly, if 'sex_male' is 1, 'alive_no' is 1 and 'class_Third' is 1, 
+        # then the probability of target being 1 is low.
 
-        if (row['pclass'] <= 2) and (row['sex_female'] == 1) and (row['embarked_C'] == 1) and (row['alive_yes'] == 1) and (row['alone_False'] == 1) and (row['adult_male_False'] == 1) and (row['who_woman'] == 1) and ((row['class_First'] == 1) or (row['class_Second'] == 1)) and ((row['deck_B'] == 1) or (row['deck_D'] == 1) or (row['deck_E'] == 1)) and (row['embark_town_Cherbourg'] == 1):
-            y = 1
+        if row['sex_female'] == 1 and row['alive_yes'] == 1 and row['class_First'] == 1:
+            y = 0.9
+        elif row['sex_male'] == 1 and row['alive_no'] == 1 and row['class_Third'] == 1:
+            y = 0.1
         else:
-            y = 0
+            y = 0.5
 
         # Do not change the code after this point.
         output.append(y)

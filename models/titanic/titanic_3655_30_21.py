@@ -7,21 +7,15 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival statistics from the Titanic disaster
-        # We also consider age, with children being more likely to survive
-        # Fare is also considered, with higher fare indicating higher social-economic status and thus higher survival rate
+        # Here we are using a simple rule-based approach to predict the target.
+        # We are assuming that if the passenger is female, in first class, and embarked from Cherbourg, they have a high probability of survival.
+        # This is based on historical data which suggests that women and children, as well as upper-class passengers, had a higher survival rate on the Titanic.
+        # Of course, this is a simplification and in a real-world scenario, we would likely use a machine learning model to make this prediction.
 
-        y = 0.0
-        y += row['sex_female']
-        y += row['class_First']
-        y += row['embarked_C']
-        if row['age'] < 16:
-            y += 1
-        y += row['fare'] / 100
-
-        # Normalize the output to be between 0 and 1
-        y = min(max(y, 0), 1)
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 0.9
+        else:
+            y = 0.1
 
         # Do not change the code after this point.
         output.append(y)

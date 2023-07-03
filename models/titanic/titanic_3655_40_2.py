@@ -6,21 +6,28 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # Here we are assuming that the target is more likely to be 1 if the passenger is female, in first class, and embarked from Cherbourg.
-        # This is a simple heuristic and may not be accurate for all cases.
-        # A more accurate model would require training a machine learning model on the data.
+
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # These conditions are based on the historical data of the Titanic disaster where women, children, and first-class passengers were given priority for lifeboats.
+        # The embarkation point is also considered as passengers from Cherbourg had a higher survival rate.
+        # The age of the passenger is also considered, giving higher survival probability for children.
+        # The fare paid by the passenger is also considered, assuming that passengers who paid higher fares might have been given priority for lifeboats.
+        # This is a simple heuristic and does not guarantee accurate results for all cases.
+
         y = 0.0
-        if row['sex_female'] == 1:
+        if row['sex_female'] == 1.0:
             y += 0.3
-        if row['class_First'] == 1:
-            y += 0.3
-        if row['embark_town_Cherbourg'] == 1:
-            y += 0.3
-        if row['fare'] > 30:
+        if row['pclass'] == 1.0:
+            y += 0.2
+        if row['embarked_C'] == 1.0:
             y += 0.1
-        if y > 1.0:
-            y = 1.0
+        if row['age'] <= 15.0:
+            y += 0.2
+        if row['fare'] >= 30.0:
+            y += 0.2
+
+        # Normalize the probability to be between 0 and 1
+        y = min(max(y, 0.0), 1.0)
 
         # Do not change the code after this point.
         output.append(y)

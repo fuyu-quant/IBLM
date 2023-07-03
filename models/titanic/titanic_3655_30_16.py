@@ -7,14 +7,46 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give more weightage to the features that are more likely to result in survival.
-        # For example, 'sex_female', 'fare', 'class_First', 'who_woman' are given more weightage as they are more likely to result in survival.
-        # Similarly, 'sex_male', 'pclass', 'class_Third', 'who_man' are given less weightage as they are less likely to result in survival.
-        # The weights are arbitrary and can be adjusted for better accuracy.
-        y = 0.3*row['sex_female'] + 0.2*row['fare'] + 0.2*row['class_First'] + 0.2*row['who_woman'] - 0.2*row['sex_male'] - 0.2*row['pclass'] - 0.2*row['class_Third'] - 0.2*row['who_man']
+        # Based on the given data, we can see that the target is more likely to be 1 if the passenger is female, embarked from Cherbourg, is alone, and is in first class. 
+        # Conversely, the target is more likely to be 0 if the passenger is male, embarked from Southampton, is not alone, and is in third class.
+        # We can use these observations to make a simple prediction.
 
-        # Normalize the output to be between 0 and 1
-        y = (y - min(y)) / (max(y) - min(y))
+        score = 0
+
+        # Increase score if passenger is female
+        if row['sex_female'] == 1.0:
+            score += 1
+
+        # Increase score if passenger embarked from Cherbourg
+        if row['embark_town_Cherbourg'] == 1.0:
+            score += 1
+
+        # Increase score if passenger is alone
+        if row['alone_True'] == 1.0:
+            score += 1
+
+        # Increase score if passenger is in first class
+        if row['class_First'] == 1.0:
+            score += 1
+
+        # Decrease score if passenger is male
+        if row['sex_male'] == 1.0:
+            score -= 1
+
+        # Decrease score if passenger embarked from Southampton
+        if row['embark_town_Southampton'] == 1.0:
+            score -= 1
+
+        # Decrease score if passenger is not alone
+        if row['alone_False'] == 1.0:
+            score -= 1
+
+        # Decrease score if passenger is in third class
+        if row['class_Third'] == 1.0:
+            score -= 1
+
+        # Normalize the score to a probability between 0 and 1
+        y = 1 / (1 + np.exp(-score))
 
         # Do not change the code after this point.
         output.append(y)

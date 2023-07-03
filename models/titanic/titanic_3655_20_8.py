@@ -1,8 +1,4 @@
-Here is a simple python code that predicts the probability of "target" being 1 based on the given data. This code uses a simple rule-based approach to predict the probability. The rules are based on the observation of the data. 
-
-```python
 import numpy as np
-import pandas as pd
 
 def predict(x):
     df = x.copy()
@@ -10,37 +6,17 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        
-        # Rule 1: If 'pclass' is 1 or 2, the probability is high
-        if row['pclass'] <= 2:
-            y = 0.8
-        else:
-            y = 0.2
 
-        # Rule 2: If 'sex_female' is 1, the probability is high
-        if row['sex_female'] == 1:
-            y += 0.1
-        else:
-            y -= 0.1
+        # Here we are using a simple rule-based approach to predict the target.
+        # We are assuming that if the passenger is female, has a first class ticket, and embarked from Cherbourg, they have a high probability of survival.
+        # This is based on historical data which suggests that women, children, and upper-class passengers were more likely to survive the Titanic disaster.
+        # This is a very simplistic approach and a real-world solution would likely use a machine learning model to make more accurate predictions.
 
-        # Rule 3: If 'fare' is greater than 20, the probability is high
-        if row['fare'] > 20:
-            y += 0.1
+        if row['sex_female'] == 1.0 and row['class_First'] == 1.0 and row['embark_town_Cherbourg'] == 1.0:
+            y = 0.9
         else:
-            y -= 0.1
-
-        # Rule 4: If 'age' is less than 30, the probability is high
-        if row['age'] < 30:
-            y += 0.1
-        else:
-            y -= 0.1
-
-        # Ensure the probability is between 0 and 1
-        y = max(min(y, 1), 0)
+            y = 0.1
 
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
-```
-
-Please note that this is a very simple rule-based approach and may not give the best results. For better results, you should consider using machine learning algorithms.

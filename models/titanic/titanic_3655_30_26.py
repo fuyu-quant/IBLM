@@ -7,15 +7,20 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # The logic here is to give higher probability for those who are female, in first class, and embarked from Cherbourg
-        # These are based on the known survival factors from the Titanic disaster
-        # The age, fare, and number of siblings/spouses/parents/children are also considered
-        # The weights for each factor are determined based on their perceived importance
-
-        y = 0.3 * row['sex_female'] + 0.2 * row['class_First'] + 0.1 * row['embarked_C'] - 0.1 * row['age']/50 - 0.1 * row['fare']/100 - 0.1 * row['sibsp']/5 - 0.1 * row['parch']/5
-
-        # The output is then scaled to be between 0 and 1 using the sigmoid function
-        y = 1 / (1 + np.exp(-y))
+        # Here we are assuming that the target is more likely to be 1 if the passenger is female, is in first class, and embarked from Cherbourg.
+        # This is a simple heuristic and may not be accurate for all cases.
+        # A more accurate model would require training a machine learning model on the data.
+        y = 0.0
+        if row['sex_female'] == 1.0:
+            y += 0.3
+        if row['pclass'] == 1.0:
+            y += 0.3
+        if row['embarked_C'] == 1.0:
+            y += 0.3
+        if row['fare'] > 30.0:
+            y += 0.1
+        if y > 1.0:
+            y = 1.0
 
         # Do not change the code after this point.
         output.append(y)

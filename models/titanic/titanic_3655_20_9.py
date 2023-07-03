@@ -1,8 +1,4 @@
-Here is a simple Python code that predicts the probability of "target" being 1 based on the given data. This code uses a simple rule-based approach to predict the probability. It checks if the passenger is female, if the passenger is in first class, and if the passenger is a child. If all these conditions are met, it predicts a high probability of survival (0.9). If not, it predicts a low probability of survival (0.1). This is a very basic approach and may not provide accurate results for all cases.
-
-```python
 import numpy as np
-import pandas as pd
 
 def predict(x):
     df = x.copy()
@@ -10,13 +6,25 @@ def predict(x):
     for index, row in df.iterrows():
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
-        if row['sex_female'] == 1 and row['pclass'] == 1 and row['who_child'] == 1:
-            y = 0.9
-        else:
-            y = 0.1
+
+        # Here we are using a simple rule-based approach to predict the target.
+        # We are assuming that the target is more likely to be 1 if the passenger is female, embarked from Cherbourg, is alone, and is in first class.
+        # This is based on the historical data from the Titanic disaster, where women, children, and first-class passengers were more likely to survive.
+        # Of course, this is a very simplistic approach and a real-world solution would likely use a machine learning model.
+
+        y = 0.0
+        if row['sex_female'] == 1.0:
+            y += 0.3
+        if row['embarked_C'] == 1.0:
+            y += 0.2
+        if row['alone_True'] == 1.0:
+            y += 0.1
+        if row['class_First'] == 1.0:
+            y += 0.4
+
+        # Normalize the prediction to the range [0, 1]
+        y = min(max(y, 0.0), 1.0)
+
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
-```
-
-Please note that this is a very basic approach and may not provide accurate results for all cases. For a more accurate prediction, you would need to use a machine learning model trained on the given data.

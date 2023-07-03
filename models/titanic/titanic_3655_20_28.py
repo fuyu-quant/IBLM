@@ -9,15 +9,15 @@ def predict(x):
 
         # Here we are using a simple rule-based approach to predict the target.
         # The rules are based on the observations from the given data.
-        # For example, if the passenger is female (sex_female=1), embarked from Cherbourg (embarked_C=1), and travelled in first class (class_First=1), 
-        # then the probability of survival (target=1) is high.
-        # Similarly, if the passenger is male (sex_male=1), embarked from Southampton (embark_town_Southampton=1), and travelled in third class (class_Third=1), 
-        # then the probability of survival (target=1) is low.
-        # These rules are not perfect and there will be exceptions, but they should provide a reasonable starting point for the prediction.
+        # For example, if 'sex_female' is 1, 'alive_yes' is 1 and 'class_First' is 1, 
+        # then the probability of target being 1 is high.
+        # Similarly, if 'sex_male' is 1, 'alive_no' is 1 and 'class_Third' is 1, 
+        # then the probability of target being 1 is low.
+        # These rules are not perfect and may not work well on unseen data.
 
-        if row['sex_female'] == 1 and row['embarked_C'] == 1 and row['class_First'] == 1:
+        if row['sex_female'] == 1.0 and row['alive_yes'] == 1.0 and row['class_First'] == 1.0:
             y = 0.9
-        elif row['sex_male'] == 1 and row['embark_town_Southampton'] == 1 and row['class_Third'] == 1:
+        elif row['sex_male'] == 1.0 and row['alive_no'] == 1.0 and row['class_Third'] == 1.0:
             y = 0.1
         else:
             y = 0.5

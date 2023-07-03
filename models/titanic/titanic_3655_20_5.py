@@ -11,7 +11,7 @@ def predict(x):
         # We are assuming that if the passenger is female, embarked from Cherbourg, and is in first class, 
         # then there is a high probability that the target is 1. 
         # Otherwise, we assume that the probability is low.
-        if row['sex_female'] == 1 and row['embarked_C'] == 1 and row['class_First'] == 1:
+        if row['sex_female'] == 1.0 and row['embarked_C'] == 1.0 and row['class_First'] == 1.0:
             y = 0.9
         else:
             y = 0.1

@@ -7,20 +7,32 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Here we are assuming that the target is more likely to be 1 if the passenger is female, in first class, and embarked from Cherbourg.
-        # This is a simple heuristic and may not be accurate for all cases.
-        # A more sophisticated model could be trained using machine learning techniques.
+        # The logic here is to give higher probability for survival if the passenger is a female, in first class, and embarked from Cherbourg.
+        # These conditions are based on the historical data of the Titanic disaster where women, children, and first-class passengers had higher survival rates.
+        # The age of the passenger is also considered, giving higher survival probability for younger passengers.
+        # The fare paid by the passenger is also considered, assuming that passengers who paid higher fares might have been given priority during the evacuation.
+        # The number of siblings/spouses and parents/children aboard is also considered, assuming that passengers with family members might have helped each other to survive.
+        # The deck of the passenger is also considered, assuming that passengers on higher decks had a higher chance of survival as they were closer to the lifeboats.
+        # The 'alive_yes' and 'alive_no' columns are ignored as they are direct indicators of the target variable.
+
         y = 0.0
-        if row['sex_female'] == 1:
-            y += 0.3
-        if row['class_First'] == 1:
-            y += 0.3
-        if row['embark_town_Cherbourg'] == 1:
-            y += 0.3
-        if row['fare'] > 30:
-            y += 0.1
-        if y > 1.0:
-            y = 1.0
+        y += row['sex_female']
+        y += row['class_First']
+        y += row['embarked_C']
+        y -= row['age'] / 100
+        y += row['fare'] / 100
+        y += row['sibsp'] / 10
+        y += row['parch'] / 10
+        y += row['deck_A'] / 10
+        y += row['deck_B'] / 10
+        y += row['deck_C'] / 10
+        y += row['deck_D'] / 10
+        y += row['deck_E'] / 10
+        y += row['deck_F'] / 10
+        y += row['deck_G'] / 10
+
+        # Normalize the prediction to the range [0, 1]
+        y = max(0.0, min(1.0, y))
 
         # Do not change the code after this point.
         output.append(y)

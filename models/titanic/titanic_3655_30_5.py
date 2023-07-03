@@ -7,32 +7,26 @@ def predict(x):
         # Do not change the code before this point.
         # Please describe the process required to make the prediction below.
 
-        # Based on the given data, we can see that the target is more likely to be 1 when:
-        # - pclass is lower (1st class has higher survival rate)
-        # - age is lower (children have higher survival rate)
-        # - fare is higher (people who paid more have higher survival rate)
-        # - sex is female (women have higher survival rate)
-        # - embarked from Cherbourg (people from Cherbourg have higher survival rate)
-        # - alone is False (people with family have higher survival rate)
-        # - class is First (people in first class have higher survival rate)
-        # - deck is B, D, E (people on these decks have higher survival rate)
-        # - embark town is Cherbourg (people from Cherbourg have higher survival rate)
+        # Here we are assuming that the target is more likely to be 1 if the passenger is female, is in first class, and embarked from Cherbourg.
+        # This is a simple heuristic and may not be accurate for all cases.
+        y = 0.0
+        if row['sex_female'] == 1.0:
+            y += 0.3
+        if row['class_First'] == 1.0:
+            y += 0.3
+        if row['embark_town_Cherbourg'] == 1.0:
+            y += 0.3
 
-        y = 0
-        y += row['pclass'] * -0.1
-        y += row['age'] * -0.02
-        y += row['fare'] * 0.02
-        y += row['sex_female'] * 0.3
-        y += row['embarked_C'] * 0.1
-        y += row['alone_False'] * 0.1
-        y += row['class_First'] * 0.2
-        y += row['deck_B'] * 0.1
-        y += row['deck_D'] * 0.1
-        y += row['deck_E'] * 0.1
-        y += row['embark_town_Cherbourg'] * 0.1
+        # We also consider the age of the passenger, assuming that younger passengers are more likely to be the target.
+        # We normalize the age to be between 0 and 1.
+        y += (1.0 - row['age'] / 100.0) * 0.1
 
-        # Normalize the output to be between 0 and 1
-        y = 1 / (1 + np.exp(-y))
+        # Finally, we consider the fare paid by the passenger, assuming that passengers who paid a higher fare are more likely to be the target.
+        # We normalize the fare to be between 0 and 1.
+        y += row['fare'] / 500.0 * 0.1
+
+        # We limit the output to be between 0 and 1.
+        y = min(max(y, 0.0), 1.0)
 
         # Do not change the code after this point.
         output.append(y)
