@@ -36,7 +36,7 @@ os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
 from iblm import IBLMClassifier
 
 # LangChain経由でLLMを読み込む(GPT-4の利用を推奨)
-llm_model = OpenAI(temperature=0, model_name = 'gpt-4')
+llm_model = OpenAI(temperature=0, model_name = 'gpt-4-0613')
 
 params = {'columns_name': True}
 
@@ -61,7 +61,7 @@ y_proba = iblm.predict(x_test)
 
 
 ## 対応しているモデル
-現在はGPT-4の利用を推奨としています．
+現在はGPT-4-0613の利用を推奨としています．
 
 
 ## Contributor

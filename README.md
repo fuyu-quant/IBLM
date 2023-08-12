@@ -61,7 +61,7 @@ Use the link below to try it out immediately on Google colab.
 
 
 ## Supported Models
-Currently, the recommended model is GPT-4
+Currently, the recommended model is GPT-4-0613
 
 
 ## Contributor
