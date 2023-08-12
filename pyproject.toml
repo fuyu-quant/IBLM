@@ -24,6 +24,7 @@ jupyterlab-code-formatter = "^2.2.1"
 black = "^23.7.0"
 isort = "^5.12.0"
 jupyter-ai = "^2.0.0"
+seaborn = "^0.12.2"
 
 
 [build-system]
