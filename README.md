@@ -57,7 +57,7 @@ y_proba = iblm.predict(x_test)
 
 ### Notebooks
 Use the link below to try it out immediately on Google colab.
-- Binary classification...[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/iblmodel_titanic.ipynb)
+- Binary classification:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/iblmodel_titanic.ipynb)
 
 
 ## Supported Models
