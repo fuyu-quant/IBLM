@@ -30,16 +30,15 @@ class ICLClassifier():
 
 
         icl_prompt = """
-        Output the values according to all of the following conditions.
-        ・The output should be numeric only.
+        Predict the probability value by observing all of the following conditions.
+        ・Output must be numeric only.
         ・Do not output any text.
-        ・Non-numeric output will result in an error.
-        ・Predict the probability value as accurately as possible. Please be as detailed as possible.
-        ・The rightmost column with a value of 0 or 1 is 'target'.
+        ・Predicting probability values as finely as possible increases overall accuracy.
+        ・Please refer to the following data to estimate the probability that "target" will be 1. The rightmost column with a value of 0 or 1 is 'target'.
         ------------------
         {dataset_str_}
         ------------------
-        ・Predict the probability that 'target' is 1 for the following data. 
+        Predict the probability that 'target' is 1 for the following data. 
         ------------------
         """.format(
             dataset_str_ = dataset_str
@@ -47,7 +46,9 @@ class ICLClassifier():
 
         self.icl_prompt = icl_prompt
 
-        print('Number of input tokens:' + len(icl_prompt))
+        num_prompt = len(icl_prompt)
+
+        print(f'Number of input tokens:{num_prompt}')
 
         return icl_prompt
 

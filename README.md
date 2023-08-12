@@ -36,7 +36,7 @@ os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
 from iblm import IBLMClassifier
 
 # Load LLM via LangChain. (GPT-4 recommended)
-llm_model = OpenAI(temperature=0, model_name = 'gpt-4')
+llm_model = OpenAI(temperature=0, model_name = 'gpt-4-0613')
 
 params = {'columns_name': True}
 
@@ -61,7 +61,7 @@ Use the link below to try it out immediately on Google colab.
 
 
 ## Supported Models
-Currently, the recommended model is GPT-4
+Currently, the recommended model is GPT-4-0613
 
 
 ## Contributor
