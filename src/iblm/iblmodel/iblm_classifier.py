@@ -2,8 +2,8 @@ from langchain.callbacks import get_openai_callback
 import numpy as np
 import pandas as pd
 from importlib import resources
-import warnings
 
+import warnings
 warnings.filterwarnings('ignore')
 
 
