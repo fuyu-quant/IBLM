@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from importlib import resources
 
-from utils import data_to_text
+from ..utils import data_to_text
 
 import warnings
 warnings.filterwarnings('ignore')
