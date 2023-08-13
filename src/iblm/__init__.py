@@ -1,7 +1,7 @@
 #from ._version import version
 
 from .iblmodel.iblm_classifier import IBLMClassifier
-from .iblmodel.iblm_regressor import IBLMRegressor
+from .iblmodel.iblmodel import IBLModel
 
 from .iclmodel.icl_classifier import ICLClassifier
 
