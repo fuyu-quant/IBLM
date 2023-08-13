@@ -39,7 +39,7 @@ class IBLModel():
             if self.objective == 'regression':
                 with resources.open_text('iblm.iblmodel.prompt', 'regression.txt') as file:
                     prompt = file.read()
-            elif self.objective == 'classification':
+            elif self.objective == 'classification_2':
                 with resources.open_text('iblm.iblmodel.prompt', 'classification.txt') as file:
                     prompt = file.read()
 
@@ -47,7 +47,7 @@ class IBLModel():
             dataset_str_ = dataset_str,
             data_type_ = data_type,
             col_name_ = col_name,
-            col_option_ = col_option
+            #col_option_ = col_option
             )
 
         code_model = self.llm_model(create_prompt)
