@@ -1,53 +1,46 @@
 from tqdm import tqdm
 import numpy as np
+from importlib import resources
+
+from ..utils import preprocessing
 
 import warnings
 warnings.filterwarnings('ignore')
 
 
-class ICLClassifier():
+class ICLModel():
     def __init__(
         self, 
         llm_model, 
+        params
         ):
         self.llm_model = llm_model
+        self.columns_name = params['columns_name']
+        self.objective = params['objective']
         self.icl_prompt = None
 
 
     def fit(self, x, y):
         df = x.copy()
-
         df['target'] = y
 
-
         # Create a string dataset
-        dataset = []
-        for index, row in df.iterrows():
-            row_as_str = [str(item) for item in row.tolist()] 
-            dataset.append(','.join(row_as_str))
+        dataset_str = preprocessing.text_converter(df)
 
-        dataset_str = '\n'.join(dataset)
+        # create prompt
+        if prompt == None:
+            if self.objective == 'regression':
+                with resources.open_text('iblm.iclmodel.prompt', 'regression.txt') as file:
+                    prompt = file.read()
+            elif self.objective == 'classification':
+                with resources.open_text('iblm.iclmodel.prompt', 'classification.txt') as file:
+                    prompt = file.read()
 
-
-        icl_prompt = """
-        Predict the probability value by observing all of the following conditions.
-        ・Output must be numeric only.
-        ・Do not output any text.
-        ・Predicting probability values as finely as possible increases overall accuracy.
-        ・Please refer to the following data to estimate the probability that "target" will be 1. The rightmost column with a value of 0 or 1 is 'target'.
-        ------------------
-        {dataset_str_}
-        ------------------
-        Predict the probability that 'target' is 1 for the following data. 
-        ------------------
-        """.format(
-            dataset_str_ = dataset_str
-            )
-
+        icl_prompt = prompt.format(dataset_str_ = dataset_str)
+            
         self.icl_prompt = icl_prompt
 
         num_prompt = len(icl_prompt)
-
         print(f'Number of input tokens:{num_prompt}')
 
         return icl_prompt

@@ -1,0 +1,10 @@
+Predict the probability value by observing all of the following conditions.
+・Output must be numeric only.
+・Do not output any text.
+・Predicting probability values as finely as possible increases overall accuracy.
+・Please refer to the following data to estimate the probability that "target" will be 1. The rightmost column with a value of 0 or 1 is 'target'.
+------------------
+{dataset_str_}
+------------------
+Predict the probability that 'target' is 1 for the following data. 
+------------------
