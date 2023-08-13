@@ -18,7 +18,7 @@ class IBLMClassifier():
         self.model_code = None
 
 
-    def fit(self, x, y, model_name, file_path = None, prompt = '20230813.txt'):
+    def fit(self, x, y, prompt = None, model_name = None, file_path = None):
         df = x.copy()
         df['target'] = y
 
@@ -47,9 +47,10 @@ class IBLMClassifier():
             col_option = 'df.columns = range(df.shape[1])'
 
 
-        with resources.open_text('iblm.iblmodel.prompt', f'{prompt}') as file:
-            prompt = file.read()
-
+        # create prompt
+        if prompt == None:
+            with resources.open_text('iblm.iblmodel.prompt', '20230813.txt') as file:
+                prompt = file.read()
         create_prompt = prompt.format(
             dataset_str_ = dataset_str,
             data_type_ = data_type,
