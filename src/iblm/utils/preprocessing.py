@@ -1,6 +1,6 @@
 import pandas as pd
 
-def data_to_text(df):
+def text_converter(df):
     dataset = []
     for index, row in df.iterrows():
         row_as_str = [str(item) for item in row.tolist()] 

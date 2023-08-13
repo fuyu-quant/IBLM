@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from importlib import resources
 
-from ..utils import data_to_text
+from ..utils import preprocessing
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -30,7 +30,7 @@ class IBLModel():
         data_type = ', '.join(df.dtypes.astype(str))
 
         # Create a string dataset
-        dataset_str = data_to_text(df)
+        dataset_str = preprocessing.text_converter(df)
 
         # column name
         if self.columns_name:
