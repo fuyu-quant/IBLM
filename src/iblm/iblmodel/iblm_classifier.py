@@ -1,6 +1,7 @@
 from langchain.callbacks import get_openai_callback
 import numpy as np
 import pandas as pd
+from importlib import resources
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -45,10 +46,11 @@ class IBLMClassifier():
             col_name = ', '.join(df.columns.astype(str))
             col_option = 'df.columns = range(df.shape[1])'
 
-        with open(f'../prompt/{prompt}', 'r', encoding='utf-8') as file:
-            template = file.read()
 
-        create_prompt = template.format(
+        with resources.open_text('iblm.iblmodel.prompt', f'{prompt}') as file:
+            prompt = file.read()
+
+        create_prompt = prompt.format(
             dataset_str_ = dataset_str,
             data_type_ = data_type,
             col_name_ = col_name,
