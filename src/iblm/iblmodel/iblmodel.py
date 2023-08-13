@@ -64,6 +64,7 @@ class IBLModel():
         # fixing prompts
         modification_prompt = """
         Please extract and output only the Python code from the following.
+        Do not put ```python ```, etc. into the output.
         -------------
         {code_model_}
         """.format(code_model_ = code_model)
