@@ -47,7 +47,7 @@ class IBLModel():
             dataset_str_ = dataset_str,
             data_type_ = data_type,
             col_name_ = col_name,
-            #col_option_ = col_option
+            col_option_ = col_option
             )
 
         code_model = self.llm_model(create_prompt)
