@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
  
 
 
-class IBBoostingClassifier():
+class IBLBoosting():
     def __init__(
         self, 
         llm_model_name, 

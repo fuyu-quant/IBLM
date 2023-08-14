@@ -2,8 +2,10 @@ from langchain.callbacks import get_openai_callback
 import numpy as np
 import pandas as pd
 from importlib import resources
-import warnings
 
+from ..utils import preprocessing
+
+import warnings
 warnings.filterwarnings('ignore')
 
 
@@ -11,53 +13,35 @@ class IBLModel():
     def __init__(
         self, 
         llm_model,
-        params,
-        mode,
+        params
         ):
         self.llm_model = llm_model
         self.columns_name = params['columns_name']
-        self.mode = mode
-        self.model_code = None
+        self.objective = params['objective']
+        self.code_model = None
 
 
     def fit(self, x, y, prompt = None, model_name = None, file_path = None):
         df = x.copy()
         df['target'] = y
 
-
         # Obtaining data types
         data_type = ', '.join(df.dtypes.astype(str))
 
-
         # Create a string dataset
-        dataset = []
-        for index, row in df.iterrows():
-            row_as_str = [str(item) for item in row.tolist()] 
-            dataset.append(','.join(row_as_str))
-        dataset_str = '\n'.join(dataset)
-
+        dataset_str = preprocessing.text_converter(df)
 
         # column name
-        if self.columns_name:
-            col_name = ', '.join(df.columns.astype(str))
-            col_option = ''
-
-        else:
-            # serial number
-            df.columns = range(df.shape[1])
-            col_name = ', '.join(df.columns.astype(str))
-            col_option = 'df.columns = range(df.shape[1])'
-
-
+        col_name, col_option = preprocessing.columns_name(self.columns_name, df)
+     
         # create prompt
         if prompt == None:
-            if self.mode == 'regression':
+            if self.objective == 'regression':
                 with resources.open_text('iblm.iblmodel.prompt', 'regression.txt') as file:
                     prompt = file.read()
-            elif self.mode == 'classification':
+            elif self.objective == 'classification':
                 with resources.open_text('iblm.iblmodel.prompt', 'classification.txt') as file:
                     prompt = file.read()
-
 
         create_prompt = prompt.format(
             dataset_str_ = dataset_str,
@@ -66,55 +50,36 @@ class IBLModel():
             col_option_ = col_option
             )
 
+        code_model = self.llm_model(create_prompt)
+        print(code_model)
 
-        with get_openai_callback() as cb:
-            model_code = self.llm_model(create_prompt)
-            print(cb)
+        # prompt modification
+        modification_prompt = preprocessing.prompt_modification(code_model)
+        code_model = self.llm_model(modification_prompt)
+        self.code_model = code_model
 
         # Save to File
-        if file_path != None:
-            with open(file_path + f'{model_name}.py', mode='w') as file:
-                file.write(model_code)
-
-        self.model_code = model_code
-
-        return model_code
+        preprocessing.save_codemodel(file_path, model_name, self.code_model)
+    
+        return self.code_model
 
 
 
     def predict(self, x):
-        if self.model_code is None:
+        if self.code_model is None:
             raise Exception("You must train the model before predicting!")
 
-        code = self.model_code
-
+        code = self.code_model
         exec(code, globals())
-
         y = predict(x)
         return y
 
 
 
-
     def interpret(self):
-        if self.model_code is None:
+        if self.code_model is None:
             raise Exception("You must train the model before interpreting!")
 
-        interpret_prompt = """
-        Refer to the code below and explain how you are going to process the data and make predictions.
-        The only part to explain is the part where the data is processed.
-        Do not explain df = x.copy().
-        Please output the data in bulleted form.
-        Please tell us what you can say based on the whole process.
-        ------------------
-        {model_code_}
-        """.format(
-            model_code_ = self.model_code
-        )
-
-        with get_openai_callback() as cb:
-            output = self.llm_model(interpret_prompt)
-            print(cb)
-
-
+        interpret_prompt = preprocessing.interpret_codemodel(self.code_model)
+        output = self.llm_model(interpret_prompt)
         return output

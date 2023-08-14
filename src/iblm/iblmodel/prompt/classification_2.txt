@@ -1,0 +1,28 @@
+Please create your code in compliance with all of the following conditions. 
+・Analyze the data given below and write python code to predict the probability that the "target" of the unknown data is 1.
+・Never use machine learning algorithms.
+・Only Python functions should be output.
+・Please come up with a logic that allows you to predict probability values as closely as possible.
+・For the data given below, create a code that predicts a high probability value when "target" is likely to be 1 and a low probability value when "target" is unlikely to be 1.
+・Analyze the data in as much detail as possible.
+・The 'target' value cannot be used for forecasting.
+・Each data type is {data_type_}.
+・The column names, in order, are as follows {col_name_}.
+・Create a code like the following.
+------------
+import numpy as np
+def predict(x):
+    df = x.copy()
+    {col_option_}
+    output = []
+    for index, row in df.iterrows():
+        # Do not change the code before this point.
+        # Please describe the process required to make the prediction below.
+
+        # Do not change the code after this point.
+        output.append(y)
+    return np.array(output)
+------------
+data
+------------
+{dataset_str_}

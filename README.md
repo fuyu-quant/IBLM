@@ -18,6 +18,8 @@
 ## What is IBLM?
 IBLM (Inductive Bias Learning) is a new machine learning modeling method that uses LLM to infer the structure of the model itself from the data set and outputs it as Python code. The learned model (code model) can be used as a machine learning model to predict a new dataset.
 
+![ibl](./images/ibl.png)
+
 
 ## How to Use
 
@@ -33,17 +35,20 @@ os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
 ```
 
 ### Binary classification
-
+Currently, only small amounts of data can be executed.
 * Model Definition
 ```python
-from iblm import IBLMClassifier
+from iblm import IBLModel
 
 # Load LLM via LangChain. (GPT-4 recommended)
 llm_model = OpenAI(temperature=0, model_name = 'gpt-4-0613')
 
-params = {'columns_name': True}
+params = {
+    'columns_name': True,
+    'objective': 'classification',
+    }
 
-iblm = IBLMClassifier(llm_model = llm_model, params=params)
+iblm = IBLModel(llm_model = llm_model, params=params)
 ```
 
 * Model Learning
@@ -62,7 +67,7 @@ Use the link below to try it out immediately on Google colab.
 
 
 ## Supported Models
-Currently, the recommended model is GPT-4-0613
+Currently, the recommended model is GPT-4
 
 
 ## Contributor
