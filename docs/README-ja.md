@@ -35,6 +35,7 @@ os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
 
 ### 二値分類
 現在は少量のデータでのみ実行が可能です．
+同じseed値でも上手くcode modelを生成できる場合とできない場合があります．
 * モデルの
 ```python
 from iblm import IBLModel

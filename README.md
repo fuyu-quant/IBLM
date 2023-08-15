@@ -36,6 +36,7 @@ os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
 
 ### Binary classification
 Currently, only small amounts of data can be executed.
+The same seed value may or may not generate a successful code model.
 * Model Definition
 ```python
 from iblm import IBLModel
