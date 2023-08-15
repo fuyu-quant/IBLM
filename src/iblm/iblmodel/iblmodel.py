@@ -40,7 +40,7 @@ class IBLModel():
                 with resources.open_text('iblm.iblmodel.prompt', 'regression.txt') as file:
                     prompt = file.read()
             elif self.objective == 'classification':
-                with resources.open_text('iblm.iblmodel.prompt', 'classification.txt') as file:
+                with resources.open_text('iblm.iblmodel.prompt', 'classification_2.txt') as file:
                     prompt = file.read()
 
         create_prompt = prompt.format(
