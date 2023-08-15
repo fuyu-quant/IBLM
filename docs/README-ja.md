@@ -1,4 +1,4 @@
-# IBLM:Inductive Bias Learning Models
+# IBLM:Inductive-bias Learning Models
 <div align="center">
 [[ArXiv]]()
 </div>
