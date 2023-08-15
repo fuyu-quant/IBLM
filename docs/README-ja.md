@@ -3,7 +3,7 @@
 [[ArXiv]]()
 </div>
 
-- [What is IBLM](#what-is-iblm)
+- [What is IBL](#what-is-ibl)
 - [How to Use](#how-to-use)
     - [Setting](#setting)
     - [Binary classificatin](#binary-classification)
@@ -14,8 +14,8 @@
 
 
 
-## IBLMとは?
-IBLM（Inductive Bias Learning）は、LLMを用いてデータセットからモデル自体の構造を推測し、Pythonコードとして出力する新しい機械学習モデリング手法である。学習されたモデル（コードモデル）は、新たなデータセットを予測する機械学習モデルとして利用することができる。
+## IBLとは?
+IBL（Inductive-bias Learning）は、LLMを用いてデータセットからモデル自体の構造を推測し、Pythonコードとして出力する新しい機械学習モデリング手法である。学習されたモデル（コードモデル）は、新たなデータセットを予測する機械学習モデルとして利用することができる。このリポジトリではIBLによるさまざまな学習方法を試すことができる．(現在は単純な方法での二値分類のみ利用可能)
 
 ![ibl](./images/ibl.png)
 

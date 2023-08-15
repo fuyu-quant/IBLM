@@ -4,7 +4,7 @@
 </div>
 ※ I am currently writing a paper. Please contact ulti4929@gmail.com if you are interested.
 
-- [What is IBLM](#what-is-iblm)
+- [What is IBL](#what-is-ibl)
 - [How to Use](#how-to-use)
     - [Setting](#setting)
     - [Binary classificatin](#binary-classification)
@@ -15,8 +15,8 @@
 
 
 
-## What is IBLM?
-IBLM (Inductive Bias Learning) is a new machine learning modeling method that uses LLM to infer the structure of the model itself from the data set and outputs it as Python code. The learned model (code model) can be used as a machine learning model to predict a new dataset.
+## What is IBL?
+IBL (Inductive-bias Learning) is a new machine learning modeling method that uses LLM to infer the structure of the model itself from the data set and outputs it as Python code. The learned model (code model) can be used as a machine learning model to predict a new dataset.In this repository, you can try different learning methods with IBL.(Currently only binary classification with simple methods is available.)
 
 ![ibl](./images/ibl.png)
 
