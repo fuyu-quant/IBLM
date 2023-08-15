@@ -50,10 +50,7 @@ class IBLModel():
             col_option_ = col_option
             )
 
-        print(create_prompt)
-
         code_model = self.llm_model(create_prompt)
-        #print(code_model)
 
         # prompt modification
         modification_prompt = preprocessing.prompt_modification(code_model)
