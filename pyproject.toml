@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iblm"
-version = "0.2.15"
+version = "0.2.17"
 description = "Inductive-bias Learning"
 authors = ["toma tanaka <ulti4929@gmail.com>"]
 license = "MIT"
