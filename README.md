@@ -1,8 +1,9 @@
 # IBLM:Inductive-bias Learning Models
 <div align="center">
-[[ArXiv]]()
+
+[[ArXiv]](https://arxiv.org/abs/2308.09890)
+
 </div>
-※ I am currently writing a paper. Please contact ulti4929@gmail.com if you are interested.
 
 - [What is IBL](#what-is-ibl)
 - [How to Use](#how-to-use)
