@@ -1,18 +1,16 @@
-from langchain.llms import OpenAI
-from langchain.callbacks import get_openai_callback
 import re
 
 import numpy as np
 
 import warnings
 warnings.filterwarnings('ignore')
- 
+
 
 
 class IBLBoosting():
     def __init__(
-        self, 
-        llm_model_name, 
+        self,
+        llm_model_name,
         params
         ):
         self.llm_model_name = llm_model_name
@@ -44,7 +42,7 @@ class IBLBoosting():
         # Create a string dataset
         dataset = []
         for index, row in df.iterrows():
-            row_as_str = [str(item) for item in row.tolist()] 
+            row_as_str = [str(item) for item in row.tolist()]
             dataset.append(','.join(row_as_str))
         dataset_str = '\n'.join(dataset)
 
@@ -91,7 +89,7 @@ class IBLBoosting():
                 output.append(y)
 
             output = np.array(output)
-                
+
             return output
         """.format(
             task_type_ = task_type,
@@ -130,7 +128,7 @@ class IBLBoosting():
         exec(code, globals())
 
         #model = namespace["code"]
-        
+
         y = predict(x)
 
         return y
