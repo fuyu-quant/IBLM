@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 
 import prompt
+from exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
 from llm_client import get_client, run_prompt
-from exceptions import InvalidModelObjectiveError, InvalidCodeModelError, UndefinedCodeModelError
 
 logger = logging.getLogger(__name__)
 # logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s")
@@ -57,17 +57,17 @@ class IBLModel:
     def load_prompt_templates(self, objective: str) -> None:
         # fit_prompt_templates
         if self.objective == "regression":
-            with open("prompt_templates/ibl/regression.txt", "r") as file:
+            with open("prompt_templates/ibl/regression.j2", "r") as file:
                 self._default_fit_prompt_template = file.read()
         elif self.objective == "binary":
-            with open("prompt_templates/ibl/classification.txt", "r") as file:
+            with open("prompt_templates/ibl/classification_3.j2", "r") as file:
                 self._default_fit_prompt_template = file.read()
         elif self.objective == "multiclass":
-            with open("prompt_templates/ibl/classification.txt", "r") as file:
+            with open("prompt_templates/ibl/classification_3.j2", "r") as file:
                 self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with open("prompt_templates/interpret.txt", "r") as file:
+        with open("prompt_templates/interpret.j2", "r") as file:
             self._default_interpret_prompt_template = file.read()
 
     @property

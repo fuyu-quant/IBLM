@@ -1,9 +1,11 @@
 from __future__ import annotations
 
-from openai import OpenAI, AzureOpenAI
-import google.generativeai as genai
 import os
-from exceptions import InvalidAPIType, InvalidAPIOption
+
+import google.generativeai as genai
+from openai import AzureOpenAI, OpenAI
+
+from exceptions import InvalidAPIOption, InvalidAPIType
 
 API_TYPES = ("openai", "azure", "gemini")
 
