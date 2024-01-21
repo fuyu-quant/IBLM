@@ -54,6 +54,8 @@ class IBLModel:
         self.code_model = None
         self.interpret_result = None
 
+        self.fit_params = None
+
     def load_prompt_templates(self, objective: str) -> None:
         # fit_prompt_templates
         if self.objective == "regression":
@@ -114,6 +116,9 @@ class IBLModel:
 
         self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
 
+        self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
+
+
     def predict(self, X: pd.DataFrame) -> None:
         if self.code_model is None:
             raise UndefinedCodeModelError("You must load or train the model before predict!")
@@ -144,7 +149,12 @@ class IBLModel:
             file.write(self.code_model)
 
     def evaluate(y: np.array) -> dict:
-        pass
+        if self.objective == "regression":
+            pass
+        elif self.objective == "binary":
+            pass
+        elif self.objective == "multiclass":
+            pass
 
     def interpret(self, temperature: float = 0, seed: int | None = None, prompt_template: str = None) -> None:
         if self.code_model is None:
