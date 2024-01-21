@@ -1,16 +1,13 @@
-import pandas as pd
-import numpy as np
-
-from openai import OpenAI
+from __future__ import annotations
 
 import logging
 
+import numpy as np
+import pandas as pd
+
 import prompt
-
-import os
-
-os.environ["OPENAI_API_KEY"] = "ABCDG"
-
+from llm_client import get_client, run_prompt
+from exceptions import InvalidModelObjectiveError, InvalidCodeModelError, UndefinedCodeModelError
 
 logger = logging.getLogger(__name__)
 # logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s")
@@ -18,16 +15,39 @@ logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(
 logger.setLevel(logging.INFO)
 
 
-client = OpenAI()
-
-
 class IBLModel:
     IBL_OBJECTIVES = ("regression", "binary", "multiclass")
 
-    def __init__(self, model_name: str, objective: str):
+    def __init__(
+        self,
+        model_name: str,
+        objective: str,
+        # common
+        api_type: str = "openai",
+        # openai & azure
+        api_key: str | None = None,
+        max_retries: int = 5,
+        timeout: int = 120,
+        organization: str | None = None,
+        # azure
+        api_version: str | None = None,
+        azure_endpoint: str | None = None,
+    ) -> None:
+
         self.model_name = model_name
-        # self._objective = objective
         self.objective = objective
+        self.client = get_client(
+            # common
+            api_type=api_type,
+            # openai & azure
+            api_key=api_key,
+            max_retries=max_retries,
+            timeout=timeout,
+            organization=organization,
+            # azure
+            api_version=api_version,
+            azure_endpoint=azure_endpoint,
+        )
 
         self.load_prompt_templates(objective)
 
@@ -59,7 +79,7 @@ class IBLModel:
         if objective in self.IBL_OBJECTIVES:
             self._objective = objective
         else:
-            raise Exception(f"specify the objective from {self.IBL_OBJECTIVES}")
+            raise InvalidModelObjectiveError(f"specify the objective from {self.IBL_OBJECTIVES}")
 
         self.load_prompt_templates(objective)
 
@@ -71,22 +91,17 @@ class IBLModel:
     def default_interpret_prompt_template(self) -> str:
         return self._default_interpret_prompt_template
 
-    def _run_prompt(self, prompt: str, seed: int, temperature: float = 0) -> str:
-        response = client.chat.completions.create(
-            model=self.model_name,
-            messages=[{"role": "user", "content": prompt}],
-            seed=seed,
-            temperature=temperature,
+    def _run_prompt(self, prompt: str, temperature: float = 0, seed: int | None = None) -> str:
+        return run_prompt(
+            client=self.client, model_name=self.model_name, prompt=prompt, temperature=temperature, seed=seed
         )
-
-        return response.choices[0].message.content
 
     def fit(
         self,
         X: pd.DataFrame,
         y: np.array,
-        seed: int,
         temperature: float = 0,
+        seed: int | None = None,
         prompt_template: str = None,
     ) -> None:
 
@@ -94,30 +109,26 @@ class IBLModel:
             prompt_template = self.default_fit_prompt_template
 
         dataset_str, data_type = prompt._data_to_text(X, y)
-
         prompt_args = dict(dataset_str=dataset_str, data_type=data_type)
-
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
         self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
 
     def predict(self, X: pd.DataFrame) -> None:
         if self.code_model is None:
-            raise Exception("You must load or train the model before predict!")
+            raise UndefinedCodeModelError("You must load or train the model before predict!")
 
         _code_space = {}
 
         try:
             exec(self.code_model, globals(), _code_space)
-        except Exception:
-            logger.exception("Failed to `exec import` code_model")
-            raise
+        except Exception as err:
+            raise InvalidCodeModelError("Failed to execute `exec code_model`") from err
 
         try:
             y = _code_space["predict"](X)
-        except Exception:
-            logger.exception("Failed to execute `predict` function in code_model")
-            raise
+        except Exception as err:
+            raise InvalidCodeModelError("Failed to execute `predict` function in code_model") from err
 
         return y
 
@@ -127,7 +138,7 @@ class IBLModel:
 
     def save_code_model(self, file_path: str) -> None:
         if self.code_model is None:
-            raise Exception("You must train the model before interpreting!")
+            raise UndefinedCodeModelError("You must train the model before saving!")
 
         with open(file_path, mode="w") as file:
             file.write(self.code_model)
@@ -135,17 +146,14 @@ class IBLModel:
     def evaluate(y: np.array) -> dict:
         pass
 
-    def interpret(self, seed: int, temperature: float = 0, prompt_template: str = None) -> None:
+    def interpret(self, temperature: float = 0, seed: int | None = None, prompt_template: str = None) -> None:
         if self.code_model is None:
-            raise Exception("You must train the model before interpreting!")
+            raise UndefinedCodeModelError("You must train the model before interpreting!")
 
         if prompt_template is None:
             prompt_template = self.default_interpret_prompt_template
 
         prompt_args = dict(code_model=self.code_model)
-
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
-        self.interpret_result = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
-
-
+        self.interpret_result = self._run_prompt(prompt=prompt_, temperature=temperature, seed=seed)
