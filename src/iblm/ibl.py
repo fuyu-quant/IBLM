@@ -4,33 +4,27 @@ import logging
 
 import numpy as np
 import pandas as pd
+import prompt
+
 from sklearn.metrics import (
-    # regression
+    accuracy_score,
+    average_precision_score,
+    f1_score,
     mean_absolute_error,
     mean_squared_error,
-    r2_score,
-    # classifier
-    roc_auc_score,
-    average_precision_score,
-    accuracy_score,
-    recall_score,
     precision_score,
-    f1_score,
+    r2_score,
+    recall_score,
+    roc_auc_score,
 )
 
-import prompt
-from exceptions import (
-    InvalidCodeModelError,
-    InvalidModelObjectiveError,
-    UndefinedCodeModelError,
-)
+from exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
 from llm_client import get_client, run_prompt
+
 
 logger = logging.getLogger(__name__)
 # logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s")
-logging.basicConfig(
-    format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s:%(funcName)s:%(lineno)d)"
-)
+logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s:%(funcName)s:%(lineno)d)")
 logger.setLevel(logging.INFO)
 
 
@@ -78,17 +72,17 @@ class IBLModel:
     def load_prompt_templates(self, objective: str) -> None:
         # fit_prompt_templates
         if self.objective == "regression":
-            with open("prompt_templates/ibl/regression.j2", "r") as file:
+            with open("prompt_templates/ibl/regression.j2") as file:
                 self._default_fit_prompt_template = file.read()
         elif self.objective == "binary":
-            with open("prompt_templates/ibl/classification_3.j2", "r") as file:
+            with open("prompt_templates/ibl/classification_3.j2") as file:
                 self._default_fit_prompt_template = file.read()
         elif self.objective == "multiclass":
-            with open("prompt_templates/ibl/classification_3.j2", "r") as file:
+            with open("prompt_templates/ibl/classification_3.j2") as file:
                 self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with open("prompt_templates/interpret.j2", "r") as file:
+        with open("prompt_templates/interpret.j2") as file:
             self._default_interpret_prompt_template = file.read()
 
     @property
@@ -100,9 +94,7 @@ class IBLModel:
         if objective in self.IBL_OBJECTIVES:
             self._objective = objective
         else:
-            raise InvalidModelObjectiveError(
-                f"specify the objective from {self.IBL_OBJECTIVES}"
-            )
+            raise InvalidModelObjectiveError(f"specify the objective from {self.IBL_OBJECTIVES}")
 
         self.load_prompt_templates(objective)
 
@@ -114,9 +106,7 @@ class IBLModel:
     def default_interpret_prompt_template(self) -> str:
         return self._default_interpret_prompt_template
 
-    def _run_prompt(
-        self, prompt: str, temperature: float = 0, seed: int | None = None
-    ) -> str:
+    def _run_prompt(self, prompt: str, temperature: float = 0, seed: int | None = None) -> str:
         return run_prompt(
             client=self.client,
             model_name=self.model_name,
@@ -141,19 +131,13 @@ class IBLModel:
         prompt_args = dict(dataset_str=dataset_str, data_type=data_type)
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
-        self.code_model = self._run_prompt(
-            prompt=prompt_, seed=seed, temperature=temperature
-        )
+        self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
 
-        self.fit_params = dict(
-            temperature=temperature, seed=seed, prompt_template=prompt_template
-        )
+        self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
 
     def predict(self, X: pd.DataFrame) -> None:
         if self.code_model is None:
-            raise UndefinedCodeModelError(
-                "You must load or train the model before predict!"
-            )
+            raise UndefinedCodeModelError("You must load or train the model before predict!")
 
         _code_space = {}
 
@@ -165,14 +149,12 @@ class IBLModel:
         try:
             y = _code_space["predict"](X)
         except Exception as err:
-            raise InvalidCodeModelError(
-                "Failed to execute `predict` function in code_model"
-            ) from err
+            raise InvalidCodeModelError("Failed to execute `predict` function in code_model") from err
 
         return y
 
     def load_code_model(self, file_path: str) -> None:
-        with open(file_path, mode="r") as file:
+        with open(file_path) as file:
             self.code_model = file.read()
 
     def save_code_model(self, file_path: str) -> None:
@@ -213,9 +195,7 @@ class IBLModel:
         prompt_template: str = None,
     ) -> None:
         if self.code_model is None:
-            raise UndefinedCodeModelError(
-                "You must train the model before interpreting!"
-            )
+            raise UndefinedCodeModelError("You must train the model before interpreting!")
 
         if prompt_template is None:
             prompt_template = self.default_interpret_prompt_template
@@ -223,6 +203,4 @@ class IBLModel:
         prompt_args = dict(code_model=self.code_model)
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
-        self.interpret_result = self._run_prompt(
-            prompt=prompt_, temperature=temperature, seed=seed
-        )
+        self.interpret_result = self._run_prompt(prompt=prompt_, temperature=temperature, seed=seed)

@@ -3,9 +3,11 @@ from __future__ import annotations
 import os
 
 import google.generativeai as genai
+
 from openai import AzureOpenAI, OpenAI
 
 from exceptions import InvalidAPIOption, InvalidAPIType
+
 
 API_TYPES = ("openai", "azure", "gemini")
 
