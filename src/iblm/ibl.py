@@ -2,14 +2,18 @@ from __future__ import annotations
 
 import logging
 
-import numpy as np
-import pandas as pd
+from typing import TYPE_CHECKING
 
 import metrics
 import prompt
 
 from exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
 from llm_client import get_client, run_prompt
+
+
+if TYPE_CHECKING:
+    import numpy as np
+    import pandas as pd
 
 
 logger = logging.getLogger(__name__)
@@ -111,7 +115,7 @@ class IBLModel:
         y: np.array,
         temperature: float = 0,
         seed: int | None = None,
-        prompt_template: str = None,
+        prompt_template: str | None = None,
     ) -> None:
 
         if prompt_template is None:
@@ -161,7 +165,7 @@ class IBLModel:
         self,
         temperature: float = 0,
         seed: int | None = None,
-        prompt_template: str = None,
+        prompt_template: str | None = None,
     ) -> None:
         if self.code_model is None:
             raise UndefinedCodeModelError("You must train the model before interpreting!")

@@ -2,14 +2,19 @@ from __future__ import annotations
 
 import pickle
 
+from typing import TYPE_CHECKING
+
 import numpy as np
-import pandas as pd
 
 from ibl import IBLModel
 
 import metrics
 
 from exceptions import UndefinedCodeModelError
+
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 class IBLBagging:
@@ -48,11 +53,11 @@ class IBLBagging:
         self.models = []
 
     @property
-    def model_name(self):
+    def model_name(self) -> str:
         return self.ibl_model_config["model_name"]
 
     @property
-    def objective(self):
+    def objective(self) -> str:
         return self.ibl_model_config["objective"]
 
     def fit(
@@ -62,7 +67,7 @@ class IBLBagging:
         n_estimators: int,
         temperature: float = 0,
         seeds: list[int] | None = None,
-        prompt_template: str = None,
+        prompt_template: str | None = None,
     ) -> None:
 
         self.models = []  # clear models
