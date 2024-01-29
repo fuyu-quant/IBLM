@@ -116,6 +116,7 @@ class IBLModel:
         temperature: float = 0,
         seed: int | None = None,
         prompt_template: str | None = None,
+        try_code: bool = True,
     ) -> None:
 
         if prompt_template is None:
@@ -129,6 +130,13 @@ class IBLModel:
 
         self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
 
+        if try_code:
+            try:
+                self.predict(X.head(1))
+                logger.info("Valid code_model successfully created!")
+            except InvalidCodeModelError:
+                raise
+
     def predict(self, X: pd.DataFrame) -> None:
         if self.code_model is None:
             raise UndefinedCodeModelError("You must load or train the model before predict!")
@@ -138,11 +146,13 @@ class IBLModel:
         try:
             exec(self.code_model, globals(), _code_space)
         except Exception as err:
+            logger.exception("Error has occured while prediction")
             raise InvalidCodeModelError("Failed to execute `exec code_model`") from err
 
         try:
             y = _code_space["predict"](X)
         except Exception as err:
+            logger.exception("Error has occured while prediction")
             raise InvalidCodeModelError("Failed to execute `predict` function in code_model") from err
 
         return y
