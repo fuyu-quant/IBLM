@@ -4,19 +4,9 @@ import logging
 
 import numpy as np
 import pandas as pd
-import prompt
 
-from sklearn.metrics import (
-    accuracy_score,
-    average_precision_score,
-    f1_score,
-    mean_absolute_error,
-    mean_squared_error,
-    precision_score,
-    r2_score,
-    recall_score,
-    roc_auc_score,
-)
+import metrics
+import prompt
 
 from exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
 from llm_client import get_client, run_prompt
@@ -165,28 +155,7 @@ class IBLModel:
             file.write(self.code_model)
 
     def evaluate(self, y_true: np.array, y_pred: np.array) -> dict:
-        if self.objective == "regression":
-            metric_dict = {
-                "mae": mean_absolute_error(y_true, y_pred),
-                "rmse": np.sqrt(mean_squared_error(y_true, y_pred)),
-                "r2": r2_score(y_true, y_pred),
-            }
-        elif self.objective == "binary":
-            y_prob = y_pred
-            y_pred = np.where(y_prob > 0.5, 1, 0)
-            metric_dict = {
-                "roc_auc": roc_auc_score(y_true, y_prob),
-                "pr_auc": average_precision_score(y_true, y_prob),
-                "accuracy": accuracy_score(y_true, y_pred),
-                "recall": recall_score(y_true, y_pred),
-                "precision": precision_score(y_true, y_pred),
-                "f1_score": f1_score(y_true, y_pred),
-            }
-        elif self.objective == "multiclass":
-            # TODO: add metrics
-            metric_dict = {}
-
-        return metric_dict
+        return metrics.evaluate(y_true, y_pred, self.objective)
 
     def interpret(
         self,
