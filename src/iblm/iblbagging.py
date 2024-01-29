@@ -13,7 +13,6 @@ from exceptions import UndefinedCodeModelError
 
 
 class IBLBagging:
-    IBL_OBJECTIVES = ("regression", "binary", "multiclass")
 
     def __init__(
         self,
