@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import pickle
 
 from typing import TYPE_CHECKING
@@ -15,6 +16,10 @@ from exceptions import UndefinedCodeModelError
 
 if TYPE_CHECKING:
     import pandas as pd
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s:%(funcName)s:%(lineno)d)")
+logger.setLevel(logging.INFO)
 
 
 class IBLBagging:
@@ -78,8 +83,9 @@ class IBLBagging:
             seeds = [None] * n_estimators
         elif seeds is None:
             seeds = np.random.choice(range(10_000), size=n_estimators, replace=False)
+            logger.info(f"seeds wll be used: {seeds}")
 
-        for seed in seeds:
+        for i, seed in enumerate(seeds, start=1):
             iblm = IBLModel(**self.ibl_model_config)
             iblm.fit(
                 X=X,
@@ -90,10 +96,12 @@ class IBLBagging:
                 prompt_args=prompt_args,
                 try_code=try_code,
             )
-
             _models.append(iblm)
+            logger.info(f"Fitting task finished: {i} / {len(seeds)}")
 
         self.models = _models
+
+        logger.info("Fitting completed")
 
     def predict(self, X: pd.DataFrame) -> None:
         if self.models == []:
