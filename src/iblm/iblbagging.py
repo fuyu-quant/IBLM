@@ -68,9 +68,11 @@ class IBLBagging:
         temperature: float = 0,
         seeds: list[int] | None = None,
         prompt_template: str | None = None,
+        prompt_args: dict | None = None,
+        try_code: bool = True,
     ) -> None:
 
-        self.models = []  # clear models
+        _models = []
 
         if self.ibl_model_config["api_type"] == "gemini":
             seeds = [None] * n_estimators
@@ -79,9 +81,19 @@ class IBLBagging:
 
         for seed in seeds:
             iblm = IBLModel(**self.ibl_model_config)
-            iblm.fit(X, y, temperature, seed, prompt_template)
+            iblm.fit(
+                X=X,
+                y=y,
+                temperature=temperature,
+                seed=seed,
+                prompt_template=prompt_template,
+                prompt_args=prompt_args,
+                try_code=try_code,
+            )
 
-            self.models.append(iblm)
+            _models.append(iblm)
+
+        self.models = _models
 
     def predict(self, X: pd.DataFrame) -> None:
         if self.models == []:

@@ -116,18 +116,21 @@ class IBLModel:
         temperature: float = 0,
         seed: int | None = None,
         prompt_template: str | None = None,
+        prompt_args: dict | None = None,
         try_code: bool = True,
     ) -> None:
 
         if prompt_template is None:
             prompt_template = self.default_fit_prompt_template
 
-        dataset_str, data_type = prompt._data_to_text(X, y)
-        prompt_args = dict(dataset_str=dataset_str, data_type=data_type)
+        if prompt_args is None:
+            dataset_str, data_type = prompt.data_to_text(X, y)
+            # ??? {{col_option}} ???
+            prompt_args = dict(dataset_str=dataset_str, data_type=data_type)
+
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
         self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
-
         self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
 
         if try_code:
@@ -176,6 +179,7 @@ class IBLModel:
         temperature: float = 0,
         seed: int | None = None,
         prompt_template: str | None = None,
+        prompt_args: dict | None = None,
     ) -> None:
         if self.code_model is None:
             raise UndefinedCodeModelError("You must train the model before interpreting!")
@@ -183,7 +187,9 @@ class IBLModel:
         if prompt_template is None:
             prompt_template = self.default_interpret_prompt_template
 
-        prompt_args = dict(code_model=self.code_model)
+        if prompt_args is None:
+            prompt_args = dict(code_model=self.code_model)
+
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
         self.interpret_result = self._run_prompt(prompt=prompt_, temperature=temperature, seed=seed)

@@ -10,10 +10,10 @@ import pandas as pd
 def make_prompt(prompt_template: str, **kwargs) -> str:
     template = jinja2.Template(prompt_template)
     prompt = template.render(**kwargs)
-    return textwrap.dedent(prompt)[1:-1]
+    return textwrap.dedent(prompt)
 
 
-def _data_to_text(X: pd.DataFrame, y: np.array):
+def data_to_text(X: pd.DataFrame, y: np.array):
     df = X.copy()
     df["target"] = y
 
