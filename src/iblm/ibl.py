@@ -64,19 +64,19 @@ class IBLModel:
         self.fit_params = None
 
     def load_prompt_templates(self, objective: str) -> None:
+        task_prompt_mapping = dict(
+            regression="prompt_templates/ibl/regression.j2",
+            binary="prompt_templates/ibl/classification_3.j2",
+            multiclass="prompt_templates/ibl/classification_3.j2",
+            interpret="prompt_templates/interpret.j2",
+        )
+
         # fit_prompt_templates
-        if self.objective == "regression":
-            with open("prompt_templates/ibl/regression.j2") as file:
-                self._default_fit_prompt_template = file.read()
-        elif self.objective == "binary":
-            with open("prompt_templates/ibl/classification_3.j2") as file:
-                self._default_fit_prompt_template = file.read()
-        elif self.objective == "multiclass":
-            with open("prompt_templates/ibl/classification_3.j2") as file:
-                self._default_fit_prompt_template = file.read()
+        with open(task_prompt_mapping.get(self.objective)) as file:
+            self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with open("prompt_templates/interpret.j2") as file:
+        with open(task_prompt_mapping.get("interpret")) as file:
             self._default_interpret_prompt_template = file.read()
 
     @property
