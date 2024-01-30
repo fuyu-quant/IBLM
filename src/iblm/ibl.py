@@ -66,8 +66,8 @@ class IBLModel:
     def load_prompt_templates(self, objective: str) -> None:
         task_prompt_mapping = dict(
             regression="prompt_templates/ibl/regression.j2",
-            binary="prompt_templates/ibl/classification_3.j2",
-            multiclass="prompt_templates/ibl/classification_3.j2",
+            binary="prompt_templates/ibl/binary_3.j2",
+            multiclass="prompt_templates/ibl/binary_3.j2", # TODO: change after multiclass.j2
             interpret="prompt_templates/interpret.j2",
         )
 
