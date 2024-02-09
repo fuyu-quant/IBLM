@@ -1,2 +1,0 @@
-seed	train_num	n_trials	n_succeeses	acc_mean	acc_min	acc_max	auc_mean	auc_min	auc_max
-		30	27	0.7194148148148147	0.634	0.7657	0.7887630503103465	0.6774667357793527	0.8465177371044941
