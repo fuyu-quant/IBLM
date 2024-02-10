@@ -123,10 +123,12 @@ class IBLModel:
         if prompt_template is None:
             prompt_template = self.default_fit_prompt_template
 
-        if prompt_args is None:
-            dataset_str, data_type = prompt.data_to_text(X, y)
-            # ??? {{col_option}} ???
-            prompt_args = dict(dataset_str=dataset_str, data_type=data_type)
+        dataset_str = prompt.data_to_text(X, y)
+
+        if prompt_args:
+            prompt_args = {"dataset_str": dataset_str, **prompt_args}
+        else:
+            prompt_args = {"dataset_str": dataset_str}
 
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 
