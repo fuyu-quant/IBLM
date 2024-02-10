@@ -64,19 +64,27 @@ class IBLModel:
         self.fit_params = None
 
     def load_prompt_templates(self, objective: str) -> None:
-        task_prompt_mapping = dict(
-            regression="prompt_templates/ibl/regression.j2",
-            binary="prompt_templates/ibl/binary_3.j2",
-            multiclass="prompt_templates/ibl/binary_3.j2", # TODO: change after multiclass.j2
-            interpret="prompt_templates/interpret.j2",
-        )
+        task_prompt_mapping = {
+            "gpt-4-0125-preview": dict(
+                regression="prompt_templates/gpt-4-0125-preview/ibl/regression.j2",
+                binary="prompt_templates/gpt-4-0125-preview/ibl/binary.j2",
+                multiclass="prompt_templates/gpt-4-0125-preview/ibl/binary.j2", # TODO: change after multiclass.j2
+                interpret="prompt_templates/gpt-4-0125-preview/ibl/interpret.j2",
+            ),
+            "gemini-pro": dict(
+                regression="prompt_templates/gemini-pro/ibl/regression.j2",
+                binary="prompt_templates/gemini-pro/ibl/binary.j2",
+                multiclass="prompt_templates/gemini-pro/ibl/binary.j2", # TODO: change after multiclass.j2
+                interpret="prompt_templates/gemini-pro/ibl/interpret.j2",
+            ),
+        }
 
         # fit_prompt_templates
-        with open(task_prompt_mapping.get(self.objective)) as file:
+        with open(task_prompt_mapping.get(self.model_name).get(self.objective)) as file:
             self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with open(task_prompt_mapping.get("interpret")) as file:
+        with open(task_prompt_mapping.get(self.model_name).get("interpret")) as file:
             self._default_interpret_prompt_template = file.read()
 
     @property
@@ -123,10 +131,12 @@ class IBLModel:
         if prompt_template is None:
             prompt_template = self.default_fit_prompt_template
 
-        if prompt_args is None:
-            dataset_str, data_type = prompt.data_to_text(X, y)
-            # ??? {{col_option}} ???
-            prompt_args = dict(dataset_str=dataset_str, data_type=data_type)
+        dataset_str = prompt.data_to_text(X, y)
+
+        if prompt_args:
+            prompt_args = {"dataset_str": dataset_str, **prompt_args}
+        else:
+            prompt_args = {"dataset_str": dataset_str}
 
         prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
 

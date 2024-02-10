@@ -12,6 +12,7 @@ Please create your code in compliance with all of the following conditions. Outp
 ・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
 ・Please make your predictions as accurate as possible.
 ・Predicting probability values as finely as possible increases overall accuracy.
+・If {{col_option}} is not blank, add it after 'df = x.copy()'.
 ・You do not need to provide examples.
 ・Create a code like the following.
 ------------------
@@ -19,7 +20,6 @@ def predict(x):
     import numpy as np
 
     df = x.copy()
-    {{col_option}}
     output = []
     for index, row in df.iterrows():
         # Do not change the code before this point.

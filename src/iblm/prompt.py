@@ -24,4 +24,4 @@ def data_to_text(X: pd.DataFrame, y: np.array):
         row_as_str = [str(item) for item in row.tolist()]
         dataset.append(",".join(row_as_str))
     dataset_str = "\n".join(dataset)
-    return dataset_str, data_type
+    return dataset_str
