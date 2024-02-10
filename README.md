@@ -65,7 +65,7 @@ y_proba = iblm.predict(x_test)
 
 ### Notebooks
 Use the link below to try it out immediately on Google colab.
-- Binary classification  
+- Binary classification
     - Titanic dataset:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/iblmodel_titanic.ipynb)
     - Moon dataset:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/iblmodel_moon.ipynb)
 
@@ -79,5 +79,13 @@ Currently, the recommended model is GPT-4
 - [@cn47](https://github.com/cn47)
 
 
-## Backstory
-This idea is based on [langchain-tools](https://github.com/fuyu-quant/langchain-tools), which was created in an attempt to make LLM learn LightGBM.
+## Cite
+If you find this repo helpful, please cite the following papers:
+```
+@article{tanaka2023inductive,
+  title={Inductive-bias Learning: Generating Code Models with Large Language Model},
+  author={Tanaka, Toma and Emoto, Naofumi and Yumibayashi, Tsukasa},
+  journal={arXiv preprint arXiv:2308.09890},
+  year={2023}
+}
+```

@@ -1,0 +1,30 @@
+Please create your code in compliance with all of the following conditions. Output should be code only. Do not enclose the output in ``python ``` or the like.
+・Analyze the large amount of data below and create a {{task_type}} code to accurately predict "target".
+------------------
+{{dataset_str}}
+------------------
+・Each data type is as follows. If necessary, you can change the data type.
+・Create code that can make predictions about new data based on logic from large amounts of input data without using machine learning models.
+・If input is available, the column names below should also be used to help make decisions when creating the predictive model. Column Name:{{col_name}}
+・Create a code like the following. Do not change the input or output format.
+・If {{col_option}} is not blank, add it after 'df = x.copy()'.
+・You do not need to provide examples.
+------------------
+def predict(x):
+    import numpy as np
+
+    df = x.copy()
+
+    output = []
+    for index, row in df.iterrows():
+
+
+        # Feature creation and data preprocessing
+
+
+        {{output_code}}
+        output.append(y)
+
+    output = np.array(output)
+
+    return output
