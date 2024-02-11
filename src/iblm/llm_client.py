@@ -6,7 +6,7 @@ import google.generativeai as genai
 
 from openai import AzureOpenAI, OpenAI
 
-from exceptions import InvalidAPIOption, InvalidAPIType
+from .exceptions import InvalidAPIOption, InvalidAPIType
 
 
 API_TYPES = ("openai", "azure", "gemini")

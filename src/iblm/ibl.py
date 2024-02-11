@@ -4,12 +4,15 @@ import logging
 
 from typing import TYPE_CHECKING
 
-import metrics
-import prompt
+from .metrics import evaluate
+from .prompt import make_prompt, data_to_text
 
-from exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
-from llm_client import get_client, run_prompt
+from .exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
+from .llm_client import get_client, run_prompt
 
+import importlib.resources as pkg_resources
+
+import re
 
 if TYPE_CHECKING:
     import numpy as np
@@ -64,27 +67,25 @@ class IBLModel:
         self.fit_params = None
 
     def load_prompt_templates(self, objective: str) -> None:
+        model_prompt_mapping = {
+            "gpt-4-0125-preview": "iblm.prompt_templates.gpt-4-0125-preview.ibl",
+            "gpt-3.5-turbo-0125": "iblm.prompt_templates.gpt-35-turbo-0125.ibl",
+            "gemini-pro": "iblm.prompt_templates.gemini-pro.ibl"
+        }
+
         task_prompt_mapping = {
-            "gpt-4-0125-preview": dict(
-                regression="prompt_templates/gpt-4-0125-preview/ibl/regression.j2",
-                binary="prompt_templates/gpt-4-0125-preview/ibl/binary.j2",
-                multiclass="prompt_templates/gpt-4-0125-preview/ibl/binary.j2", # TODO: change after multiclass.j2
-                interpret="prompt_templates/gpt-4-0125-preview/ibl/interpret.j2",
-            ),
-            "gemini-pro": dict(
-                regression="prompt_templates/gemini-pro/ibl/regression.j2",
-                binary="prompt_templates/gemini-pro/ibl/binary.j2",
-                multiclass="prompt_templates/gemini-pro/ibl/binary.j2", # TODO: change after multiclass.j2
-                interpret="prompt_templates/gemini-pro/ibl/interpret.j2",
-            ),
+            "regression": "regression.j2",
+            "binary": "binary.j2",
+            "multiclass": "binary.j2", # TODO: change after multiclass.j2
+            "interpret": "interpret.j2",
         }
 
         # fit_prompt_templates
-        with open(task_prompt_mapping.get(self.model_name).get(self.objective)) as file:
+        with pkg_resources.open_text(model_prompt_mapping[self.model_name], task_prompt_mapping[self.objective]) as file:
             self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with open(task_prompt_mapping.get(self.model_name).get("interpret")) as file:
+        with pkg_resources.open_text(model_prompt_mapping[self.model_name], task_prompt_mapping["interpret"]) as file:
             self._default_interpret_prompt_template = file.read()
 
     @property
@@ -131,22 +132,27 @@ class IBLModel:
         if prompt_template is None:
             prompt_template = self.default_fit_prompt_template
 
-        dataset_str = prompt.data_to_text(X, y)
+        dataset_str = data_to_text(X, y)
+        column_list = [str(element) for element in X.columns.tolist()] + ["label"]
+        columns_name = ','.join(column_list)
 
         if prompt_args:
             prompt_args = {"dataset_str": dataset_str, **prompt_args}
         else:
-            prompt_args = {"dataset_str": dataset_str}
+            prompt_args = {"dataset_str": dataset_str, "columns_name": columns_name}
 
-        prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
+        prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
         self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
+        self.code_model = re.sub(r'^```python\n|\n```$', '', self.code_model, flags=re.MULTILINE)
+        self.code_model = re.sub(r'^```\n|\n```$', '', self.code_model, flags=re.MULTILINE)
         self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
 
         if try_code:
             try:
                 self.predict(X.head(1))
                 logger.info("Valid code_model successfully created!")
+                return self.code_model
             except InvalidCodeModelError:
                 raise
 
@@ -182,7 +188,7 @@ class IBLModel:
             file.write(self.code_model)
 
     def evaluate(self, y_true: np.array, y_pred: np.array) -> dict:
-        return metrics.evaluate(y_true, y_pred, self.objective)
+        return evaluate(y_true, y_pred, self.objective)
 
     def interpret(
         self,
@@ -200,6 +206,6 @@ class IBLModel:
         if prompt_args is None:
             prompt_args = dict(code_model=self.code_model)
 
-        prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
+        prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
         self.interpret_result = self._run_prompt(prompt=prompt_, temperature=temperature, seed=seed)
