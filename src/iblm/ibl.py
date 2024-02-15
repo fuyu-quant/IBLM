@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import logging
-
 from typing import TYPE_CHECKING
 
 from .metrics import evaluate
 from .prompt import make_prompt, data_to_text
-
 from .exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
 from .llm_client import get_client, run_prompt
-
 import importlib.resources as pkg_resources
 
 import re
@@ -20,7 +17,6 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
-# logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s")
 logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s:%(funcName)s:%(lineno)d)")
 logger.setLevel(logging.INFO)
 
@@ -143,16 +139,16 @@ class IBLModel:
 
         prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
-        self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
-        self.code_model = re.sub(r'^```python\n|\n```$', '', self.code_model, flags=re.MULTILINE)
-        self.code_model = re.sub(r'^```\n|\n```$', '', self.code_model, flags=re.MULTILINE)
-        self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
+        code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
+        code_model = re.sub(r'^```python\n|\n```$', '', code_model, flags=re.MULTILINE)
+        code_model = re.sub(r'^```\n|\n```$', '', code_model, flags=re.MULTILINE)
+        self.code_model = code_model
 
         if try_code:
             try:
                 self.predict(X.head(1))
                 logger.info("Valid code_model successfully created!")
-                return self.code_model
+                return code_model
             except InvalidCodeModelError:
                 raise
 
