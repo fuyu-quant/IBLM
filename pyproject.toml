@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.group.dev.dependencies]
 ipython = "<8.16.16"
 poetry-version-plugin = "^0.2.0"
-ruff = "^0.0.292"
+ruff = "^0.3.0"
 black = "^23.9.1"
 codespell = "^2.2.6"
 pre-commit = "3.4.0"
@@ -39,14 +39,13 @@ build-backend = "poetry.core.masonry.api"
 # [tool.poetry-version-plugin]
 # source = "git-tag"
 
+
 [tool.ruff]
 fix = false
-unfixable = [
-  "ERA", # do not autoremove commented out code
-]
 line-length = 120
 target-version = "py39"
-ignore-init-module-imports = true
+
+[tool.ruff.lint]
 extend-select = [
   "B",   # flake8-bugbear
   "C4",  # flake8-comprehensions
@@ -57,18 +56,18 @@ extend-select = [
   "RUF", # ruff checks
   "SIM", # flake8-simplify
   "TCH", # flake8-type-checking
-  "TID", #flake8-tidy-imports
-  "UP", # pyupgrade
+  "TID", # flake8-tidy-imports
+  "UP",  # pyupgrade
+]
+ignore-init-module-imports = true
+unfixable = [
+  "ERA", # do not autoremove commented out code
 ]
 
-
-[tool.ruff.flake8-tidy-imports]
+[tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports= "all"
 
-[tool.ruff.pydocstyle]
-convention = "google"
-
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-single-line = false
 lines-between-types = 1
 lines-after-imports = 2
@@ -76,9 +75,10 @@ known-first-party = ["llm_client", "exceptions", "prompt", "metrics"]
 known-third-party = [""]
 required-imports = ["from __future__ import annotations"]
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.black]
 color = true
 line-length = 120
 target-version = ["py39"]
-
