@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import pandas as pd
 import seaborn as sns
+
 
 df = sns.load_dataset('titanic')
 

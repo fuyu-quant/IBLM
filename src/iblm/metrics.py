@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import numpy as np
+
 from sklearn.metrics import (
     accuracy_score,
     average_precision_score,

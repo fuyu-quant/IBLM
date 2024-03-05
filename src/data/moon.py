@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 import pandas as pd
+
 from sklearn.datasets import make_moons
+
 
 num_train = 300
 #seed = 3656

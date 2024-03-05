@@ -1,15 +1,16 @@
 from __future__ import annotations
 
+import importlib.resources as pkg_resources
 import logging
+import re
+
 from typing import TYPE_CHECKING
 
-from .metrics import evaluate
-from .prompt import make_prompt, data_to_text
-from .exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
-from .llm_client import get_client, run_prompt
-import importlib.resources as pkg_resources
+from iblm.exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
+from iblm.llm_client import get_client, run_prompt
+from iblm.metrics import evaluate
+from iblm.prompt import data_to_text, make_prompt
 
-import re
 
 if TYPE_CHECKING:
     import numpy as np
@@ -200,7 +201,7 @@ class IBLModel:
             prompt_template = self.default_interpret_prompt_template
 
         if prompt_args is None:
-            prompt_args = dict(code_model=self.code_model)
+            prompt_args = {"code_model": self.code_model}
 
         prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 

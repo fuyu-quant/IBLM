@@ -40,20 +40,20 @@ class IBLBagging:
         azure_endpoint: str | None = None,
     ) -> None:
 
-        self.ibl_model_config = dict(
-            model_name=model_name,
-            objective=objective,
+        self.ibl_model_config = {
+            "model_name": model_name,
+            "objective": objective,
             # common
-            api_type=api_type,
+            "api_type": api_type,
             # openai & azure
-            api_key=api_key,
-            max_retries=max_retries,
-            timeout=timeout,
-            organization=organization,
+            "api_key": api_key,
+            "max_retries": max_retries,
+            "timeout": timeout,
+            "organization": organization,
             # azure
-            api_version=api_version,
-            azure_endpoint=azure_endpoint,
-        )
+            "api_version": api_version,
+            "azure_endpoint": azure_endpoint,
+        }
 
         self.models = []
 

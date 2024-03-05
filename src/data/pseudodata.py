@@ -1,7 +1,12 @@
-import pandas as pd
-import numpy as np
+from __future__ import annotations
+
 import string
+
+import numpy as np
+import pandas as pd
+
 from sklearn.datasets import make_classification
+
 
 columns = 4
 num_train = 300
@@ -16,7 +21,7 @@ def get_pseudodata(num_train, columns, seed):
     X = np.round(X, 2)
     y = np.round(y, 2)
 
-    column_name = [letter for letter in string.ascii_lowercase[:columns]]
+    column_name = list(string.ascii_lowercase[:columns])
 
     df = pd.DataFrame(X, columns = column_name)
     df['target'] = y

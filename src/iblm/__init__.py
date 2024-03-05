@@ -1,2 +1,4 @@
-from .ibl import IBLModel
-from .iblbagging.iblbagging import IBLBaggingModel
+from __future__ import annotations
+
+from iblm.ibl import IBLModel
+from iblm.iblbagging.iblbagging import IBLBaggingModel

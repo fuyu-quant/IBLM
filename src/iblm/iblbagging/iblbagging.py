@@ -1,14 +1,20 @@
 from __future__ import annotations
 
+import sys
 import traceback
-import sys
-import pandas as pd
+
 import numpy as np
-import sys
+
+
 sys.path.append('..')
+from typing import TYPE_CHECKING
+
 from iblm.ibl import IBLModel
 
-from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pandas as pd
+
 
 class IBLBaggingModel(IBLModel):
     def __init__(
@@ -92,7 +98,7 @@ class IBLBaggingModel(IBLModel):
                 y_pred = super().predict(X_sampled)
                 metric_dict = super().evaluate(y_sampled, y_pred)
                 self.code_models[key] = {'code_model': bagging_model, "metric_dict": metric_dict}
-            except Exception as e:
+            except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback_details = traceback.format_exception(exc_type, exc_value, exc_traceback)
                 print(f"Error: {traceback_details}")
@@ -101,7 +107,7 @@ class IBLBaggingModel(IBLModel):
         self.code_models = sorted(self.code_models.items(), key=lambda x: x[1]['metric_dict']['roc_auc'], reverse=True)
         return self.code_models
 
-    def predict_(self, X: pd.DataFrame, top_model: int = None) -> np.array:
+    def predict_(self, X: pd.DataFrame, top_model: int | None = None) -> np.array:
         y_preds = []
         if top_model is None:
             for _, model_info in self.code_models:
