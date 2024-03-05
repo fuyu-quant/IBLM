@@ -6,7 +6,6 @@ from sklearn.datasets import make_moons
 
 
 num_train = 300
-#seed = 3656
 seed = 3657
 
 def moon_data(num_train, seed):

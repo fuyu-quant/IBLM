@@ -78,11 +78,17 @@ class IBLModel:
         }
 
         # fit_prompt_templates
-        with pkg_resources.open_text(model_prompt_mapping[self.model_name], task_prompt_mapping[self.objective]) as file:
+        with pkg_resources.open_text(
+            model_prompt_mapping[self.model_name],
+            task_prompt_mapping[self.objective]
+            ) as file:
             self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with pkg_resources.open_text(model_prompt_mapping[self.model_name], task_prompt_mapping["interpret"]) as file:
+        with pkg_resources.open_text(
+            model_prompt_mapping[self.model_name],
+            task_prompt_mapping["interpret"]
+            ) as file:
             self._default_interpret_prompt_template = file.read()
 
     @property

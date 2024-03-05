@@ -10,9 +10,6 @@ from sklearn.datasets import make_classification
 
 columns = 4
 num_train = 300
-
-#seed = 3655
-#seed = 3656
 seed = 3657
 
 def get_pseudodata(num_train, columns, seed):

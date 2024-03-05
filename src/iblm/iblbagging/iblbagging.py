@@ -3,14 +3,14 @@ from __future__ import annotations
 import sys
 import traceback
 
-import numpy as np
-
-
-sys.path.append('..')
 from typing import TYPE_CHECKING
+
+import numpy as np
 
 from iblm.ibl import IBLModel
 
+
+sys.path.append('..')
 
 if TYPE_CHECKING:
     import pandas as pd
