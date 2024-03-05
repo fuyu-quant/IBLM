@@ -6,7 +6,7 @@ import google.generativeai as genai
 
 from openai import AzureOpenAI, OpenAI
 
-from exceptions import InvalidAPIOption, InvalidAPIType
+from iblm.exceptions import InvalidAPIOption, InvalidAPIType
 
 
 API_TYPES = ("openai", "azure", "gemini")
@@ -60,10 +60,6 @@ def run_prompt(client, model_name: str, prompt: str, temperature: float = 0, see
             messages=[{"role": "user", "content": prompt}],
             temperature=temperature,
             seed=seed,
-            # top_p=1,
-            # n=1,
-            # stop=None
-            # max_tokens=16,
         )
         return response.choices[0].message.content
     elif isinstance(client, Gemini):
@@ -72,14 +68,7 @@ def run_prompt(client, model_name: str, prompt: str, temperature: float = 0, see
             raise InvalidAPIOption("Gemini does not support `seed` option")
         model = client.genai.GenerativeModel(
             model_name,
-            generation_config=dict(
-                temperature=temperature,
-                # top_p=None,
-                # candidate_count=None,
-                # stop_sequences=None,
-                # max_output_tokens=None,
-                # top_k=None,
-            ),
+            generation_config={"temperature": temperature},
         )
         response = model.generate_content(prompt)
         return response.text

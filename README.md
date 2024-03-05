@@ -42,15 +42,22 @@ The same seed value may or may not generate a successful code model.
 ```python
 from iblm import IBLModel
 
-# Load LLM via LangChain. (GPT-4 recommended)
-llm_model = OpenAI(temperature=0, model_name = 'gpt-4-0613')
+# 回帰タスク -> objective="regression"
+# 二値分類 -> "binary"
+# 多値分類 -> "multiclass"
 
-params = {
-    'columns_name': True,
-    'objective': 'classification',
-    }
+### IBLModel呼び出し
+# OPENAI_API
+os.environ["OPENAI_API_KEY"] = "xxx"
 
-iblm = IBLModel(llm_model = llm_model, params=params)
+iblm = ibl.IBLModel(api_type="openai", model_name="gpt-4-0125-preview", objective="binary")
+
+# AZURE_OPENAI_API
+os.environ["AZURE_OPENAI_KEY"] = "xxx"
+os.environ["AZURE_OPENAI_ENDPOINT"] = "xxx"
+os.environ["OPENAI_API_VERSION"] = "xxx"
+
+iblm = IBLModel(api_type="azure", model_name="gpt-4-0125-preview", objective="binary")
 ```
 
 * Model Learning

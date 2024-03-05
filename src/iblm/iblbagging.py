@@ -23,7 +23,6 @@ logger.setLevel(logging.INFO)
 
 
 class IBLBagging:
-
     def __init__(
         self,
         model_name: str,
@@ -39,21 +38,20 @@ class IBLBagging:
         api_version: str | None = None,
         azure_endpoint: str | None = None,
     ) -> None:
-
-        self.ibl_model_config = dict(
-            model_name=model_name,
-            objective=objective,
+        self.ibl_model_config = {
+            "model_name": model_name,
+            "objective": objective,
             # common
-            api_type=api_type,
+            "api_type": api_type,
             # openai & azure
-            api_key=api_key,
-            max_retries=max_retries,
-            timeout=timeout,
-            organization=organization,
+            "api_key": api_key,
+            "max_retries": max_retries,
+            "timeout": timeout,
+            "organization": organization,
             # azure
-            api_version=api_version,
-            azure_endpoint=azure_endpoint,
-        )
+            "api_version": api_version,
+            "azure_endpoint": azure_endpoint,
+        }
 
         self.models = []
 
@@ -76,7 +74,6 @@ class IBLBagging:
         prompt_args: dict | None = None,
         try_code: bool = True,
     ) -> None:
-
         _models = []
 
         if self.ibl_model_config["api_type"] == "gemini":

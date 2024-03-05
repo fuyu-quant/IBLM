@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iblm"
-version = "0.3.1"
+version = "0.3.55"
 description = "Inductive-bias Learning"
 authors = ["toma tanaka <ulti4929@gmail.com>"]
 license = "MIT"
@@ -17,6 +17,8 @@ jupyter = "^1.0.0"
 plotly = "^5.15.0"
 matplotlib = "^3.7.1"
 python-dotenv = "^1.0.0"
+ipykernel = "^6.29.2"
+lightgbm = "^4.3.0"
 
 [tool.poetry.dependencies]
 python = "^3.9,<3.12"

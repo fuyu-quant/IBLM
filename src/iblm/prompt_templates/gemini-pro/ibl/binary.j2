@@ -1,0 +1,30 @@
+Please create your code in compliance with all of the following conditions. Output should be code only.
+・The following data are labeled 0 or 1. Please output Python code to predict the probability that the label is 1 for the unknown data.
+------------------
+columns_name
+{{columns_name}}
+dataset
+{{dataset_str}}
+------------------
+・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
+・Please make your predictions as accurate as possible.
+・Predicting probability values as finely as possible increases overall accuracy.
+・You do not need to provide examples.
+・You need to enclose the output in "#########".
+・Create a code like the following.
+#########
+def predict(x):
+    import numpy as np
+
+    df = x.copy()
+    output = []
+    for index, row in df.iterrows():
+        # Do not change the code before this point.
+        # Please describe the process required to make the prediction below.
+
+
+        # Do not change the code after this point.
+        output.append(y)
+    return np.array(output)
+#########
+

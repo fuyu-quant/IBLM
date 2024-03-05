@@ -1,14 +1,15 @@
 from __future__ import annotations
 
+import importlib.resources as pkg_resources
 import logging
+import re
 
 from typing import TYPE_CHECKING
 
-import metrics
-import prompt
-
-from exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
-from llm_client import get_client, run_prompt
+from iblm.exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
+from iblm.llm_client import get_client, run_prompt
+from iblm.metrics import evaluate
+from iblm.prompt import data_to_text, make_prompt
 
 
 if TYPE_CHECKING:
@@ -17,7 +18,6 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
-# logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s")
 logging.basicConfig(format="%(asctime)s [%(name)s][%(levelname)s] (%(module)s:%(filename)s:%(funcName)s:%(lineno)d)")
 logger.setLevel(logging.INFO)
 
@@ -40,7 +40,6 @@ class IBLModel:
         api_version: str | None = None,
         azure_endpoint: str | None = None,
     ) -> None:
-
         self.model_name = model_name
         self.objective = objective
         self.client = get_client(
@@ -64,19 +63,27 @@ class IBLModel:
         self.fit_params = None
 
     def load_prompt_templates(self, objective: str) -> None:
-        task_prompt_mapping = dict(
-            regression="prompt_templates/ibl/regression.j2",
-            binary="prompt_templates/ibl/binary_3.j2",
-            multiclass="prompt_templates/ibl/binary_3.j2", # TODO: change after multiclass.j2
-            interpret="prompt_templates/interpret.j2",
-        )
+        model_prompt_mapping = {
+            "gpt-4-0125-preview": "iblm.prompt_templates.gpt-4-0125-preview.ibl",
+            "gpt-3.5-turbo-0125": "iblm.prompt_templates.gpt-35-turbo-0125.ibl",
+            "gemini-pro": "iblm.prompt_templates.gemini-pro.ibl",
+        }
+
+        task_prompt_mapping = {
+            "regression": "regression.j2",
+            "binary": "binary.j2",
+            "multiclass": "binary.j2",  # TODO: change after multiclass.j2
+            "interpret": "interpret.j2",
+        }
 
         # fit_prompt_templates
-        with open(task_prompt_mapping.get(self.objective)) as file:
+        with pkg_resources.open_text(
+            model_prompt_mapping[self.model_name], task_prompt_mapping[self.objective]
+        ) as file:
             self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with open(task_prompt_mapping.get("interpret")) as file:
+        with pkg_resources.open_text(model_prompt_mapping[self.model_name], task_prompt_mapping["interpret"]) as file:
             self._default_interpret_prompt_template = file.read()
 
     @property
@@ -119,26 +126,30 @@ class IBLModel:
         prompt_args: dict | None = None,
         try_code: bool = True,
     ) -> None:
-
         if prompt_template is None:
             prompt_template = self.default_fit_prompt_template
 
-        dataset_str = prompt.data_to_text(X, y)
+        dataset_str = data_to_text(X, y)
+        column_list = [str(element) for element in X.columns.tolist()] + ["label"]
+        columns_name = ",".join(column_list)
 
         if prompt_args:
             prompt_args = {"dataset_str": dataset_str, **prompt_args}
         else:
-            prompt_args = {"dataset_str": dataset_str}
+            prompt_args = {"dataset_str": dataset_str, "columns_name": columns_name}
 
-        prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
+        prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
-        self.code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
-        self.fit_params = dict(temperature=temperature, seed=seed, prompt_template=prompt_template)
+        code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
+        code_model = re.sub(r"^```python\n|\n```$", "", code_model, flags=re.MULTILINE)
+        code_model = re.sub(r"^```\n|\n```$", "", code_model, flags=re.MULTILINE)
+        self.code_model = code_model
 
         if try_code:
             try:
                 self.predict(X.head(1))
                 logger.info("Valid code_model successfully created!")
+                return code_model
             except InvalidCodeModelError:
                 raise
 
@@ -174,7 +185,7 @@ class IBLModel:
             file.write(self.code_model)
 
     def evaluate(self, y_true: np.array, y_pred: np.array) -> dict:
-        return metrics.evaluate(y_true, y_pred, self.objective)
+        return evaluate(y_true, y_pred, self.objective)
 
     def interpret(
         self,
@@ -190,8 +201,8 @@ class IBLModel:
             prompt_template = self.default_interpret_prompt_template
 
         if prompt_args is None:
-            prompt_args = dict(code_model=self.code_model)
+            prompt_args = {"code_model": self.code_model}
 
-        prompt_ = prompt.make_prompt(prompt_template=prompt_template, **prompt_args)
+        prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
         self.interpret_result = self._run_prompt(prompt=prompt_, temperature=temperature, seed=seed)
