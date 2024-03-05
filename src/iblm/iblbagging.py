@@ -23,7 +23,6 @@ logger.setLevel(logging.INFO)
 
 
 class IBLBagging:
-
     def __init__(
         self,
         model_name: str,
@@ -39,7 +38,6 @@ class IBLBagging:
         api_version: str | None = None,
         azure_endpoint: str | None = None,
     ) -> None:
-
         self.ibl_model_config = {
             "model_name": model_name,
             "objective": objective,
@@ -76,7 +74,6 @@ class IBLBagging:
         prompt_args: dict | None = None,
         try_code: bool = True,
     ) -> None:
-
         _models = []
 
         if self.ibl_model_config["api_type"] == "gemini":

@@ -40,7 +40,6 @@ class IBLModel:
         api_version: str | None = None,
         azure_endpoint: str | None = None,
     ) -> None:
-
         self.model_name = model_name
         self.objective = objective
         self.client = get_client(
@@ -67,28 +66,24 @@ class IBLModel:
         model_prompt_mapping = {
             "gpt-4-0125-preview": "iblm.prompt_templates.gpt-4-0125-preview.ibl",
             "gpt-3.5-turbo-0125": "iblm.prompt_templates.gpt-35-turbo-0125.ibl",
-            "gemini-pro": "iblm.prompt_templates.gemini-pro.ibl"
+            "gemini-pro": "iblm.prompt_templates.gemini-pro.ibl",
         }
 
         task_prompt_mapping = {
             "regression": "regression.j2",
             "binary": "binary.j2",
-            "multiclass": "binary.j2", # TODO: change after multiclass.j2
+            "multiclass": "binary.j2",  # TODO: change after multiclass.j2
             "interpret": "interpret.j2",
         }
 
         # fit_prompt_templates
         with pkg_resources.open_text(
-            model_prompt_mapping[self.model_name],
-            task_prompt_mapping[self.objective]
-            ) as file:
+            model_prompt_mapping[self.model_name], task_prompt_mapping[self.objective]
+        ) as file:
             self._default_fit_prompt_template = file.read()
 
         # interpret_prompt_templates
-        with pkg_resources.open_text(
-            model_prompt_mapping[self.model_name],
-            task_prompt_mapping["interpret"]
-            ) as file:
+        with pkg_resources.open_text(model_prompt_mapping[self.model_name], task_prompt_mapping["interpret"]) as file:
             self._default_interpret_prompt_template = file.read()
 
     @property
@@ -131,13 +126,12 @@ class IBLModel:
         prompt_args: dict | None = None,
         try_code: bool = True,
     ) -> None:
-
         if prompt_template is None:
             prompt_template = self.default_fit_prompt_template
 
         dataset_str = data_to_text(X, y)
         column_list = [str(element) for element in X.columns.tolist()] + ["label"]
-        columns_name = ','.join(column_list)
+        columns_name = ",".join(column_list)
 
         if prompt_args:
             prompt_args = {"dataset_str": dataset_str, **prompt_args}
@@ -147,8 +141,8 @@ class IBLModel:
         prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
         code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
-        code_model = re.sub(r'^```python\n|\n```$', '', code_model, flags=re.MULTILINE)
-        code_model = re.sub(r'^```\n|\n```$', '', code_model, flags=re.MULTILINE)
+        code_model = re.sub(r"^```python\n|\n```$", "", code_model, flags=re.MULTILINE)
+        code_model = re.sub(r"^```\n|\n```$", "", code_model, flags=re.MULTILINE)
         self.code_model = code_model
 
         if try_code:

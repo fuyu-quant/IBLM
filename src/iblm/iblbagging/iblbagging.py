@@ -10,7 +10,7 @@ import numpy as np
 from iblm.ibl import IBLModel
 
 
-sys.path.append('..')
+sys.path.append("..")
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -35,7 +35,6 @@ class IBLBaggingModel(IBLModel):
         max_sample: int = 600,
         min_sample: int = 400,
     ) -> None:
-
         super().__init__(
             model_name,
             objective,
@@ -48,8 +47,8 @@ class IBLBaggingModel(IBLModel):
             organization,
             # azure
             api_version,
-            azure_endpoint
-            )
+            azure_endpoint,
+        )
 
         # bagging specific
         self.num_model = num_model
@@ -68,7 +67,6 @@ class IBLBaggingModel(IBLModel):
         prompt_args: dict | None = None,
         try_code: bool = True,
     ):
-
         # データのサンプリング
         np.random.seed(0)
         X.reset_index(drop=True, inplace=True)
@@ -86,40 +84,31 @@ class IBLBaggingModel(IBLModel):
             print(key)
             try:
                 bagging_model = super().fit(
-                    X_sampled,
-                    y_sampled,
-                    temperature,
-                    seed,
-                    prompt_template,
-                    prompt_args,
-                    try_code
-                    )
+                    X_sampled, y_sampled, temperature, seed, prompt_template, prompt_args, try_code
+                )
                 self.code_model = bagging_model
                 y_pred = super().predict(X_sampled)
                 metric_dict = super().evaluate(y_sampled, y_pred)
-                self.code_models[key] = {'code_model': bagging_model, "metric_dict": metric_dict}
+                self.code_models[key] = {"code_model": bagging_model, "metric_dict": metric_dict}
             except Exception:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 traceback_details = traceback.format_exception(exc_type, exc_value, exc_traceback)
                 print(f"Error: {traceback_details}")
                 continue
 
-        self.code_models = sorted(self.code_models.items(), key=lambda x: x[1]['metric_dict']['roc_auc'], reverse=True)
+        self.code_models = sorted(self.code_models.items(), key=lambda x: x[1]["metric_dict"]["roc_auc"], reverse=True)
         return self.code_models
 
     def predict_(self, X: pd.DataFrame, top_model: int | None = None) -> np.array:
         y_preds = []
         if top_model is None:
             for _, model_info in self.code_models:
-                self.code_model = model_info['code_model']
+                self.code_model = model_info["code_model"]
                 y_pred = super().predict(X)
                 y_preds.append(y_pred)
         else:
             for _, model_info in self.code_models[:top_model]:
-                self.code_model = model_info['code_model']
+                self.code_model = model_info["code_model"]
                 y_pred = super().predict(X)
                 y_preds.append(y_pred)
         return np.mean(y_preds, axis=0)
-
-
-
