@@ -9,8 +9,8 @@ from sklearn.datasets import make_classification
 
 
 columns = 4
-num_train = 300
-seed = 3657
+num_train = 400
+seed = 3658
 
 
 def get_pseudodata(num_train, columns, seed):
