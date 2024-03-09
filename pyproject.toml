@@ -73,9 +73,3 @@ lines-after-imports = 2
 known-first-party = ["llm_client", "exceptions", "prompt", "metrics"]
 known-third-party = [""]
 required-imports = ["from __future__ import annotations"]
-
-
-[tool.black]
-color = true
-line-length = 120
-target-version = ["py39"]
