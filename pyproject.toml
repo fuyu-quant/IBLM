@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "iblm"
-version = "0.3.55"
+version = "0.3.67"
 description = "Inductive-bias Learning"
 authors = ["toma tanaka <ulti4929@gmail.com>"]
 license = "MIT"
@@ -29,6 +29,7 @@ scikit-learn = "^1.2.2"
 datasets = "^2.13.1"
 tqdm = "^4.65.0"
 jinja2 = "^3.1.0"
+anthropic = "^0.19.1"
 
 [build-system]
 requires = ["poetry-core"]

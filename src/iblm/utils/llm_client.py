@@ -4,12 +4,12 @@ import os
 
 import google.generativeai as genai
 
+from anthropic import Anthropic
+from iblm.exceptions import InvalidAPIOption, InvalidAPIType
 from openai import AzureOpenAI, OpenAI
 
-from iblm.exceptions import InvalidAPIOption, InvalidAPIType
 
-
-API_TYPES = ("openai", "azure", "gemini")
+API_TYPES = ("openai", "azure", "gemini", "claude")
 
 
 class Gemini:
@@ -48,6 +48,8 @@ def get_client(
     elif api_type == "gemini":
         genai.configure(api_key=os.getenv("GOOGLE_API_KEY", api_key))
         return Gemini()
+    elif api_type == "claude":
+        return Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY", api_key))
     else:
         raise InvalidAPIType(f"specify the api_type from {API_TYPES}")
 
@@ -72,3 +74,8 @@ def run_prompt(client, model_name: str, prompt: str, temperature: float = 0, see
         )
         response = model.generate_content(prompt)
         return response.text
+    elif isinstance(client, Anthropic):
+        message = client.messages.create(
+            model=model_name, max_tokens=2000, temperature=temperature, messages=[{"role": "user", "content": prompt}]
+        )
+        return message.content[0].text

@@ -6,11 +6,10 @@
 </div>
 
 - [What is IBL](#what-is-ibl)
+- [Examples](#examples)
 - [How to Use](#how-to-use)
-    - [Setting](#setting)
-    - [Binary classificatin](#binary-classification)
-    - [Notebooks](#notebooks)
-- [Supported Models](#supported-models)
+- [Inductive-bias Learning Models](#inductive-bias-learning-models)
+- [Supported LLMs](#supported-llms)
 - [Contributor](#contributor)
 - [Backstory](#backstory)
 
@@ -21,64 +20,114 @@ IBL (Inductive-bias Learning) is a new machine learning modeling method that use
 
 ![ibl](./images/ibl.png)
 
+* Currently, only binary classification is supported.
+
+## Examples
+Use the link below to try it out immediately on Google colab.
+- Binary classification
+  - IBL
+    - OpenAI:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/pseudodata_openai.ipynb)
+    - Claude:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/pseudodata_claude.ipynb)
+
+  - IBLbagging
+    - OpenAI:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblbagging/pseudodata_openai.ipynb)
+    - Claude:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblbagging/pseudodata_claude.ipynb)
+
 
 ## How to Use
 
-### Setting
-
-* Installation
+-  Installation and Import
 ```python
 pip install iblm
-```
-* OpenAI API key settings
-```python
-os.environ["OPENAI_API_KEY"] = "OPENAI_API_KEY"
+
+import iblm
 ```
 
-### Binary classification
+- Setting
+  - OpenAI
+    ```python
+    os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY"
+
+    ibl = iblm.IBLModel(api_type="openai", model_name="gpt-4-0125-preview", objective="binary")
+    ```
+
+  - Azure OpenAI
+    ```python
+    os.environ["AZURE_OPENAI_KEY"] = "YOUR_API_KEY"
+    os.environ["AZURE_OPENAI_ENDPOINT"] = "xxx"
+    os.environ["OPENAI_API_VERSION"] = "xxx"
+
+    ibl = iblm.IBLModel(api_type="azure", model_name="gpt-4-0125-preview", objective="binary")
+    ```
+
+  - Google API
+    ```python
+    os.environ["GOOGLE_API_KEY"] = "YOUR_API_KEY"
+    ibl = iblm.IBLModel(api_type="gemini", model_name="gemini-pro", objective="binary")
+    ```
+
+  - Anthropic API
+    ```python
+    os.environ["ANTHROPIC_API_KEY"] = "YOUR_API_KEY"
+    ibl = iblm.IBLModel(api_type="", model_name="", objective="binary")
+    ```
+
+-  Model Learning\
 Currently, only small amounts of data can be executed.
-The same seed value may or may not generate a successful code model.
-* Model Definition
-```python
-from iblm import IBLModel
+    ```python
+    code_model = ibl.fit(x_train, y_train)
 
-# 回帰タスク -> objective="regression"
-# 二値分類 -> "binary"
-# 多値分類 -> "multiclass"
+    print(code_model)
+    ```
 
-### IBLModel呼び出し
-# OPENAI_API
-os.environ["OPENAI_API_KEY"] = "xxx"
+-  Model Predictions
+    ```python
+    y_proba = ibl.predict(x_test)
+    ```
 
-iblm = ibl.IBLModel(api_type="openai", model_name="gpt-4-0125-preview", objective="binary")
+## Inductive-bias Learning Models
 
-# AZURE_OPENAI_API
-os.environ["AZURE_OPENAI_KEY"] = "xxx"
-os.environ["AZURE_OPENAI_ENDPOINT"] = "xxx"
-os.environ["OPENAI_API_VERSION"] = "xxx"
+- Inductive-bias Learning\
+Normal Inductive-bias Learning
+  ```python
+  from iblm import IBLBaggingModel
 
-iblm = IBLModel(api_type="azure", model_name="gpt-4-0125-preview", objective="binary")
-```
+  iblm = IBLModel(
+      api_type="openai",
+      model_name="gpt-4-0125-preview",
+      objective="binary"
+      )
+  ```
 
-* Model Learning
-```python
-model = iblm.fit(x_train, y_train)
-```
+- Inductive-bias Learning bagging\
+Sampling data from a given dataset, we create multiple models, and the average of these models is used as the predicted value.
+  ```python
+  from iblm import IBLBaggingModel
 
-* Model Predictions
-```python
-y_proba = iblm.predict(x_test)
-```
+  iblbagging = IBLBaggingModel(
+      api_type="openai",
+      model_name="gpt-4-0125-preview",
+      objective="binary",
+      num_model=20,  # Number of models to create
+      max_sample = 2000,  # Maximum number of samples from the data set
+      min_sample = 300,　　# Minimum number of samples from the data set
+      )
+  ```
 
-### Notebooks
-Use the link below to try it out immediately on Google colab.
-- Binary classification
-    - Titanic dataset:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/iblmodel_titanic.ipynb)
-    - Moon dataset:[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fuyu-quant/IBLM/blob/main/examples/iblmodel/iblmodel_moon.ipynb)
 
+## Supported LLMs
+- OpenAI
+  - gpt-4-0125-preview
+  - gpt-3.5-turbo-0125
+- Azure OpenAI
+  - gpt-4-0125-preview
+  - gpt-3.5-turbo-0125
+- Google
+  - gemini-pro
+- Anthropic
+  - claude-3-opus-20240229
+  - claude-3-sonnet-20240229
 
-## Supported Models
-Currently, the recommended model is GPT-4
 
 
 ## Contributor

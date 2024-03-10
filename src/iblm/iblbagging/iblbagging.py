@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-import traceback
 
 from typing import TYPE_CHECKING
 
@@ -67,7 +66,7 @@ class IBLBaggingModel(IBLModel):
         prompt_args: dict | None = None,
         try_code: bool = True,
     ):
-        # データのサンプリング
+        # sampling data
         np.random.seed(0)
         X.reset_index(drop=True, inplace=True)
 
@@ -81,7 +80,6 @@ class IBLBaggingModel(IBLModel):
             X_sampled = X.loc[indices]
             y_sampled = y[indices]
             key = f"model_{i}"
-            print(key)
             try:
                 bagging_model = super().fit(
                     X_sampled, y_sampled, temperature, seed, prompt_template, prompt_args, try_code
@@ -91,9 +89,6 @@ class IBLBaggingModel(IBLModel):
                 metric_dict = super().evaluate(y_sampled, y_pred)
                 self.code_models[key] = {"code_model": bagging_model, "metric_dict": metric_dict}
             except Exception:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                traceback_details = traceback.format_exception(exc_type, exc_value, exc_traceback)
-                print(f"Error: {traceback_details}")
                 continue
 
         self.code_models = sorted(self.code_models.items(), key=lambda x: x[1]["metric_dict"]["roc_auc"], reverse=True)

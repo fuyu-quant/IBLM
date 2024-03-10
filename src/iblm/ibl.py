@@ -7,9 +7,9 @@ import re
 from typing import TYPE_CHECKING
 
 from iblm.exceptions import InvalidCodeModelError, InvalidModelObjectiveError, UndefinedCodeModelError
-from iblm.llm_client import get_client, run_prompt
-from iblm.metrics import evaluate
-from iblm.prompt import data_to_text, make_prompt
+from iblm.utils.llm_client import get_client, run_prompt
+from iblm.utils.metrics import evaluate
+from iblm.utils.prompt import data_to_text, make_prompt
 
 
 if TYPE_CHECKING:
@@ -67,6 +67,8 @@ class IBLModel:
             "gpt-4-0125-preview": "iblm.prompt_templates.gpt-4-0125-preview.ibl",
             "gpt-3.5-turbo-0125": "iblm.prompt_templates.gpt-35-turbo-0125.ibl",
             "gemini-pro": "iblm.prompt_templates.gemini-pro.ibl",
+            "claude-3-opus-20240229": "iblm.prompt_templates.claude-3-opus-20240229.ibl",
+            "claude-3-sonnet-20240229": "iblm.prompt_templates.claude-3-sonnet-20240229.ibl",
         }
 
         task_prompt_mapping = {
@@ -116,6 +118,21 @@ class IBLModel:
             seed=seed,
         )
 
+    def _extract_code_model(self, response: str) -> str:
+        response = re.sub(r"^```python\n|\n```$", "", response, flags=re.MULTILINE)
+        response = re.sub(r"^```\n|\n```$", "", response, flags=re.MULTILINE)
+
+        keyword = "#########"
+
+        start_index = response.find(keyword)
+        end_index = response.rfind(keyword)
+        if start_index != -1 and end_index != -1 and start_index < end_index:
+            start_index += len(keyword)
+            code_model = response[start_index:end_index].strip()
+            return code_model
+        else:
+            return code_model
+
     def fit(
         self,
         X: pd.DataFrame,
@@ -141,8 +158,7 @@ class IBLModel:
         prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
 
         code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
-        code_model = re.sub(r"^```python\n|\n```$", "", code_model, flags=re.MULTILINE)
-        code_model = re.sub(r"^```\n|\n```$", "", code_model, flags=re.MULTILINE)
+        code_model = self._extract_code_model(code_model)
         self.code_model = code_model
 
         if try_code:
