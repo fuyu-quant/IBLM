@@ -1,21 +1,17 @@
-Please create your code in compliance with all of the following conditions. Output should be code only. Do not enclose the output in ``python ``` or the like.
-・The following data are for "target" of 0 and 1, respectively. Analyze these data and create a python code to predict the probability that the "target" of the unknown data is 1.
+Please create your code in compliance with all of the following conditions. Output should be code only.
+・What is the Python code to predict the value of "target" based on the following data?
 ------------------
+columns_name
+{{columns_name}}
+dataset
 {{dataset_str}}
 ------------------
-・Create a code that predicts a high probability value when "target" is 1 and a low probability value when "target" is 0 for the data given above.
-・Each data type is as follows. If necessary, you can change the data type.
-------------------
-{{data_type}}
-------------------
-・The column names, in order, are as follows {{col_name}}
-・Think and code the logic to predict probability values based on the data without using a existing machine learning model.
+・Output the logic to calculate the value of "target" from given data relationships without using existing machine learning methods as python code.
 ・Please make your predictions as accurate as possible.
-・Predicting probability values as finely as possible increases overall accuracy.
-・If {{col_option}} is not blank, add it after 'df = x.copy()'.
 ・You do not need to provide examples.
+・You need to enclose the output in "#########".
 ・Create a code like the following.
-------------------
+#########
 def predict(x):
     import numpy as np
 
@@ -29,3 +25,4 @@ def predict(x):
         # Do not change the code after this point.
         output.append(y)
     return np.array(output)
+#########

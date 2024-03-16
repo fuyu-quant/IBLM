@@ -131,6 +131,7 @@ class IBLModel:
             code_model = response[start_index:end_index].strip()
             return code_model
         else:
+            code_model = response
             return code_model
 
     def fit(
@@ -156,7 +157,7 @@ class IBLModel:
             prompt_args = {"dataset_str": dataset_str, "columns_name": columns_name}
 
         prompt_ = make_prompt(prompt_template=prompt_template, **prompt_args)
-
+        print(prompt_)
         code_model = self._run_prompt(prompt=prompt_, seed=seed, temperature=temperature)
         code_model = self._extract_code_model(code_model)
         self.code_model = code_model
